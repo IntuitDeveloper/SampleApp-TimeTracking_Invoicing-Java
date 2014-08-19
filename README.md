@@ -11,7 +11,7 @@ There you can quickly:
 1. Create a developer account
 2. Create your first app and get development OAuth keys created
 3. Get a sandbox QuickBooks Online company provisioned
-4. Download this sample app's source code with an additional file containing your OAuth keys pre-installed in the project.
+4. Download this sample app's source code with an additional file containing your OAuth keys pre-installed in the project
 
 Once the sample app code is on your computer, you can do the following steps to run the app:
 
