@@ -8,6 +8,7 @@ Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App
 The most conveinent way to start playing around with this sample app is to start at developer.intuit.com/sampleapps [TBD]. 
 
 There you can quickly:
+
 1. Create a developer account
 2. Create your first app and get development OAuth keys created
 3. Get a sandbox QuickBooks Online company provisioned
