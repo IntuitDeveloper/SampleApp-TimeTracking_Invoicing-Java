@@ -5,7 +5,7 @@ Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App
 
 ## First use instructions
 
-The most conveinent way to start playing around with this sample app is to start at [http://developer.intuit.com/sampleapps/timetracking](http://developer.intuit.com/sampleapps/timetracking). 
+The most conveinent way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details). 
 
 There you can quickly:
 
@@ -22,6 +22,12 @@ Once the sample app code is on your computer, you can do the following steps to 
 2. cd to the unzipped folder
 3. Run the command: _./gradlew bootRun_
 4. Open your browser to http://localhost:8080/app/index.html
+
+## How To Guides
+
+How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app are listed below:
+
+[OAuth](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki/OAuth-How-To-Guide)
 
 ## Editing the code
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
