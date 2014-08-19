@@ -40,6 +40,8 @@ To run the Javascript Karma tests you must have NodeJs v0.10.28 or later (http:/
 2. _npm test_
 
 ### Javascript Protractor Tests
+To run the Javascript Protractor tests you must have NodeJs v0.10.28 or later (http://nodejs.org/) installed and have npm on the path.
+
 1. _cd public_
 2. _npm start_ (on one command prompt window)
 3. _npm protractor_ (on **_another_** command prompt window)
