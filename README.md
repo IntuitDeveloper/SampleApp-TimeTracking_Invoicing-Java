@@ -1,4 +1,4 @@
-SampleApp-TimeTracking_Invoicing-Java
+Time Tracking and Invoicing Java Sample App
 =====================================
 
 Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App.
@@ -21,6 +21,7 @@ Once the sample app code is on your computer, you can do the following steps to 
 1. Unzip the zip file
 2. cd to the unzipped folder
 3. Run the command: _./gradlew bootRun_
+4. Open your browser to http://localhost:8080/app/index.html
 
 ## Editing the code
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
