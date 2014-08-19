@@ -5,7 +5,7 @@ Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App
 
 ## First use instructions
 
-The most conveinent way to start playing around with this sample app is to start at [developer.intuit.com/sampleapps/timetracking](developer.intuit.com/sampleapps/timetracking). 
+The most conveinent way to start playing around with this sample app is to start at [http://developer.intuit.com/sampleapps/timetracking](http://developer.intuit.com/sampleapps/timetracking). 
 
 There you can quickly:
 
