@@ -172,7 +172,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SampleApp-TimeTracking_Invoicing-Java.iml" filepath="$PROJECT_DIR$/SampleApp-TimeTracking_Invoicing-Java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/time-tracking.iml" filepath="$PROJECT_DIR$/time-tracking.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
@@ -195,7 +195,7 @@
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="SampleApp-TimeTracking_Invoicing-Java" />
+      <module name="time-tracking" />
       <envs />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="" />

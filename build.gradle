@@ -65,6 +65,5 @@ test {
 }
 
 clean {
-    delete 'public'
     delete 'database'
 }

@@ -1,6 +1,6 @@
 oauth.json
 build/
-SampleApp-TimeTracking_Invoicing-Java.iws
+time-tracking.iws
 public/coverage
 public/unit-test-results.xml
 public/node_modules
