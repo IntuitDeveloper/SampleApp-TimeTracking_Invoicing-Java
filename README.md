@@ -27,7 +27,7 @@ Once the sample app code is on your computer, you can do the following steps to 
 
 How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app are listed below:
 
-[OAuth How To Guide](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki/OAuth-How-To-Guide)
+[OAuth How To Guide](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki/OAuth-How-To-Guide-(Java))
 
 ## Editing the code
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
