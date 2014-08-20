@@ -16,9 +16,10 @@ public interface OAuthInfoProvider {
     /**
      * Persist the request token values for a given company in your app
      * @param appCompanyId
-     * @param requestTokenValues
+     * @param requestToken
+     * @param requestTokenSecret
      */
-    public void setRequestTokenValuesForCompany(String appCompanyId, RequestTokenValues requestTokenValues);
+    public void setRequestTokenValuesForCompany(String appCompanyId, String requestToken, String requestTokenSecret);
 
     /**
      *
@@ -26,5 +27,5 @@ public interface OAuthInfoProvider {
      * @return
      */
     public CompanyRequestTokenSecret getCompanyRequestTokenSecret(String requestToken);
-    public void setAccessTokenForCompany(String appCompanyId, String realmId, AccessTokenValues accessTokenValues);
+    public void setAccessTokenForCompany(String appCompanyId, String realmId, String accessToken, String accessTokenSecret);
 }

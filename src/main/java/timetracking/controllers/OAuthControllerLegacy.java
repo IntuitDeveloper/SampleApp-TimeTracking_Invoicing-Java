@@ -2,10 +2,8 @@ package timetracking.controllers;
 
 import com.intuit.ia.connection.IAPlatformClient;
 import com.intuit.ia.exception.OAuthException;
-import oauth.AccessTokenValues;
 import oauth.CompanyRequestTokenSecret;
 import oauth.OAuthInfoProvider;
-import oauth.RequestTokenValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +22,6 @@ import java.util.Map;
  * Time: 5:34 AM
  */
 @RestController
-@RequestMapping("/legacy")
 public class OAuthControllerLegacy {
 
     @Autowired
@@ -41,10 +38,10 @@ public class OAuthControllerLegacy {
 	 *
 	 * For example in your Javascript you would do the following:
 	 *
-	 * intuit.ipp.anywhere.setup({grantUrl: https://myawesomeapp.com/requesttoken?companyId=<companyIdInYourApp>});
+	 * intuit.ipp.anywhere.setup({grantUrl: https://myawesomeapp.com/request_token?companyId=<companyIdInYourApp>});
 	 */
 
-    @RequestMapping(value = "/requesttoken", method = RequestMethod.GET)
+    @RequestMapping(value = "/request_token", method = RequestMethod.GET)
     public void requestOAuthToken(final HttpServletResponse response,
                                   @RequestParam(value = "appCompanyId", required = true) String companyId) throws IOException {
 
@@ -61,7 +58,7 @@ public class OAuthControllerLegacy {
             //Persist the request token and request token secret in the app database on the given company, we will need the
             //Request Token Secret to make the final request to Intuit for the Access Tokens
             oAuthInfoProvider.setRequestTokenValuesForCompany(companyId,
-                    new RequestTokenValues(requestToken, requestTokenSecret));
+                    requestToken, requestTokenSecret);
 
             // Retrieve the Authorize URL
             final String authURL = client.getOauthAuthorizeUrl(requestToken);
@@ -72,7 +69,6 @@ public class OAuthControllerLegacy {
         } catch (OAuthException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /*
@@ -86,7 +82,7 @@ public class OAuthControllerLegacy {
      * and the parent page is refreshed.
      *
      */
-    @RequestMapping(value = "/requesttokenready", method = RequestMethod.GET)
+    @RequestMapping(value = "/request_token_ready", method = RequestMethod.GET)
     public void requestTokenReady(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         IAPlatformClient client = new IAPlatformClient();
 
@@ -104,7 +100,7 @@ public class OAuthControllerLegacy {
             final String accessTokenSecret = oAuthAccessToken.get("accessTokenSecret");
 
             oAuthInfoProvider.setAccessTokenForCompany(companyRequestTokenSecret.getAppCompanyId(), realmID,
-                    new AccessTokenValues(accessToken, accessTokenSecret));
+                   accessToken, accessTokenSecret);
 
 
             response.sendRedirect(getProtocolHostnameAndPort(request) + "/app/close.html");
@@ -116,16 +112,16 @@ public class OAuthControllerLegacy {
 
     }
 
-    public static String getProtocolHostnameAndPort(final HttpServletRequest request) {
-        String protocol = request.getProtocol().split("/")[0].toLowerCase();
-        String hostname = request.getServerName();
-        int port = request.getServerPort();
+public static String getProtocolHostnameAndPort(final HttpServletRequest request) {
+    String protocol = request.getProtocol().split("/")[0].toLowerCase();
+    String hostname = request.getServerName();
+    int port = request.getServerPort();
 
-        StringBuilder result = new StringBuilder(protocol + "://" + hostname);
-        if (port != 80) {
-            result.append(":").append(port);
-        }
-
-        return result.toString();
+    StringBuilder result = new StringBuilder(protocol + "://" + hostname);
+    if (port != 80) {
+        result.append(":").append(port);
     }
+
+    return result.toString();
+}
 }

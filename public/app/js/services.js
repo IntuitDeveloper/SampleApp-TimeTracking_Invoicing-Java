@@ -79,7 +79,7 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
         };
 
         var oauthGrantUrl = function() {
-            return apiRoot() + "/legacy/requesttoken";
+            return apiRoot() + "/request_token";
         }
 
         var onApiLoaded = function ($scope, callback) {

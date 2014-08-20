@@ -48,22 +48,22 @@ public class OAuthInfoProviderImpl implements OAuthInfoProvider {
 
 
     @Override
-    public void setRequestTokenValuesForCompany(String appCompanyId, RequestTokenValues requestTokenValues) {
+    public void setRequestTokenValuesForCompany(String appCompanyId, String requestToken, String requestTokenSecret) {
         final Company company = companyRepository.findOne(Long.parseLong(appCompanyId));
 
         if(company == null) {
             throw new OAuthException("Could not find a company with an id of " + appCompanyId);
         }
 
-        company.setRequestToken(requestTokenValues.getRequestToken());
-        company.setRequestTokenSecret(requestTokenValues.getRequestTokenSecret());
+        company.setRequestToken(requestToken);
+        company.setRequestTokenSecret(requestTokenSecret);
 
         companyRepository.save(company);
 
     }
 
     @Override
-    public void setAccessTokenForCompany(String appCompanyId, String realmId, AccessTokenValues accessTokenValues) {
+    public void setAccessTokenForCompany(String appCompanyId, String realmId, String accessToken, String accessTokenSecret) {
         final Company company = companyRepository.findOne(Long.parseLong(appCompanyId));
 
         if(company == null) {
@@ -71,8 +71,8 @@ public class OAuthInfoProviderImpl implements OAuthInfoProvider {
         }
 
         company.setQboId(realmId);
-        company.setAccessToken(accessTokenValues.getAccessToken());
-        company.setAccessTokenSecret(accessTokenValues.getAccessTokenSecret());
+        company.setAccessToken(accessToken);
+        company.setAccessTokenSecret(accessTokenSecret);
         company.setConnectedToQbo(true);
 
         companyRepository.save(company);
