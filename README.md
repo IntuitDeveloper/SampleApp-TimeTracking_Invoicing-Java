@@ -25,9 +25,9 @@ Once the sample app code is on your computer, you can do the following steps to 
 
 ## How To Guides
 
-How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app can be found on the Time Tracking Sample Apps Wiki page:
+How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app (e.g. OAuth, OpenId, etc) can be found on the Time Tracking Sample Apps Wiki page:
 
-[https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki](Time Tracking Sample App Wiki)
+[Tracking Sample App Wiki](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wikiTime)
 
 
 
