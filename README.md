@@ -55,7 +55,7 @@ To run the Javascript Protractor tests you must have NodeJs v0.10.28 or later (h
 
 On one command prompt window:
 
-1. _./gradlew bootRun _
+1. _./gradlew bootRun_
 
 On another command prompt window:
 
