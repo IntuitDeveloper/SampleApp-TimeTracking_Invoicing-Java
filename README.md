@@ -29,8 +29,6 @@ How-To guides related to implementation tasks necessary to produce a production-
 
 [Time Tracking Sample App Wiki](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki)
 
-
-
 ## Editing the code
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
 
@@ -60,7 +58,7 @@ On one command prompt window:
 On another command prompt window:
 
 1. _cd public_
-2. _npm protractor_ (on **_another_** command prompt window)
+2. _npm run protractor_ (on **_another_** command prompt window)
 
 
 
