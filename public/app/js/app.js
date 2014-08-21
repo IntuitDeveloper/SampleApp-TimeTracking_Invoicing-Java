@@ -12,8 +12,8 @@ angular.module('myApp', [
     'myApp.controllers'
 ]).
     config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/preferences', {templateUrl: 'partials/preferences.html', controller: 'PreferencesCtrl'});
-        $routeProvider.otherwise({redirectTo: '/preferences'});
+        $routeProvider.when('/settings', {templateUrl: 'partials/settings.html', controller: 'SettingsCtrl'});
+        $routeProvider.otherwise({redirectTo: '/settings'});
     }])
     .run(['InitializerSvc', function(InitializerSvc) {
         InitializerSvc.initialize();

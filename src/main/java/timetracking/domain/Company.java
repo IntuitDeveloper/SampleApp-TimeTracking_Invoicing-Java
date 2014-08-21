@@ -20,6 +20,9 @@ public class Company {
     private String name;
 
     private boolean connectedToQbo;
+    private boolean employeesSynced;
+    private boolean customersSynced;
+    private boolean serviceItemsSynced;
 
     @Column(unique = true)
     private String qboId;
@@ -32,6 +35,15 @@ public class Company {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
     private final List<Role> roles = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private final List<Employee> employees = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private final List<Customer> customers = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private final List<ServiceItem> serviceItems = new ArrayList<>();
 
     public Company() {
 
@@ -109,6 +121,30 @@ public class Company {
         this.connectedToQbo = connectedToQbo;
     }
 
+    public boolean isEmployeesSynced() {
+        return employeesSynced;
+    }
+
+    public void setEmployeesSynced(boolean employeesSynced) {
+        this.employeesSynced = employeesSynced;
+    }
+
+    public boolean isCustomersSynced() {
+        return customersSynced;
+    }
+
+    public void setCustomersSynced(boolean customersSynced) {
+        this.customersSynced = customersSynced;
+    }
+
+    public boolean isServiceItemsSynced() {
+        return serviceItemsSynced;
+    }
+
+    public void setServiceItemsSynced(boolean serviceItemsSynced) {
+        this.serviceItemsSynced = serviceItemsSynced;
+    }
+
     public List<Role> getRoles() {
         return roles;
     }
@@ -118,5 +154,19 @@ public class Company {
         role.setCompany(this);
     }
 
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        employee.setCompany(this);
+    }
+
+    public void addCustomer(Customer customer) {
+        this.customers.add(customer);
+        customer.setCompany(this);
+    }
+
+    public void addServiceItem(ServiceItem serviceItem) {
+        this.serviceItems.add(serviceItem);
+        serviceItem.setCompany(this);
+    }
 
 }

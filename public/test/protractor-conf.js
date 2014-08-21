@@ -9,7 +9,7 @@ exports.config = {
         'browserName': 'chrome'
     },
 
-    baseUrl: 'http://localhost:8000/app/',
+    baseUrl: 'http://localhost:8080/app/index.html',
 
     framework: 'jasmine',
 
@@ -21,6 +21,11 @@ exports.config = {
         var jUnitXmlReporter = new jasmine.JUnitXmlReporter('', true, true, 'e2e-');
         jasmine.getEnv().addReporter(jUnitXmlReporter);
 
+
+        browser.manage().timeouts().pageLoadTimeout(40000);
+        browser.manage().timeouts().implicitlyWait(25000);
+
+        browser.ignoreSynchronization = true; //needed to allow the ConnectToQBO button to show up
     },
 
     jasmineNodeOpts: {

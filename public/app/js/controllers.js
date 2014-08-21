@@ -15,83 +15,57 @@ controllersModule.controller('NavCtrl', ['$scope', '$routeParams', '$location', 
     }]);
 
 
-controllersModule.controller('SetupCtrl', ['$scope', '$log', '$modal',
-    'ModelSvc', 'RoleSvc',
-    function ($scope, $log, $modal, ModelSvc, RoleSvc) {
-
-        $scope.model = ModelSvc.model;
-
-        var openRoleModal = function (create, role) {
-            var modalInstance = $modal.open({
-                templateUrl: 'partials/roleModalContent.html',
-                controller: 'RoleModalInstanceCtrl',
-                size: 'lg',
-                resolve: {
-                    create: function () {
-                        return create;
-                    },
-                    role: function () {
-                        return role;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function (roleFromModal) {
-                if (create) {
-                    RoleSvc.createRole(roleFromModal);
-                } else {
-                    angular.copy(roleFromModal, role);
-                    RoleSvc.saveRole(roleFromModal);
-                }
-            });
-        }
-
-
-        $scope.addRole = function () {
-            openRoleModal(true);
-        }
-
-        $scope.editRole = function (role) {
-            openRoleModal(false, role);
-        }
-
-        $scope.deleteRole = function(role) {
-            RoleSvc.deleteRole(role);
-        }
-
-    }]);
-
-controllersModule.controller('RoleModalInstanceCtrl',
-    ['$scope', '$modalInstance', 'RoleSvc', 'create', 'role',
-        function ($scope, $modalInstance, RoleSvc, create, role) {
-
-            $scope.create = create;
-            $scope.modeStr = create ? "Create" : "Edit";
-            $scope.okButtonStr = create ? "Create" : "Update";
-            $scope.tempRole = create ? {} : angular.copy(role);
-
-            $scope.ok = function () {
-                $modalInstance.close($scope.tempRole);
-            };
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss();
-            };
-
-            $scope.notDuplicateRoleName = function(name) {
-                var result = RoleSvc.duplicateRoleName(name, role);
-                return  !result;
-            }
-
-        }]);
-
-controllersModule.controller('PreferencesCtrl',
+controllersModule.controller('SettingsCtrl',
     ['$scope', 'ModelSvc',
         function ($scope, ModelSvc) {
 
             $scope.model = ModelSvc.model;
 
-            $scope.showConnectButton = function() {
+            $scope.showConnectButton = function () {
                 return $scope.model.company.connectedToQbo === false;
             }
-}]);
+
+            var connectedToQBO = function () {
+                return $scope.model.company.connectedToQbo === true;
+            }
+
+            var disableSyncButton = function (entitySynced) {
+                if (connectedToQBO()) {
+                    //we can synced
+                    if (entitySynced) {
+                        //we have synced
+                        return true;
+                    } else {
+                        //we have not synced
+                        return false;
+                    }
+                } else {
+                    //we can't sync
+                    return true;
+                }
+            }
+
+            $scope.disableEmployeeSyncButton = function () {
+                return disableSyncButton($scope.model.company.employeesSynced);
+            }
+
+            $scope.disableCustomersSyncButton = function () {
+                return disableSyncButton($scope.model.company.customersSynced);
+            }
+
+            $scope.disableServiceItemsSyncButton = function () {
+                return disableSyncButton($scope.model.company.serviceItemsSycned);
+            }
+
+            $scope.syncEmployees = function () {
+
+            }
+
+            $scope.syncCustomers = function() {
+
+            }
+
+            $scope.syncServiceItems = function() {
+
+            }
+        }]);

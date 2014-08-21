@@ -22,7 +22,6 @@ import timetracking.domain.AppInfo;
 import timetracking.domain.Company;
 import timetracking.handlers.RoleEventHandler;
 import timetracking.repository.AppInfoRepository;
-import timetracking.repository.CompanyRepository;
 import timetracking.serializers.MoneyDeserializer;
 import timetracking.serializers.MoneySerializer;
 import timetracking.validation.RoleValidator;
@@ -56,74 +55,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 
         final ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
 
-        initializeData(context);
-    }
-
-    /**
-     * Loads oauth information from oauth.json, which is expected to be in the project root
-     *
-     * @param context
-     */
-    private static void initializeData(ConfigurableApplicationContext context) {
-
-        if (oauthInfoNeeded(context)) {
-            try {
-                final File file = new File("oauth.json");
-                final String jsonStr = FileUtils.readFileToString(file);
-                ObjectMapper mapper = new ObjectMapper();
-                final JsonNode jsonNode = mapper.readTree(jsonStr);
-
-                createAppInfo(jsonNode, context);
-                createCompany(jsonNode, context);
-
-            } catch (IOException e) {
-                System.err.println("Failed to read oauth information from oauth.json. Please make sure oauth.json is in the root of the project directory");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static void createCompany(JsonNode jsonNode, ConfigurableApplicationContext springContext) {
-        final CompanyRepository repository = springContext.getBean(CompanyRepository.class);
-
-        final JsonNode jsonCompanyInfo = jsonNode.get("companyInfo");
-
-        Company company;
-        if (jsonCompanyInfo != null) {
-            company = new Company(jsonCompanyInfo.get("qboId").asText(),
-                    jsonCompanyInfo.get("accessToken").asText(),
-                    jsonCompanyInfo.get("accessTokenSecret").asText()
-            );
-
-        } else {
-            company = new Company("Russell's Law Firm");
-        }
-
-//        final QBOCompanyServiceFactory qboCompanyServiceFactory = springContext.getBean(QBOCompanyServiceFactory.class);
-//        final QboCompanyService companyService = qboCompanyServiceFactory.create(company);
-//        companyService.syncFromQBO();
-//        company.addRole(new Role("Lawyer", "A person who knows the law", Money.parse("USD 100.00")));
-        repository.save(company);
-    }
-
-    private static boolean oauthInfoNeeded(ConfigurableApplicationContext context) {
-        AppInfoRepository appInfoRepository = context.getBean(AppInfoRepository.class);
-        return appInfoRepository.count() == 0;
-    }
-
-    private static AppInfo createAppInfo(JsonNode jsonNode, ConfigurableApplicationContext context) {
-        AppInfoRepository repository = context.getBean(AppInfoRepository.class);
-
-        final JsonNode jsonAppInfo = jsonNode.get("appInfo");
-
-        AppInfo appInfo = new AppInfo(jsonAppInfo.get("appToken").asText(),
-                jsonAppInfo.get("consumerKey").asText(),
-                jsonAppInfo.get("consumerSecret").asText());
-
-        repository.save(appInfo);
-
-        return appInfo;
-
+        DataLoader.initializeData(context);
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.Map;
  * Time: 5:34 AM
  */
 @RestController
-public class OAuthControllerLegacy {
+public class OAuthController {
 
     @Autowired
     private OAuthInfoProvider oAuthInfoProvider;

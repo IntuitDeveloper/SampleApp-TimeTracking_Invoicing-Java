@@ -1,11 +1,11 @@
-var PreferencesPage = (function () {
-    function PreferencesPage() {
+var SettingsPage = (function () {
+    function SettingsPage() {
         this.connectToQBOText = element(by.css('#connect-to-qbo-div p'));
         this.connectToQBOButton = element(by.css('#connect-to-qbo-div a.intuitPlatformConnectButton'));
     }
 
-    return PreferencesPage;
+    return SettingsPage;
 
 })();
 
-module.exports = PreferencesPage;
+module.exports = SettingsPage;
