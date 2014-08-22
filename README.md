@@ -1,7 +1,13 @@
 Time Tracking and Invoicing Java Sample App
 =====================================
 
-Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App.
+Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App. 
+
+This sample app is is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem. Please note that while these examples work, they are not necessarily examples of how you would implement you production application. In other words, this is not a seed project that is meant to be taken cart blanche and deployed to your production environment.  
+
+For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.
+
+Therefore there are certain instances where we might forego a more complicated implementation (e.g. cacheing a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from. 
 
 ## First use instructions
 
