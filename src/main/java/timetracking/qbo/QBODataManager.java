@@ -1,8 +1,12 @@
 package timetracking.qbo;
 
 import com.intuit.ipp.core.IEntity;
+import com.intuit.ipp.data.Account;
+import com.intuit.ipp.data.Item;
+import com.intuit.ipp.data.ReferenceType;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.services.DataService;
+import com.intuit.ipp.services.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import timetracking.domain.Customer;
 import timetracking.domain.Employee;
@@ -14,6 +18,8 @@ import timetracking.repository.CustomerRepository;
 import timetracking.repository.EmployeeRepository;
 import timetracking.repository.ServiceItemRepository;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: russellb337
@@ -23,6 +29,7 @@ import timetracking.repository.ServiceItemRepository;
 public class QBODataManager {
 
     public static final String INCOME_ACCOUNT_QUERY = "select * from account where accounttype = 'Income' and accountsubtype = 'ServiceFeeIncome'";
+
     @Autowired
     private DataServiceFactory dataServiceFactory;
 
@@ -54,22 +61,35 @@ public class QBODataManager {
         customerRepository.save(customer);
     }
 
-    public void createItemInQBO(ServiceItem buildQBOObject) {
-        DataService dataService = dataServiceFactory.getDataService(buildQBOObject.getCompany());
-        final com.intuit.ipp.data.Item qboObject = ServiceItemMapper.buildQBOObject(buildQBOObject);
+    public void createItemInQBO(ServiceItem serviceItem) {
+        DataService dataService = dataServiceFactory.getDataService(serviceItem.getCompany());
+        final com.intuit.ipp.data.Item qboObject = ServiceItemMapper.buildQBOObject(serviceItem);
 
         //item specific logic
-        try {
-            dataService.executeQuery(INCOME_ACCOUNT_QUERY);
-        } catch (FMSException e) {
-            throw new RuntimeException("Failed to execute query '" + INCOME_ACCOUNT_QUERY + "'", e);
-        }
-
+        findAndAssociateIncomeAccount(dataService, qboObject);
 
         final com.intuit.ipp.data.Item returnedQBOObject = createObjectInQBO(dataService, qboObject);
+        serviceItem.setQboId(returnedQBOObject.getId());
+        serviceItemRepository.save(serviceItem);
+    }
 
-        buildQBOObject.setQboId(returnedQBOObject.getId());
-        serviceItemRepository.save(buildQBOObject);
+    private void findAndAssociateIncomeAccount(DataService dataService, Item qboObject) {
+        try {
+            final QueryResult queryResult = dataService.executeQuery(INCOME_ACCOUNT_QUERY);
+            if (queryResult.getTotalCount() == 0) {
+                throw new RuntimeException("Could not find a suitable income account when creating a service item");
+            }
+
+            final List<Account> entities = (List<Account>) queryResult.getEntities();
+            final Account account = entities.get(0);
+
+            ReferenceType referenceType = new ReferenceType();
+            referenceType.setValue(account.getId());
+            qboObject.setIncomeAccountRef(referenceType);
+
+        } catch (FMSException e) {
+            throw new RuntimeException("Failed to execute income account query '" + INCOME_ACCOUNT_QUERY + "'", e);
+        }
     }
 
     private <T extends IEntity> T createObjectInQBO(DataService dataService, T qboObject) {

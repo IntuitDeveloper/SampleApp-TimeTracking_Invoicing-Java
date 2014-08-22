@@ -20,20 +20,19 @@ public class ServiceItemMapper {
 
         mapperFactory.classMap(ServiceItem.class, com.intuit.ipp.data.Item.class)
                 .field("rate.amount", "unitPrice")
-                .field("qboIncomeAccountId", "incomeAccountRef.value")
                 .byDefault()
                 .register();
 
         domainToQBOMapper = mapperFactory.getMapperFacade(ServiceItem.class, com.intuit.ipp.data.Item.class);
     }
 
-    public static com.intuit.ipp.data.Item buildQBOObject(ServiceItem pSalesReceipt) {
+    public static com.intuit.ipp.data.Item buildQBOObject(ServiceItem serviceItem) {
 
-        if (pSalesReceipt == null) {
+        if (serviceItem == null) {
             return null;
         }
 
-        final com.intuit.ipp.data.Item qboServiceItem = domainToQBOMapper.map(pSalesReceipt);
+        final com.intuit.ipp.data.Item qboServiceItem = domainToQBOMapper.map(serviceItem);
 
         return qboServiceItem;
 

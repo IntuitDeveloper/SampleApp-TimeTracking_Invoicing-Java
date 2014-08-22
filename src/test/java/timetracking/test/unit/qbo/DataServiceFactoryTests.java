@@ -1,4 +1,4 @@
-package timetracking.unit.qbo;
+package timetracking.test.unit.qbo;
 
 import com.intuit.ipp.core.Context;
 import com.intuit.ipp.core.ServiceType;
@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import timetracking.domain.AppInfo;
 import timetracking.domain.Company;
-import timetracking.exceptions.qbo.CompanyNotConnectedToQBOException;
 import timetracking.qbo.DataServiceFactory;
 import timetracking.repository.AppInfoRepository;
 
@@ -90,7 +89,7 @@ public class DataServiceFactoryTests {
 
             dataServiceFactory.getDataService(c);
 
-        } catch (CompanyNotConnectedToQBOException t) {
+        } catch (RuntimeException t) {
             exceptionThrown = true;
             assertEquals("Company is not connected to QBO: " + companyName, t.getMessage());
         }

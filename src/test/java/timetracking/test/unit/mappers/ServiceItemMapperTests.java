@@ -1,4 +1,4 @@
-package timetracking.unit.mappers;
+package timetracking.test.unit.mappers;
 
 import org.joda.money.Money;
 import org.junit.Test;
@@ -22,13 +22,11 @@ public class ServiceItemMapperTests {
         final String name = "foo";
         final String description = "A really good description";
         final String rate = "100.25";
-        final String incomeAccountId = "231";
 
         ServiceItem domain = new ServiceItem();
         domain.setName(name);
         domain.setDescription(description);
         domain.setRate(Money.parse("USD " + rate));
-        domain.setQboIncomeAccountId(incomeAccountId);
 
         final com.intuit.ipp.data.Item item = ServiceItemMapper.buildQBOObject(domain);
 
@@ -36,7 +34,6 @@ public class ServiceItemMapperTests {
         assertEquals("description", description, item.getDescription());
         assertNotNull("rate", item.getUnitPrice());
         assertEquals("rate", rate, item.getUnitPrice().toString());
-        assertEquals("incomeAccountId", incomeAccountId, item.getIncomeAccountRef().getValue());
 
     }
 }

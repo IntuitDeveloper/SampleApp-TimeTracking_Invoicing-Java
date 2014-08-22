@@ -1,4 +1,4 @@
-package timetracking.unit.mappers;
+package timetracking.test.unit.mappers;
 
 import org.junit.Test;
 import timetracking.domain.Customer;

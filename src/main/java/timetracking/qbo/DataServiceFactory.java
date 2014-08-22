@@ -9,7 +9,6 @@ import com.intuit.ipp.services.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import timetracking.domain.AppInfo;
 import timetracking.domain.Company;
-import timetracking.exceptions.qbo.CompanyNotConnectedToQBOException;
 import timetracking.repository.AppInfoRepository;
 
 /**
@@ -45,7 +44,7 @@ public class DataServiceFactory {
 
     private void verifyCompanyConnectedToQBO(Company company) {
         if (!company.isConnectedToQbo()) {
-            throw new CompanyNotConnectedToQBOException(company);
+            throw new RuntimeException("Company is not connected to QBO: " + company.getName());
         }
     }
 }

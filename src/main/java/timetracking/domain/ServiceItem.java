@@ -19,7 +19,6 @@ public class ServiceItem {
 
 
     private String qboId;
-    private String qboIncomeAccountId;
 
     @Column(unique = true)
     private String name;
@@ -49,14 +48,6 @@ public class ServiceItem {
 
     public void setQboId(String qboId) {
         this.qboId = qboId;
-    }
-
-    public String getQboIncomeAccountId() {
-        return qboIncomeAccountId;
-    }
-
-    public void setQboIncomeAccountId(String qboIncomeAccountId) {
-        this.qboIncomeAccountId = qboIncomeAccountId;
     }
 
     public String getName() {

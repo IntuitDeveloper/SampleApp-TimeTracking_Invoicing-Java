@@ -1,6 +1,9 @@
-package timetracking.unit.qbo;
+package timetracking.test.unit.qbo;
 
+import com.intuit.ipp.core.IEntity;
+import com.intuit.ipp.data.Account;
 import com.intuit.ipp.services.DataService;
+import com.intuit.ipp.services.QueryResult;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -21,7 +24,11 @@ import timetracking.repository.CustomerRepository;
 import timetracking.repository.EmployeeRepository;
 import timetracking.repository.ServiceItemRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -113,7 +120,8 @@ public class QBODataManagerTests {
 
     @Test
     public void testCreateServiceItemInQBO(@Mocked final ServiceItemMapper mapper,
-                                           @Injectable final ServiceItemRepository repository) throws Exception {
+                                           @Injectable final ServiceItemRepository repository,
+                                           @Mocked final QueryResult queryResult) throws Exception {
 
         final ServiceItem domainEntity = new ServiceItem();
 
@@ -127,12 +135,27 @@ public class QBODataManagerTests {
 
         final com.intuit.ipp.data.Item mappedQboObject = new com.intuit.ipp.data.Item();
 
+        final List<IEntity> list = new ArrayList<>();
+        final Account account = new Account();
+        list.add(account);
+        final String expectedAccountId = "22222223";
+        account.setId(expectedAccountId);
+
         new Expectations() {{
             dataServiceFactory.getDataService(c);
             result = dataService;
 
             ServiceItemMapper.buildQBOObject(domainEntity);
             result = mappedQboObject;
+
+            dataService.executeQuery(QBODataManager.INCOME_ACCOUNT_QUERY);
+            result = queryResult;
+
+            queryResult.getTotalCount();
+            result = 1;
+
+            queryResult.getEntities();
+            result = list;
 
             dataService.add(mappedQboObject);
             result = returnedQboObject;
@@ -143,5 +166,50 @@ public class QBODataManagerTests {
         qboDataManager.createItemInQBO(domainEntity);
 
         assertEquals("qboId  was not updated", expectedQBOId, domainEntity.getQboId());
+        assertEquals("income account id was not set", expectedAccountId, mappedQboObject.getIncomeAccountRef().getValue());
+    }
+
+    @Test
+    public void testCreateServiceItemInQBO_NoMatchingIncomeAccount(@Mocked final ServiceItemMapper mapper,
+                                                                   @Injectable final ServiceItemRepository repository,
+                                                                   @Mocked final QueryResult queryResult) throws Exception {
+
+        final ServiceItem domainEntity = new ServiceItem();
+
+        final Company c = new Company();
+        c.setName("The Federalists");
+        c.addServiceItem(domainEntity);
+
+        final com.intuit.ipp.data.Item mappedQboObject = new com.intuit.ipp.data.Item();
+
+        new Expectations() {{
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            ServiceItemMapper.buildQBOObject(domainEntity);
+            result = mappedQboObject;
+
+            dataService.executeQuery(QBODataManager.INCOME_ACCOUNT_QUERY);
+            result = queryResult;
+
+            queryResult.getTotalCount();
+            result = 0;
+
+            dataService.add(mappedQboObject);
+            times = 0;
+            repository.save(domainEntity);
+            times = 0;
+        }};
+
+
+        boolean exceptionThrown = false;
+        try {
+            qboDataManager.createItemInQBO(domainEntity);
+        } catch (RuntimeException e) {
+            exceptionThrown = true;
+            assertEquals("Could not find a suitable income account when creating a service item", e.getMessage());
+        }
+
+        assertTrue("exception not thrown", exceptionThrown);
     }
 }
