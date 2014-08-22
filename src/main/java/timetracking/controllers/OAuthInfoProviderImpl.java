@@ -1,6 +1,8 @@
 package timetracking.controllers;
 
-import oauth.*;
+import oauth.CompanyRequestTokenSecret;
+import oauth.OAuthException;
+import oauth.OAuthInfoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import timetracking.domain.Company;
 import timetracking.repository.AppInfoRepository;
@@ -22,24 +24,24 @@ public class OAuthInfoProviderImpl implements OAuthInfoProvider {
 
     @Override
     public String getAppToken() {
-        return appInfoRepository.findAll().iterator().next().getAppToken();
+        return appInfoRepository.getFirst().getAppToken();
     }
 
     @Override
     public String getConsumerKey() {
-        return appInfoRepository.findAll().iterator().next().getConsumerKey();
+        return appInfoRepository.getFirst().getConsumerKey();
     }
 
     @Override
     public String getConsumerSecret() {
-        return appInfoRepository.findAll().iterator().next().getConsumerSecret();
+        return appInfoRepository.getFirst().getConsumerSecret();
     }
 
     @Override
     public CompanyRequestTokenSecret getCompanyRequestTokenSecret(String requestToken) {
         final Company company = companyRepository.findByRequestToken(requestToken);
 
-        if(company == null) {
+        if (company == null) {
             throw new OAuthException("Could not find a company with an request token of " + requestToken);
         }
 
@@ -51,7 +53,7 @@ public class OAuthInfoProviderImpl implements OAuthInfoProvider {
     public void setRequestTokenValuesForCompany(String appCompanyId, String requestToken, String requestTokenSecret) {
         final Company company = companyRepository.findOne(Long.parseLong(appCompanyId));
 
-        if(company == null) {
+        if (company == null) {
             throw new OAuthException("Could not find a company with an id of " + appCompanyId);
         }
 
@@ -66,7 +68,7 @@ public class OAuthInfoProviderImpl implements OAuthInfoProvider {
     public void setAccessTokenForCompany(String appCompanyId, String realmId, String accessToken, String accessTokenSecret) {
         final Company company = companyRepository.findOne(Long.parseLong(appCompanyId));
 
-        if(company == null) {
+        if (company == null) {
             throw new OAuthException("Could not find a company with an id of " + appCompanyId);
         }
 

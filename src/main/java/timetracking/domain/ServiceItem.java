@@ -21,11 +21,13 @@ public class ServiceItem {
     private String qboId;
     private String qboIncomeAccountId;
 
+    @Column(unique = true)
     private String name;
+
     private String description;
 
     @Convert(converter = MoneyConverter.class)
-    private Money  rate;
+    private Money rate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_fk", referencedColumnName = "id")
@@ -83,5 +85,9 @@ public class ServiceItem {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Company getCompany() {
+        return company;
     }
 }

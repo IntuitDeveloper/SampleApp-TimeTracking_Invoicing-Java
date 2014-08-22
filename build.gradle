@@ -16,7 +16,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
 
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 version = '1.0'
 
 //custom variables for this project
@@ -35,11 +35,14 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.hsqldb:hsqldb")
+    compile("org.hsqldb:hsqldb") //set the database to hyper sql
     compile("org.springframework.data:spring-data-rest-webmvc")
     compile("commons-io:commons-io:2.4")
     compile("org.joda:joda-money:0.9.1")
+    compile("ma.glasnost.orika:orika-core:1.4.5")
     compile fileTree(dir: "libs/qbo-sdk-2.3.1", include: "*.jar")
+
+    testCompile("org.jmockit:jmockit:1.10")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     //oauth dependencies

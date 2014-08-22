@@ -35,8 +35,7 @@ public class DataLoader {
                 createCompany(context);
 
             } catch (IOException e) {
-                System.err.println("Failed to read oauth information from oauth.json. Please make sure oauth.json is in the root of the project directory");
-                e.printStackTrace();
+                throw new RuntimeException("Failed to read oauth information from oauth.json. Please make sure oauth.json is in the root of the project directory");
             }
         }
     }
@@ -45,7 +44,7 @@ public class DataLoader {
     private static void createCompany(ConfigurableApplicationContext springContext) {
         final CompanyRepository repository = springContext.getBean(CompanyRepository.class);
 
-        if(repository.count() == 0) {
+        if (repository.count() == 0) {
             System.out.println("No company data in the app, creating data");
 
             Company company = new Company("Your Law Firm");

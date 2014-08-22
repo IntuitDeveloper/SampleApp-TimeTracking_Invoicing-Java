@@ -55,10 +55,10 @@ On one command prompt window:
 
 1. _./gradlew bootRun_
 
-On another command prompt window:
+On **_another_** command prompt window:
 
 1. _cd public_
-2. _npm run protractor_ (on **_another_** command prompt window)
+2. _npm run protractor_
 
 
 

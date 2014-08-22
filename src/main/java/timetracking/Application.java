@@ -1,6 +1,5 @@
 package timetracking;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import oauth.OAuthInfoProvider;
@@ -18,10 +17,10 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import timetracking.controllers.OAuthInfoProviderImpl;
-import timetracking.domain.AppInfo;
 import timetracking.domain.Company;
 import timetracking.handlers.RoleEventHandler;
-import timetracking.repository.AppInfoRepository;
+import timetracking.qbo.DataServiceFactory;
+import timetracking.qbo.QBODataManager;
 import timetracking.serializers.MoneyDeserializer;
 import timetracking.serializers.MoneySerializer;
 import timetracking.validation.RoleValidator;
@@ -93,4 +92,13 @@ public class Application extends RepositoryRestMvcConfiguration {
         return new OAuthInfoProviderImpl();
     }
 
+    @Bean
+    QBODataManager qboDataManager() {
+        return new QBODataManager();
+    }
+
+    @Bean
+    DataServiceFactory dataServiceFactory() {
+        return new DataServiceFactory();
+    }
 }

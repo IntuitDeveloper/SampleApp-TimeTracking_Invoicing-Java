@@ -34,6 +34,10 @@ public class AppInfo {
 
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getAppToken() {
         return appToken;
     }

@@ -80,4 +80,8 @@ public class Employee {
     public void setCompany(Company company) {
         this.company = company;
     }
+
+    public Company getCompany() {
+        return company;
+    }
 }
