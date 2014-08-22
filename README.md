@@ -8,7 +8,7 @@ This sample app is meant to provide working examples of how to integrate your ap
 1. Implementing OAuth to connect an application to a customer's QuickBooks Online (QBO) account.
 2. Using the QBO v3 SDK to create TimeActivity and Invoice objects in QBO.
 
-Please note that while these examples work, features not called out above are not intended to be taken and used production business applications. In other words, this is not a seed project to be taken cart blanche and deployed to your production environment.  
+Please note that while these examples work, features not called out above are not intended to be taken and used in production business applications. In other words, this is not a seed project to be taken cart blanche and deployed to your production environment.  
 
 For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.
 
