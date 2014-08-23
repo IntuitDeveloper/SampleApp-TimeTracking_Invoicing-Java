@@ -1,9 +1,14 @@
 Time Tracking and Invoicing Java Sample App
 =====================================
 
-Welcome to Intuit Partner Platform's Time Tracking and Invoicing Java Sample App. 
+Welcome to the Intuit Partner Platform's Time Tracking and Invoicing Java Sample App. 
 
-This sample app is is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem. Please note that while these examples work, they are not necessarily examples of how you would implement a production business application. In other words, this is not a seed project that is meant to be taken cart blanche and deployed to your production environment.  
+This sample app is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem.  Specifically, this sample application demonstrates the following:
+
+1. Implementing OAuth to connect an application to a customer's QuickBooks Online (QBO) account.
+2. Using the QBO v3 SDK to create TimeActivity and Invoice objects in QBO.
+
+Please note that while these examples work, features not called out above are not intended to be taken and used in production business applications. In other words, this is not a seed project to be taken cart blanche and deployed to your production environment.  
 
 For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.
 
