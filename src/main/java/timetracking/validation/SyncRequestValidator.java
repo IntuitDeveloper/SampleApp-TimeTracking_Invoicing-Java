@@ -3,7 +3,7 @@ package timetracking.validation;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import timetracking.domain.Role;
+import timetracking.controllers.SyncRequest;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,14 +12,14 @@ import timetracking.domain.Role;
  * Time: 8:56 AM
  */
 
-public class RoleValidator implements Validator {
+public class SyncRequestValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return Role.class.isAssignableFrom(clazz);
+        return SyncRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "field.required", "The name field is required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "field.required", "The type field is required");
     }
 }

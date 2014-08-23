@@ -169,4 +169,7 @@ public class Company {
         serviceItem.setCompany(this);
     }
 
+    public List<Employee> getEmployees() {
+        return employees;
+    }
 }

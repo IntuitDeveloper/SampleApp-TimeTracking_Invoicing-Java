@@ -23,7 +23,6 @@ import timetracking.qbo.DataServiceFactory;
 import timetracking.qbo.QBODataManager;
 import timetracking.serializers.MoneyDeserializer;
 import timetracking.serializers.MoneySerializer;
-import timetracking.validation.RoleValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class Application extends RepositoryRestMvcConfiguration {
     @Override
     protected void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
         //add validators here
-        validatingListener.addValidator("beforeCreate", new RoleValidator());
+//        validatingListener.addValidator("beforeCreate", new SyncRequestValidator());
     }
 
 
