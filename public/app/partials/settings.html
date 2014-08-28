@@ -18,6 +18,7 @@
                 <tr>
                     <th>Entity Type</th>
                     <th>Action</th>
+                    <th>Status</th>
                 </tr>
                 <tr>
                     <td>Employees</td>
@@ -26,21 +27,34 @@
                             <span class="glyphicon glyphicon-transfer"></span> Sync
                         </button>
                     </td>
+                    <td>
+                        <span>{{syncEmployeesMessage}}</span>
+                    </td>
                 </tr>
                 <tr>
                     <td>Customers</td>
                     <td>
-                        <button type="button" class="btn btn-default btn-sm" ng-disabled="disableCustomersSyncButton()" ng-click="syncCustomers()">
-                            <span class="glyphicon glyphicon-transfer"></span> Sync
+                        <button type="button" class="btn btn-default btn-sm"
+                                ng-disabled="disableCustomersSyncButton()"
+                                ng-click="syncCustomers()">
+                        <span class="glyphicon glyphicon-transfer"></span> Sync
                         </button>
+                    </td>
+                    <td>
+                        <span>{{syncCustomersMessage}}</span>
                     </td>
                 </tr>
                 <tr>
                     <td>Service Items</td>
                     <td>
-                        <button type="button" class="btn btn-default btn-sm "ng-disabled="disableServiceItemsSyncButton()" ng-click="syncServiceItems()">
-                            <span class="glyphicon glyphicon-transfer"></span> Sync
+                        <button type="button" class="btn btn-default btn-sm "
+                                ng-disabled="disableServiceItemsSyncButton()"
+                                ng-click="syncServiceItems()">
+                        <span class="glyphicon glyphicon-transfer"></span> Sync
                         </button>
+                    </td>
+                    <td>
+                        <span>{{syncServiceItemsMessage}}</span>
                     </td>
                 </tr>
             </table>

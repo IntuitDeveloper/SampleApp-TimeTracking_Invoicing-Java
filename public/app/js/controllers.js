@@ -15,11 +15,13 @@ controllersModule.controller('NavCtrl', ['$scope', '$routeParams', '$location', 
     }]);
 
 
-controllersModule.controller('SettingsCtrl',
-    ['$scope', 'ModelSvc',
-        function ($scope, ModelSvc) {
+controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc',
+    function ($scope, SyncRequestSvc, ModelSvc, CompanySvc) {
 
             $scope.model = ModelSvc.model;
+        $scope.syncCustomersMessage = '';
+        $scope.syncServiceItemsMessage = '';
+        $scope.syncEmployeesMessage = '';
 
             $scope.showConnectButton = function () {
                 return $scope.model.company.connectedToQbo === false;
@@ -33,20 +35,16 @@ controllersModule.controller('SettingsCtrl',
                 if (connectedToQBO()) {
                     //we can synced
                     if (entitySynced) {
-                        //we have synced
+                        //we have synced, disable the button
                         return true;
                     } else {
-                        //we have not synced
+                        //we have not synced, don't disable the button
                         return false;
                     }
                 } else {
-                    //we can't sync
+                    //we can't sync, disable the button
                     return true;
                 }
-            }
-
-            $scope.disableEmployeeSyncButton = function () {
-                return disableSyncButton($scope.model.company.employeesSynced);
             }
 
             $scope.disableCustomersSyncButton = function () {
@@ -54,18 +52,34 @@ controllersModule.controller('SettingsCtrl',
             }
 
             $scope.disableServiceItemsSyncButton = function () {
-                return disableSyncButton($scope.model.company.serviceItemsSycned);
+                return disableSyncButton($scope.model.company.serviceItemsSynced);
             }
 
-            $scope.syncEmployees = function () {
-
+        $scope.disableEmployeeSyncButton = function () {
+            return disableSyncButton($scope.model.company.employeesSynced);
             }
 
             $scope.syncCustomers = function() {
-
+                SyncRequestSvc.sendCustomerSyncRequest(syncCompleted);
             }
 
             $scope.syncServiceItems = function() {
+                SyncRequestSvc.sendServiceItemsSyncRequest(syncCompleted);
+            }
 
+        $scope.syncEmployees = function () {
+            SyncRequestSvc.sendEmployeeSyncRequest(syncCompleted);
+        }
+
+        var syncCompleted = function (data, status, headers, config) {
+            var message = data.successful ? data.message : 'Error: ' + data.message;
+            if (data.type === 'Customer') {
+                $scope.syncCustomersMessage = message;
+            } else if (data.type === 'ServiceItem') {
+                $scope.syncServiceItemsMessage = message;
+            } else if (data.type === 'Employee') {
+                $scope.syncEmployeesMessage = message;
+            }
+            CompanySvc.initializeModel();
             }
         }]);

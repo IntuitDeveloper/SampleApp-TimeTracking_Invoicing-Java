@@ -7,13 +7,26 @@ var timetrackingServices = angular.module('myApp.services', ['ngResource']);
 
 timetrackingServices.value('version', '0.1');
 
-timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'CompanySvc',
-    function ($rootScope, RootUrlSvc, CompanySvc) {
+timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc',
+    function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc) {
 
         var initialized = false;
 
         var initialize = function () {
-            CompanySvc.initialize();
+
+            $rootScope.$on('api.loaded', function () {
+                CompanySvc.initialize();
+                CustomerSvc.initialize();
+                ServiceItemSvc.initialize();
+
+                CompanySvc.initializeModel();
+            });
+
+            $rootScope.$on('model.company.change', function () {
+                ServiceItemSvc.initializeModel();
+                CustomerSvc.initializeModel();
+            });
+
             RootUrlSvc.initialize();
 
             $rootScope.$on('$viewContentLoaded', function (scope, next, current) {
@@ -62,8 +75,8 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
     function ($resource, $rootScope, $location) {
 
         var rootUrls = {};
-        var apiRoot = function() {
-            return $location.protocol() +"://" + $location.host() + ":8080";
+        var apiRoot = function () {
+            return $location.protocol() + "://" + $location.host() + ":8080";
         };
 
         var initialize = function () {
@@ -74,11 +87,12 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
 //                    console.log("Discovered the URL for " + link + ": " + href);
                     rootUrls[link] = href.split(/\{/)[0]; //chop off the template stuff
                 }
+                rootUrls['syncRequest'] = apiRoot() + "/syncrequest";  // non-discoverable
                 $rootScope.$broadcast('api.loaded');  //broadcast an event so that the CompanySvc can know to load the companies
             });
         };
 
-        var oauthGrantUrl = function() {
+        var oauthGrantUrl = function () {
             return apiRoot() + "/request_token";
         }
 
@@ -92,7 +106,7 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
             initialize: initialize,
             rootUrls: rootUrls,
             onApiLoaded: onApiLoaded,
-            oauthGrantUrl : oauthGrantUrl
+            oauthGrantUrl: oauthGrantUrl
         }
     }]);
 
@@ -100,14 +114,14 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
 timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
     function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
 
-        var getCompanyResource = function () {
-            return $resource(RootUrlSvc.rootUrls.companies + ':companyId', {}, {
-                query: {method: 'GET', isArray: false}
-            });
+        var Company;
+
+        var initialize = function () {
+            Company = $resource(RootUrlSvc.rootUrls.companies + ':companyId', {}, { query: {method: 'GET', isArray: false} });
         };
 
-        var getCompanies = function () {
-            getCompanyResource().query(function (data) {
+        var initializeModel = function () {
+            Company.query(function (data) {
                 var companies = data._embedded.companies;
                 ModelSvc.model.companies = companies;
                 ModelSvc.model.company = companies[0]; //select the first company for now
@@ -116,20 +130,86 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
                 var grantUrl = RootUrlSvc.oauthGrantUrl() + '?appCompanyId=' + ModelSvc.model.company.id;
                 intuit.ipp.anywhere.setup({
                     grantUrl: grantUrl});
-
-
             });
-        };
-
-        var initialize = function () {
-            RootUrlSvc.onApiLoaded($rootScope, getCompanies);
         };
 
         return {
             initialize: initialize,
-            getCompanies: getCompanies
+            initializeModel: initializeModel
         }
 
     }]);
 
 
+timetrackingServices.factory('ServiceItemSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var ServiceItem;
+
+        var initialize = function () {
+            ServiceItem = $resource(RootUrlSvc.rootUrls.serviceItems, {}, { query: {method: 'GET', isArray: false} });
+        };
+
+        var initializeModel = function () {
+            ServiceItem.query(function (data) {
+                var serviceItems = data._embedded.serviceItems;
+                ModelSvc.model.company.serviceItems = serviceItems;
+            });
+        }
+
+        return {
+            initialize: initialize,
+            initializeModel: initializeModel
+        }
+    }]);
+
+
+timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var Customer;
+
+        var initialize = function () {
+            Customer = $resource(RootUrlSvc.rootUrls.customers, {}, { query: {method: 'GET', isArray: false} });
+        };
+
+        var initializeModel = function () {
+            Customer.query(function (data) {
+                var customers = data._embedded.customers;
+                ModelSvc.model.company.customers = customers;
+
+            });
+        }
+
+        return {
+            initialize: initialize,
+            initializeModel: initializeModel
+        }
+    }]);
+
+
+timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($http, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var sendSyncRequest = function (entityType, successCallback, errorCallback) {
+            $http.post(RootUrlSvc.rootUrls.syncRequest, {type: entityType, companyId: ModelSvc.model.company.id})
+                .success(successCallback);
+        };
+
+        var initialize = function () {
+
+        };
+
+        return {
+            initialize: initialize,
+            sendCustomerSyncRequest: function (callback) {
+                sendSyncRequest('Customer', callback);
+            },
+            sendServiceItemsSyncRequest: function (callback) {
+                sendSyncRequest('ServiceItem', callback)
+            },
+            sendEmployeeSyncRequest: function (callback) {
+                sendSyncRequest('Employee', callback)
+            }
+        }
+    }]);
