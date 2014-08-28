@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.test.integration;
+package com.intuit.developer.sampleapp.timetracking.test.integration;
 
 import com.intuit.developer.sampleapp.timetracking.Application;
 import org.junit.Before;

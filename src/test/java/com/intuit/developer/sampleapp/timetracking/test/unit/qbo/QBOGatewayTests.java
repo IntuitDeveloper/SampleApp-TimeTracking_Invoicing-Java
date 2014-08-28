@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.test.unit.qbo;
+package com.intuit.developer.sampleapp.timetracking.test.unit.qbo;
 
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
@@ -8,7 +8,7 @@ import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.EmployeeMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.ServiceItemMapper;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
-import com.intuit.developer.sampleapp.timetracking.qbo.QBODataManager;
+import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.repository.CustomerRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.EmployeeRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.ServiceItemRepository;
@@ -37,10 +37,11 @@ import static org.junit.Assert.assertTrue;
  * Time: 10:02 AM
  */
 @RunWith(JMockit.class)
-public class QBODataManagerTests {
+public class QBOGatewayTests {
 
+    public static final String EXPECTED_INCOME_ACCOUNT_QUERY = "select * from account where accounttype = 'Income' and accountsubtype = 'ServiceFeeIncome'";
     @Tested
-    QBODataManager qboDataManager;
+    QBOGateway qboDataManager;
 
     @Injectable
     DataServiceFactory dataServiceFactory;
@@ -148,11 +149,8 @@ public class QBODataManagerTests {
             ServiceItemMapper.buildQBOObject(domainEntity);
             result = mappedQboObject;
 
-            dataService.executeQuery(QBODataManager.INCOME_ACCOUNT_QUERY);
+            dataService.executeQuery(EXPECTED_INCOME_ACCOUNT_QUERY);
             result = queryResult;
-
-            queryResult.getTotalCount();
-            result = 1;
 
             queryResult.getEntities();
             result = list;
@@ -189,11 +187,11 @@ public class QBODataManagerTests {
             ServiceItemMapper.buildQBOObject(domainEntity);
             result = mappedQboObject;
 
-            dataService.executeQuery(QBODataManager.INCOME_ACCOUNT_QUERY);
+            dataService.executeQuery(EXPECTED_INCOME_ACCOUNT_QUERY);
             result = queryResult;
 
-            queryResult.getTotalCount();
-            result = 0;
+            queryResult.getEntities();
+            result = new ArrayList<IEntity>();
 
             dataService.add(mappedQboObject);
             times = 0;
@@ -207,7 +205,7 @@ public class QBODataManagerTests {
             qboDataManager.createItemInQBO(domainEntity);
         } catch (RuntimeException e) {
             exceptionThrown = true;
-            assertEquals("Could not find a suitable income account when creating a service item", e.getMessage());
+            assertEquals("Could not find an account of type Income and subtype ServiceFeeIncome", e.getMessage());
         }
 
         assertTrue("exception not thrown", exceptionThrown);

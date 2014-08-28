@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.test.unit.qbo;
+package com.intuit.developer.sampleapp.timetracking.test.unit.qbo;
 
 import com.intuit.developer.sampleapp.timetracking.domain.AppInfo;
 import com.intuit.developer.sampleapp.timetracking.domain.Company;

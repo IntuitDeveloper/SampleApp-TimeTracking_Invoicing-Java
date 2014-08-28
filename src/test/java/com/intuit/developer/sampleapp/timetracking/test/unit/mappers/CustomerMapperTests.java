@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.test.unit.mappers;
+package com.intuit.developer.sampleapp.timetracking.test.unit.mappers;
 
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
 import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;

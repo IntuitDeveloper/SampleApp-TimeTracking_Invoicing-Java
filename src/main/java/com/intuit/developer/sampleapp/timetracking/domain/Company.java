@@ -172,4 +172,12 @@ public class Company {
     public List<Employee> getEmployees() {
         return employees;
     }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public List<ServiceItem> getServiceItems() {
+        return serviceItems;
+    }
 }

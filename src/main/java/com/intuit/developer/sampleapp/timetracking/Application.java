@@ -6,7 +6,7 @@ import com.intuit.developer.sampleapp.timetracking.controllers.OAuthInfoProvider
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
 import com.intuit.developer.sampleapp.timetracking.handlers.RoleEventHandler;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
-import com.intuit.developer.sampleapp.timetracking.qbo.QBODataManager;
+import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneyDeserializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneySerializer;
 import oauth.OAuthInfoProvider;
@@ -92,8 +92,8 @@ public class Application extends RepositoryRestMvcConfiguration {
     }
 
     @Bean
-    QBODataManager qboDataManager() {
-        return new QBODataManager();
+    QBOGateway qboDataManager() {
+        return new QBOGateway();
     }
 
     @Bean
