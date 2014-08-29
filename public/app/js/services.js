@@ -7,8 +7,9 @@ var timetrackingServices = angular.module('myApp.services', ['ngResource']);
 
 timetrackingServices.value('version', '0.1');
 
-timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc',
-    function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc) {
+timetrackingServices.factory('InitializerSvc',
+    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc',
+        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc) {
 
         var initialized = false;
 
@@ -18,6 +19,7 @@ timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'Com
                 CompanySvc.initialize();
                 CustomerSvc.initialize();
                 ServiceItemSvc.initialize();
+                EmployeeSvc.initialize();
 
                 CompanySvc.initializeModel();
             });
@@ -25,6 +27,7 @@ timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'Com
             $rootScope.$on('model.company.change', function () {
                 ServiceItemSvc.initializeModel();
                 CustomerSvc.initializeModel();
+                EmployeeSvc.initializeModel();
             });
 
             RootUrlSvc.initialize();
@@ -47,26 +50,14 @@ timetrackingServices.factory('InitializerSvc', ['$rootScope', 'RootUrlSvc', 'Com
     }]);
 
 //A service which contains the current model (e.g. companies, items, etc)
-timetrackingServices.factory('ModelSvc', ['$rootScope',
-    function ($rootScope) {
+timetrackingServices.factory('ModelSvc', [
+    function () {
 
         var model = {};
         model.company = {};
 
-        var broadcastCompanyChange = function () {
-            $rootScope.$broadcast('model.company.change');
-        };
-
-        var onCompanyChange = function ($scope, callback) {
-            $scope.$on('model.company.change', function () {
-                callback(model);
-            });
-        };
-
         return {
-            model: model,
-            onCompanyChange: onCompanyChange,
-            broadcastCompanyChange: broadcastCompanyChange
+            model: model
         }
     }]);
 
@@ -96,16 +87,9 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
             return apiRoot() + "/request_token";
         }
 
-        var onApiLoaded = function ($scope, callback) {
-            $scope.$on('api.loaded', function () {
-                callback();
-            });
-        };
-
         return {
             initialize: initialize,
             rootUrls: rootUrls,
-            onApiLoaded: onApiLoaded,
             oauthGrantUrl: oauthGrantUrl
         }
     }]);
@@ -125,7 +109,7 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
                 var companies = data._embedded.companies;
                 ModelSvc.model.companies = companies;
                 ModelSvc.model.company = companies[0]; //select the first company for now
-                ModelSvc.broadcastCompanyChange();
+                $rootScope.$broadcast('model.company.change');
 
                 var grantUrl = RootUrlSvc.oauthGrantUrl() + '?appCompanyId=' + ModelSvc.model.company.id;
                 intuit.ipp.anywhere.setup({
@@ -147,7 +131,7 @@ timetrackingServices.factory('ServiceItemSvc', ['$resource', '$rootScope', 'Root
         var ServiceItem;
 
         var initialize = function () {
-            ServiceItem = $resource(RootUrlSvc.rootUrls.serviceItems, {}, { query: {method: 'GET', isArray: false} });
+            ServiceItem = $resource(ModelSvc.model.company._links.serviceItems.href, {}, { query: {method: 'GET', isArray: false} });
         };
 
         var initializeModel = function () {
@@ -170,7 +154,7 @@ timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrl
         var Customer;
 
         var initialize = function () {
-            Customer = $resource(RootUrlSvc.rootUrls.customers, {}, { query: {method: 'GET', isArray: false} });
+            Customer = $resource(ModelSvc.model.company._links.customers.href, {}, { query: {method: 'GET', isArray: false} });
         };
 
         var initializeModel = function () {
@@ -187,6 +171,28 @@ timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrl
         }
     }]);
 
+timetrackingServices.factory('EmployeeSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var Employee;
+
+        var initialize = function () {
+            Employee = $resource(ModelSvc.model.company._links.employees.href, {}, { query: {method: 'GET', isArray: false} });
+        };
+
+        var initializeModel = function () {
+            Employee.query(function (data) {
+                var employees = data._embedded.employees;
+                ModelSvc.model.company.employees = employees;
+
+            });
+        }
+
+        return {
+            initialize: initialize,
+            initializeModel: initializeModel
+        }
+    }]);
 
 timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlSvc', 'ModelSvc',
     function ($http, $rootScope, RootUrlSvc, ModelSvc) {
@@ -196,12 +202,7 @@ timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlS
                 .success(successCallback);
         };
 
-        var initialize = function () {
-
-        };
-
         return {
-            initialize: initialize,
             sendCustomerSyncRequest: function (callback) {
                 sendSyncRequest('Customer', callback);
             },
