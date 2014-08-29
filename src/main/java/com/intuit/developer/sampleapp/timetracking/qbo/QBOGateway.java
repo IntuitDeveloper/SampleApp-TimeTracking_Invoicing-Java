@@ -166,9 +166,9 @@ public class QBOGateway {
     }
 
 
-    private static final String EXISTING_EMPLOYEE_QUERY = "select * from employee where active = true and givenName = '%s' and familyName = '%s'";
-    private static final String EXISTING_CUSTOMER_QUERY = "select * from customer where active = true and givenName = '%s' and familyName = '%s'";
-    private static final String EXISTING_SERVICE_ITEM_QUERY = "select * from item where active = true and name = '%s'";
+    public static final String EXISTING_EMPLOYEE_QUERY = "select * from employee where active = true and givenName = '%s' and familyName = '%s'";
+    public static final String EXISTING_CUSTOMER_QUERY = "select * from customer where active = true and givenName = '%s' and familyName = '%s'";
+    public static final String EXISTING_SERVICE_ITEM_QUERY = "select * from item where active = true and name = '%s'";
 
     private com.intuit.ipp.data.Employee findExistingEmployee(DataService dataService, Employee employee) {
         String query = String.format(EXISTING_EMPLOYEE_QUERY, employee.getFirstName(), employee.getLastName());
