@@ -64,17 +64,11 @@ describe('Unit: Services', function () {
             InitializerSvc.initialize();
 
             spyOn(CompanySvc, 'initialize');
-            spyOn(CustomerSvc, 'initialize');
-            spyOn(ServiceItemSvc, 'initialize');
-            spyOn(EmployeeSvc, 'initialize');
             spyOn(CompanySvc, 'initializeModel');
 
             $rootScope.$broadcast('api.loaded');
 
             expect(CompanySvc.initialize).toHaveBeenCalled();
-            expect(CustomerSvc.initialize).toHaveBeenCalled();
-            expect(ServiceItemSvc.initialize).toHaveBeenCalled();
-            expect(EmployeeSvc.initialize).toHaveBeenCalled();
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
         });
 
@@ -281,16 +275,11 @@ describe('Unit: Services', function () {
             RootUrlSvc.rootUrls.companies = rootCompaniesResource;
         }));
 
-        it('should have an initialize function', function () {
-            expect(ServiceItemSvc.initialize).toBeDefined();
-        });
-
         it('should have an initializeModel function', function () {
             expect(ServiceItemSvc.initializeModel).toBeDefined();
         });
 
         it('should call the service item resource on initializeModel', function () {
-            ServiceItemSvc.initialize();
 
             $httpBackend.expectGET(serviceItemsForCompany1URL);
             ServiceItemSvc.initializeModel();
@@ -343,16 +332,11 @@ describe('Unit: Services', function () {
             RootUrlSvc.rootUrls.companies = rootCompaniesResource;
         }));
 
-        it('should have an initialize function', function () {
-            expect(CustomerSvc.initialize).toBeDefined();
-        });
-
         it('should have an initializeModel function', function () {
             expect(CustomerSvc.initializeModel).toBeDefined();
         });
 
         it('should call the customer resource on initializeModel', function () {
-            CustomerSvc.initialize();
 
             $httpBackend.expectGET(customersForCompany1URL);
             CustomerSvc.initializeModel();
@@ -405,16 +389,11 @@ describe('Unit: Services', function () {
             RootUrlSvc.rootUrls.companies = rootCompaniesResource;
         }));
 
-        it('should have an initialize function', function () {
-            expect(EmployeeSvc.initialize).toBeDefined();
-        });
-
         it('should have an initializeModel function', function () {
             expect(EmployeeSvc.initializeModel).toBeDefined();
         });
 
-        it('should call the customer resource on initializeModel', function () {
-            EmployeeSvc.initialize();
+        it('should call the employee resource on initializeModel', function () {
 
             $httpBackend.expectGET(employeesForCompany1URL);
             EmployeeSvc.initializeModel();

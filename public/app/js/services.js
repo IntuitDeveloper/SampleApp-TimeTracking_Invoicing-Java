@@ -17,10 +17,6 @@ timetrackingServices.factory('InitializerSvc',
 
             $rootScope.$on('api.loaded', function () {
                 CompanySvc.initialize();
-                CustomerSvc.initialize();
-                ServiceItemSvc.initialize();
-                EmployeeSvc.initialize();
-
                 CompanySvc.initializeModel();
             });
 
@@ -128,21 +124,18 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
 timetrackingServices.factory('ServiceItemSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
     function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
 
-        var ServiceItem;
-
-        var initialize = function () {
-            ServiceItem = $resource(ModelSvc.model.company._links.serviceItems.href, {}, { query: {method: 'GET', isArray: false} });
-        };
 
         var initializeModel = function () {
-            ServiceItem.query(function (data) {
+
+            var serviceItemResource = $resource(ModelSvc.model.company._links.serviceItems.href, {}, { query: {method: 'GET', isArray: false} });
+
+            serviceItemResource.query(function (data) {
                 var serviceItems = data._embedded.serviceItems;
                 ModelSvc.model.company.serviceItems = serviceItems;
             });
         }
 
         return {
-            initialize: initialize,
             initializeModel: initializeModel
         }
     }]);
@@ -151,14 +144,9 @@ timetrackingServices.factory('ServiceItemSvc', ['$resource', '$rootScope', 'Root
 timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
     function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
 
-        var Customer;
-
-        var initialize = function () {
-            Customer = $resource(ModelSvc.model.company._links.customers.href, {}, { query: {method: 'GET', isArray: false} });
-        };
-
         var initializeModel = function () {
-            Customer.query(function (data) {
+            var customerResource = $resource(ModelSvc.model.company._links.customers.href, {}, { query: {method: 'GET', isArray: false} });
+            customerResource.query(function (data) {
                 var customers = data._embedded.customers;
                 ModelSvc.model.company.customers = customers;
 
@@ -166,7 +154,6 @@ timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrl
         }
 
         return {
-            initialize: initialize,
             initializeModel: initializeModel
         }
     }]);
@@ -174,14 +161,9 @@ timetrackingServices.factory('CustomerSvc', ['$resource', '$rootScope', 'RootUrl
 timetrackingServices.factory('EmployeeSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
     function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
 
-        var Employee;
-
-        var initialize = function () {
-            Employee = $resource(ModelSvc.model.company._links.employees.href, {}, { query: {method: 'GET', isArray: false} });
-        };
-
         var initializeModel = function () {
-            Employee.query(function (data) {
+            var employeeResource = $resource(ModelSvc.model.company._links.employees.href, {}, { query: {method: 'GET', isArray: false} });
+            employeeResource.query(function (data) {
                 var employees = data._embedded.employees;
                 ModelSvc.model.company.employees = employees;
 
@@ -189,7 +171,6 @@ timetrackingServices.factory('EmployeeSvc', ['$resource', '$rootScope', 'RootUrl
         }
 
         return {
-            initialize: initialize,
             initializeModel: initializeModel
         }
     }]);
