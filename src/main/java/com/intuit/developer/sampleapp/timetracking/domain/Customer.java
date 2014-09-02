@@ -85,4 +85,8 @@ public class Customer {
     public Company getCompany() {
         return company;
     }
+
+    public long getId() {
+        return id;
+    }
 }

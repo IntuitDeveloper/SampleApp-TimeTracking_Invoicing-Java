@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.intuit.developer.sampleapp.timetracking.controllers.OAuthInfoProviderImpl;
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
-import com.intuit.developer.sampleapp.timetracking.handlers.RoleEventHandler;
+import com.intuit.developer.sampleapp.timetracking.handlers.TimeActivityHandler;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
+import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateDeserializer;
+import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateSerializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneyDeserializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneySerializer;
 import oauth.OAuthInfoProvider;
 import org.apache.commons.io.FileUtils;
 import org.joda.money.Money;
+import org.joda.time.LocalDate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -71,8 +74,8 @@ public class Application extends RepositoryRestMvcConfiguration {
 
     //add REST event handler beans here
     @Bean
-    RoleEventHandler roleEventHandler() {
-        return new RoleEventHandler();
+    TimeActivityHandler timeActivityHandler() {
+        return new TimeActivityHandler();
     }
 
     @Override
@@ -81,6 +84,8 @@ public class Application extends RepositoryRestMvcConfiguration {
 
         myCustomModule.addSerializer(Money.class, new MoneySerializer());
         myCustomModule.addDeserializer(Money.class, new MoneyDeserializer());
+        myCustomModule.addSerializer(LocalDate.class, new LocalDateSerializer());
+        myCustomModule.addDeserializer(LocalDate.class, new LocalDateDeserializer());
 
         objectMapper.registerModule(myCustomModule);
 

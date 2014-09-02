@@ -3,17 +3,17 @@ package com.intuit.developer.sampleapp.timetracking.qbo;
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
 import com.intuit.developer.sampleapp.timetracking.domain.Employee;
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
+import com.intuit.developer.sampleapp.timetracking.domain.TimeActivity;
 import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.EmployeeMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.ServiceItemMapper;
+import com.intuit.developer.sampleapp.timetracking.mappers.TimeActivityMapper;
 import com.intuit.developer.sampleapp.timetracking.repository.CustomerRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.EmployeeRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.ServiceItemRepository;
+import com.intuit.developer.sampleapp.timetracking.repository.TimeActivityRepository;
 import com.intuit.ipp.core.IEntity;
-import com.intuit.ipp.data.Account;
-import com.intuit.ipp.data.AccountTypeEnum;
-import com.intuit.ipp.data.Item;
-import com.intuit.ipp.data.ReferenceType;
+import com.intuit.ipp.data.*;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.services.DataService;
 import com.intuit.ipp.services.QueryResult;
@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.Class;
 import java.util.List;
 
 /**
@@ -44,6 +45,9 @@ public class QBOGateway {
 
     @Autowired
     private ServiceItemRepository serviceItemRepository;
+
+    @Autowired
+    private TimeActivityRepository timeActivityRepository;
 
     public void createEmployeeInQBO(Employee employee) {
 
@@ -121,6 +125,22 @@ public class QBOGateway {
         // update the SalesItem in app
         serviceItem.setQboId(returnedQBOObject.getId());
         serviceItemRepository.save(serviceItem);
+    }
+
+    public void createTimeActivityInQBO(TimeActivity timeActivity) {
+        DataService dataService = dataServiceFactory.getDataService(timeActivity.getEmployee().getCompany());
+        final com.intuit.ipp.data.TimeActivity qboObject = TimeActivityMapper.buildQBOObject(timeActivity);
+
+        /* I'm setting to Not Billable because I don't want this time time activity to show up on the QBO Create Invoice
+           screen because this time activity will be billed through invoices created through THIS app
+         */
+        qboObject.setBillableStatus(BillableStatusEnum.NOT_BILLABLE);
+        qboObject.setNameOf(TimeActivityTypeEnum.EMPLOYEE);
+
+        final com.intuit.ipp.data.TimeActivity returnedQboObject = createObjectInQBO(dataService, qboObject);
+
+        timeActivity.setQboId(returnedQboObject.getId());
+        timeActivityRepository.save(timeActivity);
     }
 
     /**
