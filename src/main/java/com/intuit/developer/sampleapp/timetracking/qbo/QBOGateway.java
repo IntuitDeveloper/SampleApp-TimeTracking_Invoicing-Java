@@ -197,7 +197,7 @@ public class QBOGateway {
             }
 
         } catch (FMSException e) {
-            throw new RuntimeException("Failed to execute an employee query: " + query, e);
+            throw new RuntimeException("Failed to execute an entity query: " + query, e);
         }
     }
 
