@@ -84,4 +84,8 @@ public class Employee {
     public Company getCompany() {
         return company;
     }
+
+    public long getId() {
+        return id;
+    }
 }

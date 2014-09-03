@@ -81,4 +81,8 @@ public class ServiceItem {
     public Company getCompany() {
         return company;
     }
+
+    public long getId() {
+        return id;
+    }
 }

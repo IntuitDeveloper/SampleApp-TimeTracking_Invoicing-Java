@@ -20,6 +20,7 @@ public class ServiceItemMapper {
 
         mapperFactory.classMap(ServiceItem.class, com.intuit.ipp.data.Item.class)
                 .field("rate.amount", "unitPrice")
+                .exclude("id")
                 .byDefault()
                 .register();
 
