@@ -68,10 +68,4 @@ public class TimeActivityMapper {
         return qboTimeActivity;
 
     }
-
-    public static void main(String[] args) {
-        int minutes = 90;
-
-
-    }
 }
