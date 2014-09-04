@@ -85,3 +85,67 @@ controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'Model
             CompanySvc.initializeModel();
         };
     }]);
+
+controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 'TimeActivitySvc',
+    function ($scope, $filter, ModelSvc, TimeActivitySvc) {
+
+        $scope.model = ModelSvc.model;
+        $scope.selectedDate = null;
+        $scope.selectedDuration = new Date();
+        $scope.selectedDuration.setMinutes(15);
+        $scope.selectedDuration.setHours(0);
+
+        $scope.showAlert = false;
+        $scope.alertMessage = "";
+
+
+        var resetSelectedDuration = function () {
+            var d = new Date()
+            d.setMinutes(15);
+            d.setHours(0);
+            $scope.selectedDuration = d;
+        };
+
+        var showSuccessfulAlert = function (result) {
+            $scope.alertMessage = "Time Activity successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
+            $scope.showAlert = true;
+        };
+
+        $scope.saveTimeActivity = function () {
+
+            TimeActivitySvc.createTimeActivity({
+                minutes: ($scope.selectedDuration.getHours() * 60)
+                    + $scope.selectedDuration.getMinutes(),
+                date: $filter('date')($scope.selectedDate, 'yyyy-MM-dd'),
+                description: $scope.description,
+                serviceItem: $scope.selectedServiceItem._links.self.href,
+                employee: $scope.selectedEmployee._links.self.href,
+                customer: $scope.selectedCustomer._links.self.href,
+                company: ModelSvc.model.company._links.self.href
+            }, showSuccessfulAlert);
+            $scope.clearTimeActivity();
+        };
+
+        $scope.clearTimeActivity = function () {
+            $scope.selectedDate = null;
+            resetSelectedDuration();
+            $scope.selectedEmployee = null;
+            $scope.selectedCustomer = null;
+            $scope.selectedServiceItem = null;
+            $scope.description = null;
+        };
+
+        //date picker stuff
+        $scope.openDatePicker = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+
+        $scope.timeChanged = function () {
+            //dont let the user select 0:00, making 15 minutes the minimum amount of time to be recorded
+            if ($scope.selectedDuration.getHours() === 0 && $scope.selectedDuration.getMinutes() === 0) {
+                resetSelectedDuration();
+            }
+        };
+    }]);

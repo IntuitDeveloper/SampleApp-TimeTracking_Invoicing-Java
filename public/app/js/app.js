@@ -13,6 +13,7 @@ angular.module('myApp', [
 ]).
     config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/settings', {templateUrl: 'partials/settings.html', controller: 'SettingsCtrl'});
+        $routeProvider.when('/timeentry', {templateUrl: 'partials/timeentry.html', controller: 'TimeEntryCtrl'});
         $routeProvider.otherwise({redirectTo: '/settings'});
     }])
     .run(['InitializerSvc', function(InitializerSvc) {

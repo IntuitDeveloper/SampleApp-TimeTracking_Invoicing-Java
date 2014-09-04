@@ -8,42 +8,43 @@ var timetrackingServices = angular.module('myApp.services', ['ngResource']);
 timetrackingServices.value('version', '0.1');
 
 timetrackingServices.factory('InitializerSvc',
-    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc',
-        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc) {
+    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc',
+        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc) {
 
-        var initialized = false;
+            var initialized = false;
 
-        var initialize = function () {
+            var initialize = function () {
 
-            $rootScope.$on('api.loaded', function () {
-                CompanySvc.initialize();
-                CompanySvc.initializeModel();
-            });
+                $rootScope.$on('api.loaded', function () {
+                    CompanySvc.initialize();
+                    TimeActivitySvc.initialize();
+                    CompanySvc.initializeModel();
+                });
 
-            $rootScope.$on('model.company.change', function () {
-                ServiceItemSvc.initializeModel();
-                CustomerSvc.initializeModel();
-                EmployeeSvc.initializeModel();
-            });
+                $rootScope.$on('model.company.change', function () {
+                    ServiceItemSvc.initializeModel();
+                    CustomerSvc.initializeModel();
+                    EmployeeSvc.initializeModel();
+                });
 
-            RootUrlSvc.initialize();
+                RootUrlSvc.initialize();
 
-            $rootScope.$on('$viewContentLoaded', function (scope, next, current) {
-                /*
-                 Every time we load a new view, we need to reinitialize the intuit anywhere library
-                 so that the connect to quickbooks button is rendered properly
-                 */
-                if (initialized) { //only reinitialize from the 2nd time onwards
-                    intuit.ipp.anywhere.init();
-                }
-                initialized = true;
-            });
-        };
+                $rootScope.$on('$viewContentLoaded', function (scope, next, current) {
+                    /*
+                     Every time we load a new view, we need to reinitialize the intuit anywhere library
+                     so that the connect to quickbooks button is rendered properly
+                     */
+                    if (initialized) { //only reinitialize from the 2nd time onwards
+                        intuit.ipp.anywhere.init();
+                    }
+                    initialized = true;
+                });
+            };
 
-        return {
-            initialize: initialize
-        }
-    }]);
+            return {
+                initialize: initialize
+            }
+        }]);
 
 //A service which contains the current model (e.g. companies, items, etc)
 timetrackingServices.factory('ModelSvc', [
@@ -193,5 +194,26 @@ timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlS
             sendEmployeeSyncRequest: function (callback) {
                 sendSyncRequest('Employee', callback)
             }
+        }
+    }]);
+
+timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var rootTimeActivityResource;
+
+        var initialize = function () {
+            rootTimeActivityResource = $resource(RootUrlSvc.rootUrls.timeActivities);
+        };
+
+        var createTimeActivity = function (timeActivity, callback) {
+            rootTimeActivityResource.save(timeActivity).$promise.then(function (responseFromServer) {
+                callback(responseFromServer);
+            });
+        };
+
+        return {
+            initialize: initialize,
+            createTimeActivity: createTimeActivity
         }
     }]);

@@ -24,6 +24,8 @@ public class TimeActivity {
 
     private String description;
 
+    private boolean billed = false;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "item_fk", referencedColumnName = "id")
     private ServiceItem serviceItem;
@@ -35,6 +37,18 @@ public class TimeActivity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_fk", referencedColumnName = "id")
     private Customer customer;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "company_fk", referencedColumnName = "id")
+    private Company company;
+
+    public boolean isBilled() {
+        return billed;
+    }
+
+    public void setBilled(boolean billed) {
+        this.billed = billed;
+    }
 
     public String getQboId() {
         return qboId;
@@ -90,5 +104,13 @@ public class TimeActivity {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

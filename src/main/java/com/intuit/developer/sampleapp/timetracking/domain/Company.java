@@ -45,6 +45,9 @@ public class Company {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
     private final List<ServiceItem> serviceItems = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private final List<TimeActivity> timeActivities = new ArrayList<>();
+
     public Company() {
 
     }
@@ -179,5 +182,9 @@ public class Company {
 
     public List<ServiceItem> getServiceItems() {
         return serviceItems;
+    }
+
+    public List<TimeActivity> getTimeActivities() {
+        return timeActivities;
     }
 }
