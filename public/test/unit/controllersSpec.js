@@ -138,7 +138,6 @@ describe("Unit: Controllers", function () {
             expect(scope.syncEmployees).toBeDefined();
         });
 
-
         it('should call the SyncRequestSvc.sendServiceItemsSyncRequest when syncServiceItems is called', function () {
             spyOn(SyncRequestSvc, 'sendServiceItemsSyncRequest');
 
@@ -209,8 +208,203 @@ describe("Unit: Controllers", function () {
             expect(scope.syncServiceItemsMessage).toEqual("987");
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
         });
-        
-        
+
+    });
+
+    describe('Unit: TimeEntryCtrl', function () {
+        var ctrl, scope, $filter, TimeActivitySvc, CompanySvc, ModelSvc;
+
+        beforeEach(module('myApp.controllers'));
+
+        beforeEach(inject(function ($rootScope, $controller, _$filter_, _TimeActivitySvc_, _CompanySvc_, _ModelSvc_) {
+            //create an empty scope
+            scope = $rootScope.$new();
+
+            //declare the controller and inject our empty scope
+            ctrl = $controller('TimeEntryCtrl', {$scope: scope});
+
+            $filter = _$filter_;
+            TimeActivitySvc = _TimeActivitySvc_;
+            CompanySvc = _CompanySvc_;
+            ModelSvc = _ModelSvc_;
+        }));
+
+        it('should have a settings controller defined', function () {
+            expect(ctrl).toBeDefined();
+        });
+
+        it('should have the model on the scope object', function () {
+            expect(scope.model).toBeDefined();
+        });
+
+        it('should have a scope variable for the selected employee', function () {
+            expect(scope.selectedEmployee).toBeDefined();
+        });
+
+        it('should have a scope variable for the selected customer', function () {
+            expect(scope.selectedCustomer).toBeDefined();
+        });
+
+        it('should have a scope variable for the selected service item', function () {
+            expect(scope.selectedServiceItem).toBeDefined();
+        });
+
+        it('should have a scope variable for the description', function () {
+            expect(scope.description).toBeDefined();
+        });
+
+        it('should have a scope variable for the selected date', function () {
+            expect(scope.selectedDate).toBeDefined();
+        });
+
+        it('should have a scope variable for the selected duration', function () {
+            expect(scope.selectedDuration).toBeDefined();
+        });
+
+        it('should have a scope variable to determine whether to show the alert bar', function () {
+            expect(scope.showAlert).toBeDefined();
+        });
+
+        it('should have a scope variable to determine whether to show the alert bar', function () {
+            expect(scope.alertMessage).toBeDefined();
+        });
+
+        it('should have a scope variable called datePickerOpen', function () {
+            expect(scope.datePickerOpened).toBeDefined();
+        });
+
+        it('should have a function called saveTimeActivity which calls the TimeActivitySvc', function () {
+            expect(scope.saveTimeActivity).toBeDefined();
+
+            spyOn(TimeActivitySvc, 'createTimeActivity');
+            spyOn(scope, 'clearTimeActivity')
+
+            var selectedServiceItemHref = "http://localhost:8080/serviceItems/1";
+            var selectedEmployeeHref = "http://localhost:8080/employees/1";
+            var selectedCustomerHref = "http://localhost:8080/employees/1";
+            var selectedCompanyHref = "http://localhost:8080/companies/1";
+
+            scope.selectedServiceItem = {
+                _links: {
+                    self: {
+                        href: selectedServiceItemHref
+                    }
+                }
+            };
+
+            scope.selectedEmployee = {
+                _links: {
+                    self: {
+                        href: selectedEmployeeHref
+                    }
+                }
+            };
+
+            scope.selectedCustomer = {
+                _links: {
+                    self: {
+                        href: selectedCustomerHref
+                    }
+                }
+            };
+
+            ModelSvc.model.company = {
+                _links: {
+                    self: {
+                        href: selectedCompanyHref
+                    }
+                }
+            };
+
+            scope.selectedDuration = new Date();
+            scope.selectedDuration.setHours(1);
+            scope.selectedDuration.setMinutes(30);
+
+            scope.selectedDate = new Date();
+            scope.selectedDate.setDate(4);
+            scope.selectedDate.setMonth(8);
+            scope.selectedDate.setYear(2014);
+
+            scope.description = 'How now brown cow?';
+
+            scope.saveTimeActivity();
+
+            expect(TimeActivitySvc.createTimeActivity).toHaveBeenCalledWith({
+                minutes: 90,
+                date: '2014-09-04',
+                description: 'How now brown cow?',
+                serviceItem: selectedServiceItemHref,
+                employee: selectedEmployeeHref,
+                customer: selectedCustomerHref,
+                company: selectedCompanyHref
+            }, ctrl.showSuccessfulAlert);
+
+            expect(scope.clearTimeActivity).toHaveBeenCalled();
+        });
+
+        it('should have a function called clearTimeActivity that resets the time activity scope variables', function () {
+
+            expect(scope.clearTimeActivity).toBeDefined();
+
+            scope.selectedDate = 'foo';
+            scope.selectedDuration = new Date();
+            scope.selectedDuration.setHours(1);
+            scope.selectedDuration.setMinutes(30);
+            scope.selectedEmployee = 'bar';
+            scope.seletedCustomer = 'abc';
+            scope.selectedServiceItem = 'xyz';
+            scope.description = 'Who watches the water?';
+
+            scope.clearTimeActivity();
+
+            expect(scope.selectedDate).toBeNull();
+            expect(scope.selectedDuration.getHours()).toEqual(0);
+            expect(scope.selectedDuration.getMinutes()).toEqual(15);
+            expect(scope.selectedEmployee).toBeNull();
+            expect(scope.selectedCustomer).toBeNull();
+            expect(scope.selectedServiceItem).toBeNull();
+            expect(scope.description).toBeNull();
+        });
+
+        it('should have a function called openDatePicker', function () {
+            scope.opened = false;
+
+            expect(scope.openDatePicker).toBeDefined();
+
+            var fakeEvent = {
+                preventDefault: function () {
+
+                },
+                stopPropagation: function () {
+
+                }
+            };
+
+            spyOn(fakeEvent, 'preventDefault');
+            spyOn(fakeEvent, 'stopPropagation');
+
+            scope.openDatePicker(fakeEvent);
+
+            expect(fakeEvent.preventDefault).toHaveBeenCalled();
+            expect(fakeEvent.stopPropagation).toHaveBeenCalled();
+            expect(scope.datePickerOpened).toBeTruthy();
+
+        });
+
+        it('should have a function called timeChanged that doesnt allow a selectedDuration of 0:00', function () {
+            scope.selectedDuration = new Date();
+            scope.selectedDuration.setHours(0);
+            scope.selectedDuration.setMinutes(0);
+
+            spyOn(ctrl, 'resetSelectedDuration').andCallThrough();
+
+            scope.timeChanged();
+
+            expect(ctrl.resetSelectedDuration).toHaveBeenCalled();
+
+            expect(scope.selectedDuration.getHours()).toEqual(0);
+            expect(scope.selectedDuration.getMinutes()).toEqual(15);
+        });
     });
 });
 

@@ -128,7 +128,7 @@ public class QBOGateway {
     }
 
     public void createTimeActivityInQBO(TimeActivity timeActivity) {
-        DataService dataService = dataServiceFactory.getDataService(timeActivity.getEmployee().getCompany());
+        DataService dataService = dataServiceFactory.getDataService(timeActivity.getCompany());
         final com.intuit.ipp.data.TimeActivity qboObject = TimeActivityMapper.buildQBOObject(timeActivity);
 
         /* I'm setting to Not Billable because I don't want this time time activity to show up on the QBO Create Invoice
@@ -220,9 +220,6 @@ public class QBOGateway {
             throw new RuntimeException("Failed to execute an entity query: " + query, e);
         }
     }
-
-
-
 
 
 }

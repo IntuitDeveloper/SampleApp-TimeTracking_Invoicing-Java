@@ -90,26 +90,34 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
     function ($scope, $filter, ModelSvc, TimeActivitySvc) {
 
         $scope.model = ModelSvc.model;
+        $scope.selectedEmployee = null;
+        $scope.selectedCustomer = null;
+        $scope.selectedServiceItem = null;
+        $scope.description = null;
         $scope.selectedDate = null;
         $scope.selectedDuration = new Date();
         $scope.selectedDuration.setMinutes(15);
         $scope.selectedDuration.setHours(0);
 
+        $scope.datePickerOpened = false;
         $scope.showAlert = false;
         $scope.alertMessage = "";
 
+        var self = this;
 
-        var resetSelectedDuration = function () {
+
+        this.resetSelectedDuration = function () {
             var d = new Date()
             d.setMinutes(15);
             d.setHours(0);
             $scope.selectedDuration = d;
         };
 
-        var showSuccessfulAlert = function (result) {
+        this.showSuccessfulAlert = function (result) {
             $scope.alertMessage = "Time Activity successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
             $scope.showAlert = true;
         };
+
 
         $scope.saveTimeActivity = function () {
 
@@ -122,13 +130,13 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
                 employee: $scope.selectedEmployee._links.self.href,
                 customer: $scope.selectedCustomer._links.self.href,
                 company: ModelSvc.model.company._links.self.href
-            }, showSuccessfulAlert);
+            }, self.showSuccessfulAlert);
             $scope.clearTimeActivity();
         };
 
         $scope.clearTimeActivity = function () {
             $scope.selectedDate = null;
-            resetSelectedDuration();
+            self.resetSelectedDuration();
             $scope.selectedEmployee = null;
             $scope.selectedCustomer = null;
             $scope.selectedServiceItem = null;
@@ -139,13 +147,13 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
         $scope.openDatePicker = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
-            $scope.opened = true;
+            $scope.datePickerOpened = true;
         };
 
         $scope.timeChanged = function () {
             //dont let the user select 0:00, making 15 minutes the minimum amount of time to be recorded
             if ($scope.selectedDuration.getHours() === 0 && $scope.selectedDuration.getMinutes() === 0) {
-                resetSelectedDuration();
+                self.resetSelectedDuration();
             }
         };
     }]);

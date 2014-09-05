@@ -1,17 +1,16 @@
 package com.intuit.developer.sampleapp.timetracking.test.unit.qbo;
 
-import com.intuit.developer.sampleapp.timetracking.domain.Company;
-import com.intuit.developer.sampleapp.timetracking.domain.Customer;
-import com.intuit.developer.sampleapp.timetracking.domain.Employee;
-import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
+import com.intuit.developer.sampleapp.timetracking.domain.*;
 import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.EmployeeMapper;
 import com.intuit.developer.sampleapp.timetracking.mappers.ServiceItemMapper;
+import com.intuit.developer.sampleapp.timetracking.mappers.TimeActivityMapper;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.repository.CustomerRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.EmployeeRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.ServiceItemRepository;
+import com.intuit.developer.sampleapp.timetracking.repository.TimeActivityRepository;
 import com.intuit.ipp.core.IEntity;
 import com.intuit.ipp.data.Account;
 import com.intuit.ipp.services.DataService;
@@ -23,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -49,9 +49,9 @@ public class QBOGatewayTests {
 
 
     @Test
-    public void testCreateEmployeeInQBO(@Mocked final EmployeeMapper mapper,
-                                        @Injectable final EmployeeRepository repository,
-                                        @Mocked final QueryResult queryResult) throws Exception {
+    public void testCreateEmployeeInQBO_NoMatchFound(@Mocked final EmployeeMapper mapper,
+                                                     @Injectable final EmployeeRepository repository,
+                                                     @Mocked final QueryResult queryResult) throws Exception {
 
         final String firstName = "First";
         final String lastName = "Last";
@@ -98,9 +98,52 @@ public class QBOGatewayTests {
     }
 
     @Test
-    public void testCreateCustomerInQBO(@Mocked final CustomerMapper mapper,
-                                        @Injectable final CustomerRepository repository,
-                                        @Mocked final QueryResult queryResult) throws Exception {
+    public void testCreateEmployeeInQBO_MatchFound(@Injectable final EmployeeRepository repository) throws Exception {
+
+        final String firstName = "First";
+        final String lastName = "Last";
+        final Employee employee = new Employee(firstName, lastName, "first.last@gmail.com", "916-222-3333");
+
+        final Company c = new Company();
+        c.setName("The Federalists");
+        c.addEmployee(employee);
+
+        final String expectedQBOId = "987654321";
+        final com.intuit.ipp.data.Employee qboEmployee = new com.intuit.ipp.data.Employee();
+        qboEmployee.setId(expectedQBOId);
+        qboEmployee.setGivenName(firstName);
+        qboEmployee.setFamilyName(lastName);
+
+        // Create employee query results
+        final QueryResult employeeQueryResult = new QueryResult();
+        employeeQueryResult.setEntities(Arrays.asList(qboEmployee));
+
+        new NonStrictExpectations() {{
+
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            dataService.executeQuery(anyString);
+            times = 1;
+            result = employeeQueryResult;
+
+        }};
+
+        qboDataManager.createEmployeeInQBO(employee);
+
+        new Verifications() {{
+            dataService.add(withAny(new com.intuit.ipp.data.Employee()));
+            times = 0;
+            repository.save(employee);
+        }};
+
+        assertEquals(expectedQBOId, employee.getQboId());
+    }
+
+    @Test
+    public void testCreateCustomerInQBO_NoMatchFound(@Mocked final CustomerMapper mapper,
+                                                     @Injectable final CustomerRepository repository,
+                                                     @Mocked final QueryResult queryResult) throws Exception {
 
         String firstName = "First";
         String lastName = "Last";
@@ -147,10 +190,53 @@ public class QBOGatewayTests {
     }
 
     @Test
-    public void testCreateServiceItemInQBO(@Mocked final ServiceItemMapper mapper,
-                                           @Injectable final ServiceItemRepository repository,
-                                           @Mocked final QueryResult accountQueryResult,
-                                           @Mocked final QueryResult itemQueryResult) throws Exception {
+    public void testCreateCustomerInQBO_MatchFound(@Injectable final CustomerRepository repository) throws Exception {
+
+        final String firstName = "First";
+        final String lastName = "Last";
+        final Customer customer = new Customer(firstName, lastName, "first.last@gmail.com", "916-222-3333");
+
+        final Company c = new Company();
+        c.setName("The Federalists");
+        c.addCustomer(customer);
+
+        final String expectedQBOId = "987654321";
+        final com.intuit.ipp.data.Customer qboCustomer = new com.intuit.ipp.data.Customer();
+        qboCustomer.setId(expectedQBOId);
+        qboCustomer.setGivenName(firstName);
+        qboCustomer.setFamilyName(lastName);
+
+        // Create customer query results
+        final QueryResult employeeQueryResult = new QueryResult();
+        employeeQueryResult.setEntities(Arrays.asList(qboCustomer));
+
+        new NonStrictExpectations() {{
+
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            dataService.executeQuery(anyString);
+            times = 1;
+            result = employeeQueryResult;
+
+        }};
+
+        qboDataManager.createCustomerInQBO(customer);
+
+        new Verifications() {{
+            dataService.add(withAny(new com.intuit.ipp.data.Customer()));
+            times = 0;
+            repository.save(customer);
+        }};
+
+        assertEquals(expectedQBOId, customer.getQboId());
+    }
+
+    @Test
+    public void testCreateServiceItemInQBO_NoMatchFound(@Mocked final ServiceItemMapper mapper,
+                                                        @Injectable final ServiceItemRepository repository,
+                                                        @Mocked final QueryResult accountQueryResult,
+                                                        @Mocked final QueryResult itemQueryResult) throws Exception {
 
         final String name = "Research";
         final String description = "Reading a lot";
@@ -193,7 +279,6 @@ public class QBOGatewayTests {
             dataService.add(mappedQboObject);
             result = returnedQboObject;
 
-            repository.save(domainEntity);
         }};
 
         qboDataManager.createItemInQBO(domainEntity);
@@ -259,5 +344,85 @@ public class QBOGatewayTests {
             repository.save(domainEntity);
             times = 0;
         }};
+    }
+
+    @Test
+    public void testCreateServiceItemInQBO_MatchFound(@Injectable final ServiceItemRepository repository) throws Exception {
+
+        final String name = "name";
+        final String description = "description";
+        final ServiceItem serviceItem = new ServiceItem(name, description, Money.parse("USD 1.00"));
+
+        final Company c = new Company();
+        c.setName("The Federalists");
+        c.addServiceItem(serviceItem);
+
+        final String expectedQBOId = "987654321";
+        final com.intuit.ipp.data.Item qboServiceItem = new com.intuit.ipp.data.Item();
+        qboServiceItem.setId(expectedQBOId);
+        qboServiceItem.setName(name);
+
+        // Create serviceItem query results
+        final QueryResult employeeQueryResult = new QueryResult();
+        employeeQueryResult.setEntities(Arrays.asList(qboServiceItem));
+
+        new NonStrictExpectations() {{
+
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            dataService.executeQuery(anyString);
+            times = 1;
+            result = employeeQueryResult;
+
+        }};
+
+        qboDataManager.createItemInQBO(serviceItem);
+
+        new Verifications() {{
+            dataService.add(withAny(new com.intuit.ipp.data.Item()));
+            times = 0;
+            repository.save(serviceItem);
+        }};
+
+        assertEquals(expectedQBOId, serviceItem.getQboId());
+    }
+
+
+    @Test
+    public void testCreateTimeActivityInQBO(@Mocked final TimeActivityMapper mapper,
+                                            @Injectable final TimeActivityRepository repository) throws Exception {
+
+        final Company c = new Company();
+        c.setName("A good company");
+
+        final TimeActivity domainEntity = new TimeActivity();
+        domainEntity.setCompany(c);
+
+        final com.intuit.ipp.data.TimeActivity mappedQboObject = new com.intuit.ipp.data.TimeActivity();
+
+        final String expectedQBOId = "987654321";
+        final com.intuit.ipp.data.TimeActivity returnedQboObject = new com.intuit.ipp.data.TimeActivity();
+        returnedQboObject.setId(expectedQBOId);
+
+        new NonStrictExpectations() {{
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            TimeActivityMapper.buildQBOObject(domainEntity);
+            result = mappedQboObject;
+
+            dataService.add(mappedQboObject);
+            result = returnedQboObject;
+
+        }};
+
+        qboDataManager.createTimeActivityInQBO(domainEntity);
+
+        new Verifications() {{
+            dataService.add(mappedQboObject);
+            repository.save(domainEntity);
+        }};
+
     }
 }

@@ -36,9 +36,9 @@ describe('Unit: Services', function () {
     };
 
     describe('Unit: InitializerSvc', function() {
-        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc;
+        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc;
 
-        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_) {
+        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_) {
 
             InitializerSvc = _InitializerSvc_;
             CompanySvc = _CompanySvc_;
@@ -47,6 +47,7 @@ describe('Unit: Services', function () {
             EmployeeSvc = _EmployeeSvc_;
             CustomerSvc = _CustomerSvc_;
             ServiceItemSvc = _ServiceItemSvc_;
+            TimeActivitySvc = _TimeActivitySvc_;
 
         }));
 
@@ -64,11 +65,13 @@ describe('Unit: Services', function () {
             InitializerSvc.initialize();
 
             spyOn(CompanySvc, 'initialize');
+            spyOn(TimeActivitySvc, 'initialize');
             spyOn(CompanySvc, 'initializeModel');
 
             $rootScope.$broadcast('api.loaded');
 
             expect(CompanySvc.initialize).toHaveBeenCalled();
+            expect(TimeActivitySvc.initialize).toHaveBeenCalled();
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
         });
 
@@ -479,5 +482,49 @@ describe('Unit: Services', function () {
         });
     });
 
+    describe('Unit: TimeActivitySvc', function () {
+        var $httpBackend, $rootScope, TimeActivitySvc, ModelSvc, RootUrlSvc;
 
+        var timeActivityRootResource = "http://localhost:8080/timeActivities";
+
+        beforeEach(inject(function (_TimeActivitySvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
+            TimeActivitySvc = _TimeActivitySvc_;
+            $httpBackend = $injector.get('$httpBackend');
+            $rootScope = _$rootScope_;
+            ModelSvc = _ModelSvc_;
+            RootUrlSvc = _RootUrlSvc_;
+
+            RootUrlSvc.rootUrls = {
+                timeActivities: timeActivityRootResource
+            }
+
+            spyOn($location, "host").andReturn("localhost");
+
+            $httpBackend.whenPOST(timeActivityRootResource).respond({});
+        }));
+
+        it('should have an initialize function', function () {
+            expect(TimeActivitySvc.initialize).toBeDefined();
+        });
+
+        it('should have a createTimeActivity function', function () {
+            expect(TimeActivitySvc.createTimeActivity).toBeDefined();
+        });
+
+        it('should call the employee resource on initializeModel', function () {
+
+            var callback = jasmine.createSpy('callback');
+
+            var expectedRequestPayload = {
+                foo: "bar"
+            }
+
+            TimeActivitySvc.initialize();
+            $httpBackend.expectPOST(timeActivityRootResource, expectedRequestPayload);
+            TimeActivitySvc.createTimeActivity(expectedRequestPayload, callback);
+            $httpBackend.flush();
+
+            expect(callback).toHaveBeenCalled();
+        });
+    });
 });
