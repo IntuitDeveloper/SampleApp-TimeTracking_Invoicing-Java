@@ -1,5 +1,6 @@
 oauth.json
 build/
+database/
 time-tracking.iws
 public/coverage
 public/unit-test-results.xml

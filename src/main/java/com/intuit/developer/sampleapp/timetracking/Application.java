@@ -44,15 +44,9 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguratio
 public class Application extends RepositoryRestMvcConfiguration {
 
     public static void main(String[] args) {
-
-//        try {
-//            FileUtils.deleteDirectory(new File("database"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
+        //start the spring app
         final ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-
+        //initialize some data
         DataLoader.initializeData(context);
     }
 
@@ -91,7 +85,6 @@ public class Application extends RepositoryRestMvcConfiguration {
         myCustomModule.addDeserializer(LocalDate.class, new LocalDateDeserializer());
 
         objectMapper.registerModule(myCustomModule);
-
     }
 
     @Bean
