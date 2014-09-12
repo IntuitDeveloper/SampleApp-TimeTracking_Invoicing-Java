@@ -2,16 +2,11 @@ package com.intuit.developer.sampleapp.timetracking.qbo;
 
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
 import com.intuit.developer.sampleapp.timetracking.domain.Employee;
-import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
+import com.intuit.developer.sampleapp.timetracking.domain.Invoice;
+import com.intuit.developer.sampleapp.timetracking.domain.*;
 import com.intuit.developer.sampleapp.timetracking.domain.TimeActivity;
-import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.EmployeeMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.ServiceItemMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.TimeActivityMapper;
-import com.intuit.developer.sampleapp.timetracking.repository.CustomerRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.EmployeeRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.ServiceItemRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.TimeActivityRepository;
+import com.intuit.developer.sampleapp.timetracking.mappers.*;
+import com.intuit.developer.sampleapp.timetracking.repository.*;
 import com.intuit.ipp.core.IEntity;
 import com.intuit.ipp.data.*;
 import com.intuit.ipp.exception.FMSException;
@@ -48,6 +43,9 @@ public class QBOGateway {
 
     @Autowired
     private TimeActivityRepository timeActivityRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     public void createEmployeeInQBO(Employee employee) {
 
@@ -143,6 +141,21 @@ public class QBOGateway {
         timeActivityRepository.save(timeActivity);
     }
 
+    public void createInvoiceInQBO(Invoice invoice) {
+        DataService dataService = dataServiceFactory.getDataService(invoice.getCompany());
+        final com.intuit.ipp.data.Invoice qboObject = InvoiceMapper.buildQBOObject(invoice);
+
+        //find a net 30 term, should exist by default
+        ReferenceType termsRef = findTermsReference(dataService, "STANDARD", 30);
+        qboObject.setSalesTermRef(termsRef);
+
+        final com.intuit.ipp.data.Invoice returnedQBOObject = createObjectInQBO(dataService, qboObject);
+
+        invoice.setQboId(returnedQBOObject.getId());
+        invoice.setStatus(InvoiceStatus.Billed);
+        invoiceRepository.save(invoice);
+    }
+
     /**
      * Get a ReferenceType wrapper for a QBO Account
      * <p/>
@@ -173,6 +186,40 @@ public class QBOGateway {
         } catch (FMSException e) {
             throw new RuntimeException("Failed to execute income account query: " + accountQuery, e);
         }
+    }
+
+    /**
+     * Get a ReferenceType wrapper for a QBO Term
+     * <p/>
+     * ReferenceType values are used to associate different QBO entities to each other.
+     */
+    private ReferenceType findTermsReference(DataService dataService, String type, int dueDays) {
+        final Term term = findTerm(dataService, type, dueDays);
+        ReferenceType referenceType = new ReferenceType();
+        referenceType.setValue(term.getId());
+        return referenceType;
+    }
+
+    private Term findTerm(DataService dataService, String type, int dueDays) {
+
+        /*
+         * Terms have no fields that are marked 'filterable'. So pull them all down and find the right one
+         */
+
+        try {
+            final List<Term> terms = dataService.findAll(new Term());
+
+            for (Term term : terms) {
+                if (term.getDueDays() == dueDays && term.getType().equals(type)) {
+                    return term;
+                }
+            }
+
+        } catch (FMSException e) {
+            throw new RuntimeException("Failed to load terms from QBO", e);
+        }
+
+        throw new RuntimeException("Could not find a term of type " + type + " and DueDays = " + dueDays);
     }
 
     private <T extends IEntity> T createObjectInQBO(DataService dataService, T qboObject) {
@@ -220,6 +267,4 @@ public class QBOGateway {
             throw new RuntimeException("Failed to execute an entity query: " + query, e);
         }
     }
-
-
 }

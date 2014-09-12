@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.intuit.developer.sampleapp.timetracking.controllers.OAuthInfoProviderImpl;
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
-import com.intuit.developer.sampleapp.timetracking.handlers.TimeActivityHandler;
+import com.intuit.developer.sampleapp.timetracking.handlers.InvoiceEventHandler;
+import com.intuit.developer.sampleapp.timetracking.handlers.TimeActivityEventHandler;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateDeserializer;
@@ -12,7 +13,6 @@ import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateSerializ
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneyDeserializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneySerializer;
 import oauth.OAuthInfoProvider;
-import org.apache.commons.io.FileUtils;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.springframework.boot.SpringApplication;
@@ -26,9 +26,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
-
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -48,11 +45,11 @@ public class Application extends RepositoryRestMvcConfiguration {
 
     public static void main(String[] args) {
 
-        try {
-            FileUtils.deleteDirectory(new File("database"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileUtils.deleteDirectory(new File("database"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         final ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
 
@@ -62,6 +59,7 @@ public class Application extends RepositoryRestMvcConfiguration {
     @Override
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setReturnBodyOnCreate(true);
+        config.setReturnBodyOnUpdate(true);
         config.exposeIdsFor(Company.class);
     }
 
@@ -74,8 +72,13 @@ public class Application extends RepositoryRestMvcConfiguration {
 
     //add REST event handler beans here
     @Bean
-    TimeActivityHandler timeActivityHandler() {
-        return new TimeActivityHandler();
+    TimeActivityEventHandler timeActivityHandler() {
+        return new TimeActivityEventHandler();
+    }
+
+    @Bean
+    InvoiceEventHandler invoiceEventHandler() {
+        return new InvoiceEventHandler();
     }
 
     @Override

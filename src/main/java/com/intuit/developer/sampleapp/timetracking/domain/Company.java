@@ -32,10 +32,6 @@ public class Company {
     private String accessToken;
     private String accessTokenSecret;
 
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
-    private final List<Role> roles = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
     private final List<Employee> employees = new ArrayList<>();
 
@@ -46,6 +42,9 @@ public class Company {
     private final List<ServiceItem> serviceItems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private final List<Invoice> invoices = new ArrayList<>();
+
+    @OneToMany(mappedBy = "company")
     private final List<TimeActivity> timeActivities = new ArrayList<>();
 
     public Company() {
@@ -148,15 +147,6 @@ public class Company {
         this.serviceItemsSynced = serviceItemsSynced;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
-        role.setCompany(this);
-    }
-
     public void addEmployee(Employee employee) {
         this.employees.add(employee);
         employee.setCompany(this);
@@ -186,5 +176,9 @@ public class Company {
 
     public List<TimeActivity> getTimeActivities() {
         return timeActivities;
+    }
+
+    public List<Invoice> getInvoices() {
+        return invoices;
     }
 }

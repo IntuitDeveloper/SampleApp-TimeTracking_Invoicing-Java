@@ -39,6 +39,7 @@ public class TimeActivityMapper {
                 .field("employee.qboId", "employeeRef.value")
                 .field("serviceItem.qboId", "itemRef.value")
                 .exclude("id")
+                .exclude("hours") //getHours() is a conveinence function for the UI, we dont want it  mapped into the QBO object because we have logic below to handle it
                 .customize(new CustomMapper<TimeActivity, com.intuit.ipp.data.TimeActivity>() {
                     @Override
                     public void mapAtoB(TimeActivity a, com.intuit.ipp.data.TimeActivity b, MappingContext context) {

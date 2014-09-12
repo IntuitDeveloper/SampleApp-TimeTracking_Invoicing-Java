@@ -88,4 +88,8 @@ public class Employee {
     public long getId() {
         return id;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

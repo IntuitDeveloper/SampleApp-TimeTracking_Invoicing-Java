@@ -207,11 +207,13 @@
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="JRebel Executor" />
       <RunnerSettings RunnerId="Profile ">
         <option name="myExternalizedOptions" value="&#10;additional-options2=onexit\=snapshot&#10;" />
       </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="JRebel Executor" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>

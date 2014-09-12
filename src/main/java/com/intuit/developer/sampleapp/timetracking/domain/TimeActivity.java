@@ -1,8 +1,11 @@
 package com.intuit.developer.sampleapp.timetracking.domain;
 
+import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,8 +27,6 @@ public class TimeActivity {
 
     private String description;
 
-    private boolean billed = false;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "item_fk", referencedColumnName = "id")
     private ServiceItem serviceItem;
@@ -42,13 +43,9 @@ public class TimeActivity {
     @JoinColumn(name = "company_fk", referencedColumnName = "id")
     private Company company;
 
-    public boolean isBilled() {
-        return billed;
-    }
-
-    public void setBilled(boolean billed) {
-        this.billed = billed;
-    }
+    @ManyToOne
+    @JoinColumn(name = "invoice_fk", referencedColumnName = "id")
+    private Invoice invoice;
 
     public String getQboId() {
         return qboId;
@@ -112,5 +109,29 @@ public class TimeActivity {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public Money getAmount() {
+        final Money serviceItemRatePerHour = getServiceItem().getRate();
+
+        final Money amount = serviceItemRatePerHour.multipliedBy(getHours(), RoundingMode.HALF_UP);
+
+        return amount;
+    }
+
+    public BigDecimal getHours() {
+        BigDecimal hours = new BigDecimal((double) minutes / 60);
+        hours.setScale(2);
+
+        return hours;
     }
 }

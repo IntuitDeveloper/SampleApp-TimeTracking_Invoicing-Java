@@ -1,18 +1,13 @@
 package com.intuit.developer.sampleapp.timetracking.test.unit.qbo;
 
 import com.intuit.developer.sampleapp.timetracking.domain.*;
-import com.intuit.developer.sampleapp.timetracking.mappers.CustomerMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.EmployeeMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.ServiceItemMapper;
-import com.intuit.developer.sampleapp.timetracking.mappers.TimeActivityMapper;
+import com.intuit.developer.sampleapp.timetracking.mappers.*;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
-import com.intuit.developer.sampleapp.timetracking.repository.CustomerRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.EmployeeRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.ServiceItemRepository;
-import com.intuit.developer.sampleapp.timetracking.repository.TimeActivityRepository;
+import com.intuit.developer.sampleapp.timetracking.repository.*;
 import com.intuit.ipp.core.IEntity;
 import com.intuit.ipp.data.Account;
+import com.intuit.ipp.data.Term;
 import com.intuit.ipp.services.DataService;
 import com.intuit.ipp.services.QueryResult;
 import mockit.*;
@@ -39,7 +34,7 @@ public class QBOGatewayTests {
 
     public static final String EXPECTED_INCOME_ACCOUNT_QUERY = "select * from account where accounttype = 'Income' and accountsubtype = 'ServiceFeeIncome'";
     @Tested
-    QBOGateway qboDataManager;
+    QBOGateway qboGateway;
 
     @Injectable
     DataServiceFactory dataServiceFactory;
@@ -84,7 +79,7 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createEmployeeInQBO(employee);
+        qboGateway.createEmployeeInQBO(employee);
 
         final String expectedQuery = String.format(QBOGateway.EXISTING_EMPLOYEE_QUERY, firstName, lastName);
 
@@ -129,7 +124,7 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createEmployeeInQBO(employee);
+        qboGateway.createEmployeeInQBO(employee);
 
         new Verifications() {{
             dataService.add(withAny(new com.intuit.ipp.data.Employee()));
@@ -178,7 +173,7 @@ public class QBOGatewayTests {
             repository.save(domainEntity);
         }};
 
-        qboDataManager.createCustomerInQBO(domainEntity);
+        qboGateway.createCustomerInQBO(domainEntity);
 
         assertEquals("qboId  was not updated", expectedQBOId, domainEntity.getQboId());
 
@@ -221,7 +216,7 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createCustomerInQBO(customer);
+        qboGateway.createCustomerInQBO(customer);
 
         new Verifications() {{
             dataService.add(withAny(new com.intuit.ipp.data.Customer()));
@@ -281,7 +276,7 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createItemInQBO(domainEntity);
+        qboGateway.createItemInQBO(domainEntity);
 
         assertEquals("qboId  was not updated", expectedQBOId, domainEntity.getQboId());
         assertEquals("income account id was not set", expectedAccountId, mappedQboObject.getIncomeAccountRef().getValue());
@@ -330,7 +325,7 @@ public class QBOGatewayTests {
 
         boolean exceptionThrown = false;
         try {
-            qboDataManager.createItemInQBO(domainEntity);
+            qboGateway.createItemInQBO(domainEntity);
         } catch (RuntimeException e) {
             exceptionThrown = true;
             assertEquals("Could not find an account of type Income and subtype ServiceFeeIncome", e.getMessage());
@@ -377,7 +372,7 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createItemInQBO(serviceItem);
+        qboGateway.createItemInQBO(serviceItem);
 
         new Verifications() {{
             dataService.add(withAny(new com.intuit.ipp.data.Item()));
@@ -417,12 +412,73 @@ public class QBOGatewayTests {
 
         }};
 
-        qboDataManager.createTimeActivityInQBO(domainEntity);
+        qboGateway.createTimeActivityInQBO(domainEntity);
+
+        assertEquals("qbo id", expectedQBOId, domainEntity.getQboId());
 
         new Verifications() {{
             dataService.add(mappedQboObject);
             repository.save(domainEntity);
         }};
+
+    }
+
+    @Test
+    public void testCreateInvoiceInQBO(@Mocked final InvoiceMapper mapper,
+                                       @Injectable final InvoiceRepository repository) throws Exception {
+        final Company c = new Company();
+        c.setName("A good company");
+
+        final Invoice domainEntity = new Invoice();
+        domainEntity.setCompany(c);
+
+        final com.intuit.ipp.data.Invoice mappedQboObject = new com.intuit.ipp.data.Invoice();
+
+        final String expectedQBOId = "987654321";
+        final com.intuit.ipp.data.Invoice returnedQboObject = new com.intuit.ipp.data.Invoice();
+        returnedQboObject.setId(expectedQBOId);
+
+        final List<Term> terms = new ArrayList<>();
+
+        Term someOtherTerm = new Term();
+        someOtherTerm.setId("4321");
+        someOtherTerm.setDueDays(20);
+        someOtherTerm.setType("STANDARD");
+        terms.add(someOtherTerm);
+
+        final String expectedTermId = "1234";
+        Term net30 = new Term();
+        net30.setId(expectedTermId);
+        net30.setType("STANDARD");
+        net30.setDueDays(30);
+        terms.add(net30);
+
+        new NonStrictExpectations() {{
+            dataServiceFactory.getDataService(c);
+            result = dataService;
+
+            InvoiceMapper.buildQBOObject(domainEntity);
+            result = mappedQboObject;
+
+            dataService.findAll((Term) any);
+            result = terms;
+
+            dataService.add(mappedQboObject);
+            result = returnedQboObject;
+
+        }};
+
+        qboGateway.createInvoiceInQBO(domainEntity);
+
+        new Verifications() {{
+            dataService.add(mappedQboObject);
+            repository.save(domainEntity);
+        }};
+
+        assertEquals("terms qbo id", expectedTermId, mappedQboObject.getSalesTermRef().getValue());
+        assertEquals("qbo id", expectedQBOId, domainEntity.getQboId());
+        assertEquals("status", InvoiceStatus.Billed, domainEntity.getStatus());
+
 
     }
 }
