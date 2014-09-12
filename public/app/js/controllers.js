@@ -157,3 +157,34 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
             }
         };
     }]);
+
+controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc',
+    function ($scope, ModelSvc, InvoiceSvc) {
+        InvoiceSvc.refreshPendingInvoices();
+
+
+        $scope.model = ModelSvc.model;
+        $scope.alertMessage = "";
+        $scope.showAlert = false;
+
+        var self = this;
+
+        $scope.expandServiceItemSummary = function (invoice) {
+            if (invoice.showServiceItemSummaries) {
+                invoice.showServiceItemSummaries = !invoice.showServiceItemSummaries;
+            } else {
+                invoice.showServiceItemSummaries = true;
+            }
+
+        };
+
+        $scope.generateInvoice = function (invoice) {
+            InvoiceSvc.submitInvoiceForBilling(invoice, self.showSuccessfulAlert);
+        };
+
+        this.showSuccessfulAlert = function (result) {
+            $scope.alertMessage = "Invoice successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
+            $scope.showAlert = true;
+        };
+    }]);
+

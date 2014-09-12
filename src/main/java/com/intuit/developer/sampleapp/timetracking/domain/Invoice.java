@@ -31,7 +31,7 @@ public class Invoice {
     private Company company;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "invoice")
-    private List<TimeActivity> timeActivities;// = new ArrayList<>();
+    private List<TimeActivity> timeActivities;
 
     public void addTimeActivity(TimeActivity timeActivity) {
         if (this.timeActivities == null) {
@@ -39,6 +39,10 @@ public class Invoice {
         }
         this.timeActivities.add(timeActivity);
         timeActivity.setInvoice(this);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getQboId() {

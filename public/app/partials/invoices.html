@@ -1,0 +1,79 @@
+<div ng-class="row">
+    <div ng-class="row">
+        <div class="alert alert-success alert-dismissible" role="alert" ng-show="showAlert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
+                    class="sr-only">Close</span></button>
+            {{alertMessage}}
+        </div>
+    </div>
+    <div ng-class="row">
+        <h3>Step 3: Generate Invoices</h3>
+    </div>
+    <div ng-class="row">
+        <h4><em>Total Pending: {{model.company.pendingInvoices.length}}</em></h4>
+    </div>
+    <div ng-class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-2"><h5>Customer</h5></div>
+        <div class="col-xs-3"><h5>Date Range</h5></div>
+        <div class="col-xs-3"><h5>Total</h5></div>
+        <div class="col-xs-3"><h5>Actions</h5></div>
+    </div>
+    <div ng-class="row" ng-repeat="invoice in model.company.pendingInvoices">
+        <div class="col-xs-1">
+            <button type="button" class="btn btn-default btn-xs" ng-click="expandServiceItemSummary(invoice)">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+            </button>
+        </div>
+        <div class="col-xs-2">{{invoice.customer.firstName}} {{invoice.customer.lastName}}</div>
+        <div class="col-xs-3">{{invoice.summary.minDate | date :'shortDate' }} - {{invoice.summary.maxDate | date
+            :'shortDate'}}
+        </div>
+        <div class="col-xs-3">{{invoice.summary.totalAmount | currency : '$'}}</div>
+        <div class="col-xs-3">
+            <button type="button" class="btn btn-default btn-sm" ng-click="generateInvoice(invoice)">
+                Generate
+            </button>
+        </div>
+        <div class="col-xs-12">
+            <div ng-class="row" ng-repeat="serviceItemSummary in invoice.summary.serviceItemAmountsSummaries"
+                 ng-show="invoice.showServiceItemSummaries">
+
+                <div class=" col-xs-offset-1 col-xs-2"><em>{{serviceItemSummary.serviceItemName}}</em></div>
+                <div class="col-xs-3">{{serviceItemSummary.rate | currency : '$'}}/Hour</div>
+                <div class="col-xs-3">{{serviceItemSummary.totalAmount | currency : '$'}}</div>
+                <div class="col-xs-12">
+                    <div ng-class="row">
+                        <div class="col-xs-offset-1 col-xs-10" ng-style="{'padding-top': '10px'};">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Date</th>
+                                        <th>Hours</th>
+                                        <th>Sub Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="timeActivity in serviceItemSummary.timeActivities">
+                                        <td>{{timeActivity.employeeName}}</td>
+                                        <td>{{timeActivity.date | date : 'shortDate'}}</td>
+                                        <td>{{timeActivity.hours}}</td>
+                                        <td>{{timeActivity.amount | currency : '$'}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

@@ -8,8 +8,8 @@ var timetrackingServices = angular.module('myApp.services', ['ngResource']);
 timetrackingServices.value('version', '0.1');
 
 timetrackingServices.factory('InitializerSvc',
-    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc',
-        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc) {
+    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc',
+        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc) {
 
             var initialized = false;
 
@@ -18,6 +18,7 @@ timetrackingServices.factory('InitializerSvc',
                 $rootScope.$on('api.loaded', function () {
                     CompanySvc.initialize();
                     TimeActivitySvc.initialize();
+                    InvoiceSvc.initialize();
                     CompanySvc.initializeModel();
                 });
 
@@ -53,8 +54,13 @@ timetrackingServices.factory('ModelSvc', [
         var model = {};
         model.company = {};
 
+        var isCompanyInitialized = function () {
+            return !angular.equals({}, model.company)
+        }
+
         return {
-            model: model
+            model: model,
+            isCompanyInitialized: isCompanyInitialized
         }
     }]);
 
@@ -97,6 +103,7 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
 
         var Company;
 
+
         var initialize = function () {
             Company = $resource(RootUrlSvc.rootUrls.companies + ':companyId', {}, { query: {method: 'GET', isArray: false} });
         };
@@ -106,6 +113,7 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
                 var companies = data._embedded.companies;
                 ModelSvc.model.companies = companies;
                 ModelSvc.model.company = companies[0]; //select the first company for now
+                console.log("broadcasting model.company.change");
                 $rootScope.$broadcast('model.company.change');
 
                 var grantUrl = RootUrlSvc.oauthGrantUrl() + '?appCompanyId=' + ModelSvc.model.company.id;
@@ -197,8 +205,8 @@ timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlS
         }
     }]);
 
-timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
-    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'RootUrlSvc',
+    function ($resource, $rootScope, RootUrlSvc) {
 
         var rootTimeActivityResource;
 
@@ -217,3 +225,66 @@ timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'Roo
             createTimeActivity: createTimeActivity
         }
     }]);
+
+timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
+
+        var Invoice;
+
+        var initialize = function () {
+            console.log("Initializing the InvoiceSvc");
+            Invoice = $resource(RootUrlSvc.rootUrls.invoices + "/:invoiceId", {},
+                {
+                    pendingForCompany: {
+                        method: 'GET',
+                        url: RootUrlSvc.rootUrls.invoices + '/search/findByCompanyAndStatus',
+                        params: {
+                            projection: 'summary',
+                            status: 'Pending'
+                        },
+                        isArray: false
+                    },
+                    update: {
+                        method: 'PUT'
+                    }
+                });
+        };
+
+        var _refreshPendingInvoices = function () {
+            console.log("Refreshing pending invoices");
+            Invoice.pendingForCompany({companyId: ModelSvc.model.company.id}, function (data) {
+                if (data._embedded) {
+                    ModelSvc.model.company.pendingInvoices = data._embedded.invoices;
+                } else {
+                    ModelSvc.model.company.pendingInvoices = [];
+                }
+            });
+        };
+
+        var refreshPendingInvoices = function () {
+
+            if (ModelSvc.isCompanyInitialized()) {
+                _refreshPendingInvoices();
+            } else {
+                $rootScope.$on('model.company.change', _refreshPendingInvoices);
+            }
+        };
+
+        var submitInvoiceForBilling = function (invoiceSummary, callback) {
+            Invoice.get({invoiceId: invoiceSummary.id}, function (invoice) {
+                invoice.status = 'ReadyToBeBilled';
+                invoice.$update({invoiceId: invoiceSummary.id}, function (updatedInvoice) {
+                    callback(updatedInvoice);
+                    refreshPendingInvoices();
+                });
+            })
+        };
+
+        return {
+            initialize: initialize,
+            refreshPendingInvoices: refreshPendingInvoices,
+            submitInvoiceForBilling: submitInvoiceForBilling
+        }
+    }
+])
+;

@@ -14,9 +14,10 @@ angular.module('myApp', [
     config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/settings', {templateUrl: 'partials/settings.html', controller: 'SettingsCtrl'});
         $routeProvider.when('/timeentry', {templateUrl: 'partials/timeentry.html', controller: 'TimeEntryCtrl'});
+        $routeProvider.when('/invoices', {templateUrl: 'partials/invoices.html', controller: 'InvoiceCtrl'});
         $routeProvider.otherwise({redirectTo: '/settings'});
     }])
-    .run(['InitializerSvc', function(InitializerSvc) {
+    .run(['InitializerSvc', function (InitializerSvc) {
         InitializerSvc.initialize();
     }]);
 

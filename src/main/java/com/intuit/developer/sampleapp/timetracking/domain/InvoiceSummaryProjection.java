@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.config.Projection;
  */
 @Projection(name = "summary", types = Invoice.class)
 public interface InvoiceSummaryProjection {
+    Long getId();
     Customer getCustomer();
-
     InvoiceSummary getSummary();
 }
