@@ -35,7 +35,7 @@ describe('Unit: Services', function () {
         }
     };
 
-    describe('Unit: InitializerSvc', function() {
+    describe('Unit: InitializerSvc', function () {
         var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc;
 
         beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_) {
@@ -51,7 +51,7 @@ describe('Unit: Services', function () {
 
         }));
 
-        it('should have a function called initialize that initializes other services', function() {
+        it('should have a function called initialize that initializes other services', function () {
             expect(InitializerSvc.initialize).toBeDefined();
             spyOn(RootUrlSvc, 'initialize');
 
@@ -148,7 +148,7 @@ describe('Unit: Services', function () {
             expect(RootUrlSvc.initialize).toBeDefined();
         });
 
-        it('should call the root resource when initialized(), store the appropriate resources, and call all registered callbacks', function() {
+        it('should call the root resource when initialized(), store the appropriate resources, and call all registered callbacks', function () {
 
             $httpBackend.expectGET(rootResource);
             RootUrlSvc.initialize();
@@ -180,8 +180,8 @@ describe('Unit: Services', function () {
         var $httpBackend, $rootScope, CompanySvc, ModelSvc, RootUrlSvc;
 
         var companiesRootResponse = {
-            _embedded : {
-                companies : [
+            _embedded: {
+                companies: [
                     {
                         name: "Company 1",
                         id: '123'
@@ -194,7 +194,7 @@ describe('Unit: Services', function () {
             }
         };
 
-        beforeEach(inject(function (_CompanySvc_,_RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
+        beforeEach(inject(function (_CompanySvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
             CompanySvc = _CompanySvc_;
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = _$rootScope_;
@@ -208,7 +208,7 @@ describe('Unit: Services', function () {
             RootUrlSvc.rootUrls.companies = rootCompaniesResource;
         }));
 
-        it('should have an initialize function', function() {
+        it('should have an initialize function', function () {
             expect(CompanySvc.initialize).toBeDefined();
         });
 
@@ -228,7 +228,7 @@ describe('Unit: Services', function () {
 
 
             expect($rootScope.$broadcast).toHaveBeenCalledWith('model.company.change');
-            expect(intuit.ipp.anywhere.setup).toHaveBeenCalledWith({grantUrl: RootUrlSvc.oauthGrantUrl()+ "?appCompanyId=" + ModelSvc.model.company.id});
+            expect(intuit.ipp.anywhere.setup).toHaveBeenCalledWith({grantUrl: RootUrlSvc.oauthGrantUrl() + "?appCompanyId=" + ModelSvc.model.company.id});
 
             expect(ModelSvc.model.companies).toEqual(companiesRootResponse._embedded.companies);
             expect(ModelSvc.model.company).toEqual(companiesRootResponse._embedded.companies[0]);
@@ -526,5 +526,89 @@ describe('Unit: Services', function () {
 
             expect(callback).toHaveBeenCalled();
         });
+    });
+
+    describe('Unit: InvoiceSvc', function () {
+        var $httpBackend, $rootScope, InvoiceSvc, ModelSvc, RootUrlSvc;
+
+        var invoiceRootResource = "http://localhost:8080/invoices";
+
+        beforeEach(inject(function (_InvoiceSvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
+            InvoiceSvc = _InvoiceSvc_;
+            $httpBackend = $injector.get('$httpBackend');
+            $rootScope = _$rootScope_;
+            ModelSvc = _ModelSvc_;
+            RootUrlSvc = _RootUrlSvc_;
+
+            RootUrlSvc.rootUrls = {
+                invoices: invoiceRootResource
+            };
+
+
+            spyOn($location, "host").andReturn("localhost");
+
+        }));
+
+        it('should have an initialize function', function () {
+            expect(InvoiceSvc.initialize).toBeDefined();
+        });
+
+        it('should have a refreshPendingInvoices function', function () {
+
+            var companyId = '1234';
+            ModelSvc.model.company.id = companyId;
+
+            var pendingInvoices = [
+                {
+                    foo: "bar"
+                }
+            ]
+
+            var response = {_embedded: {
+                invoices: pendingInvoices
+            }};
+
+            expect(InvoiceSvc.refreshPendingInvoices).toBeDefined();
+
+            var pendingInvoicesUrl = invoiceRootResource + "/search/findByCompanyAndStatus?companyId=" + companyId + "&projection=summary&status=Pending";
+            $httpBackend.whenGET(pendingInvoicesUrl).respond(response);
+
+            $httpBackend.expectGET(pendingInvoicesUrl);
+
+            InvoiceSvc.initialize();
+            InvoiceSvc.refreshPendingInvoices();
+
+            $httpBackend.flush();
+
+            expect(ModelSvc.model.company.pendingInvoices).toEqual(pendingInvoices);
+
+        });
+
+        it('should have a submitInvoiceForBilling function', function () {
+            expect(InvoiceSvc.submitInvoiceForBilling).toBeDefined();
+
+
+            var invoiceId = 3333;
+            var invoiceSummary = {id: invoiceId};
+            var callback = jasmine.createSpy();
+            var putResponse = {hello: "world"};
+
+            var invoiceUrl = invoiceRootResource + "/" + invoiceId;
+            $httpBackend.whenGET(invoiceUrl).respond({});
+            $httpBackend.expectGET(invoiceUrl);
+            $httpBackend.whenPUT(invoiceUrl).respond(putResponse);
+            $httpBackend.expectPUT(invoiceUrl, {status: 'ReadyToBeBilled'});
+
+            InvoiceSvc.initialize();
+            InvoiceSvc.submitInvoiceForBilling(invoiceSummary, callback);
+
+            $httpBackend.flush();
+
+            expect(callback).toHaveBeenCalled();
+            expect(callback.mostRecentCall.args[0].hello).toEqual("world");
+
+        });
+
+
     });
 });

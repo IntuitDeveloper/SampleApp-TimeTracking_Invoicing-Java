@@ -113,7 +113,6 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
                 var companies = data._embedded.companies;
                 ModelSvc.model.companies = companies;
                 ModelSvc.model.company = companies[0]; //select the first company for now
-                console.log("broadcasting model.company.change");
                 $rootScope.$broadcast('model.company.change');
 
                 var grantUrl = RootUrlSvc.oauthGrantUrl() + '?appCompanyId=' + ModelSvc.model.company.id;
@@ -232,7 +231,6 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
         var Invoice;
 
         var initialize = function () {
-            console.log("Initializing the InvoiceSvc");
             Invoice = $resource(RootUrlSvc.rootUrls.invoices + "/:invoiceId", {},
                 {
                     pendingForCompany: {
@@ -251,7 +249,6 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
         };
 
         var _refreshPendingInvoices = function () {
-            console.log("Refreshing pending invoices");
             Invoice.pendingForCompany({companyId: ModelSvc.model.company.id}, function (data) {
                 if (data._embedded) {
                     ModelSvc.model.company.pendingInvoices = data._embedded.invoices;
@@ -262,7 +259,6 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
         };
 
         var refreshPendingInvoices = function () {
-
             if (ModelSvc.isCompanyInitialized()) {
                 _refreshPendingInvoices();
             } else {
@@ -274,8 +270,8 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
             Invoice.get({invoiceId: invoiceSummary.id}, function (invoice) {
                 invoice.status = 'ReadyToBeBilled';
                 invoice.$update({invoiceId: invoiceSummary.id}, function (updatedInvoice) {
-                    callback(updatedInvoice);
                     refreshPendingInvoices();
+                    callback(updatedInvoice);
                 });
             })
         };

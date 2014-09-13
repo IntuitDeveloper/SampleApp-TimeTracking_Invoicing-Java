@@ -229,7 +229,7 @@ describe("Unit: Controllers", function () {
             ModelSvc = _ModelSvc_;
         }));
 
-        it('should have a settings controller defined', function () {
+        it('should have a time entry controller defined', function () {
             expect(ctrl).toBeDefined();
         });
 
@@ -405,6 +405,83 @@ describe("Unit: Controllers", function () {
             expect(scope.selectedDuration.getHours()).toEqual(0);
             expect(scope.selectedDuration.getMinutes()).toEqual(15);
         });
+    });
+
+    describe('Unit: InvoiceCtrl', function () {
+        var ctrl, scope, InvoiceSvc, ModelSvc;
+
+        beforeEach(module('myApp.controllers'));
+
+        beforeEach(inject(function ($rootScope, $controller, _InvoiceSvc_, _ModelSvc_) {
+            //create an empty scope
+            scope = $rootScope.$new();
+
+            ModelSvc = _ModelSvc_;
+            InvoiceSvc = _InvoiceSvc_;
+
+            spyOn(InvoiceSvc, 'refreshPendingInvoices');
+
+            //declare the controller and inject our empty scope
+            ctrl = $controller('InvoiceCtrl', {$scope: scope});
+
+        }));
+
+        it('should have a invoice controller defined', function () {
+            expect(ctrl).toBeDefined();
+        });
+
+        it('should call InvoiceSvc.refreshPendingInvoices when initialized', function () {
+            expect(InvoiceSvc.refreshPendingInvoices).toHaveBeenCalled();
+        });
+
+        it('should have the model on the scope object', function () {
+            expect(scope.model).toBeDefined();
+        });
+
+        it('should have a scope variable to determine whether to show the alert bar', function () {
+            expect(scope.showAlert).toBeDefined();
+        });
+
+        it('should have a scope variable to determine whether to show the alert bar', function () {
+            expect(scope.alertMessage).toBeDefined();
+        });
+
+        it('should have a expandServiceItemSummary function', function () {
+            expect(scope.expandServiceItemSummary).toBeDefined();
+
+            var invoice = {};
+            scope.expandServiceItemSummary(invoice);
+            expect(invoice.showServiceItemSummaries).toBeTruthy();
+
+            invoice = {showServiceItemSummaries: true};
+            scope.expandServiceItemSummary(invoice);
+            expect(invoice.showServiceItemSummaries).toBeFalsy();
+        });
+
+        it('should have a generateInvoice function', function () {
+            spyOn(InvoiceSvc, 'submitInvoiceForBilling');
+
+            var invoice = {};
+
+            scope.generateInvoice(invoice);
+
+            expect(InvoiceSvc.submitInvoiceForBilling).toHaveBeenCalledWith(invoice, ctrl.showSuccessfulAlert);
+
+        });
+
+        it('should have a showSuccessfulAlert function', function () {
+
+            expect(scope.showAlert).toBeFalsy();
+
+            var qboId = 1234;
+            ctrl.showSuccessfulAlert({qboId: qboId});
+
+            expect(scope.alertMessage).toEqual("Invoice successfully created and pushed to QBO (QBO ID = " + qboId + ")");
+            expect(scope.showAlert).toBeTruthy();
+        });
+
+
+
     });
 });
 
