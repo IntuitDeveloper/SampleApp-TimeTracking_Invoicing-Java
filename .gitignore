@@ -8,5 +8,9 @@ public/node_modules
 .gradle
 public/e2e-myapp.xml
 npm-debug.log
+.classpath
+.project
+.settings/
+bin/
 
 
