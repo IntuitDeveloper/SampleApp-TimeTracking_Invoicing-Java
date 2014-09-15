@@ -34,8 +34,7 @@ To most convenient way to start playing around with this sample app is to start 
 
 Once the sample app code is on your computer, you can do the following steps to run the app:
 
-1. Unzip the zip file
-2. cd to the unzipped folder
+1. cd to the project directory
 3. Run the command: _./gradlew bootRun_
 4. Open your browser to http://localhost:8080/app/index.html
 
