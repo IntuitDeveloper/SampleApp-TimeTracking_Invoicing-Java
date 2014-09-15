@@ -26,7 +26,7 @@ In order to successfully run this sample app you need a few things:
 
 To most convenient way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
 
-1. <Patti to fill in>
+1. Patti to fill in
 2. Clone the GitHub repo to your computer
 3. Fill in your oauth.json file values (app token, consumer key, consumer secret).
 
@@ -37,6 +37,12 @@ Once the sample app code is on your computer, you can do the following steps to 
 1. cd to the project directory
 3. Run the command: _./gradlew bootRun_
 4. Open your browser to http://localhost:8080/app/index.html
+
+## Cleaning up the database
+
+This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
+this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
+with no data.
 
 ## How To Guides
 
