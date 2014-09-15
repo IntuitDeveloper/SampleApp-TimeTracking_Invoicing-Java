@@ -15,8 +15,8 @@ controllersModule.controller('NavCtrl', ['$scope', '$routeParams', '$location', 
     }]);
 
 
-controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc',
-    function ($scope, SyncRequestSvc, ModelSvc, CompanySvc) {
+controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc', 'BusyModalSvc',
+    function ($scope, SyncRequestSvc, ModelSvc, CompanySvc, BusyModalSvc) {
 
         $scope.model = ModelSvc.model;
         $scope.syncCustomersMessage = '';
@@ -63,14 +63,17 @@ controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'Model
 
         $scope.syncCustomers = function () {
             SyncRequestSvc.sendCustomerSyncRequest(self.syncCompleted);
+            $scope.busyModal = BusyModalSvc.openBusyModal();
         }
 
         $scope.syncServiceItems = function () {
             SyncRequestSvc.sendServiceItemsSyncRequest(self.syncCompleted);
+            $scope.busyModal = BusyModalSvc.openBusyModal();
         }
 
         $scope.syncEmployees = function () {
             SyncRequestSvc.sendEmployeeSyncRequest(self.syncCompleted);
+            $scope.busyModal = BusyModalSvc.openBusyModal();
         }
 
         this.syncCompleted = function (data, status, headers, config) {
@@ -83,11 +86,12 @@ controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'Model
                 $scope.syncEmployeesMessage = message;
             }
             CompanySvc.initializeModel();
+            BusyModalSvc.closeBusyModal($scope.busyModal);
         };
     }]);
 
-controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 'TimeActivitySvc',
-    function ($scope, $filter, ModelSvc, TimeActivitySvc) {
+controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 'TimeActivitySvc', 'BusyModalSvc',
+    function ($scope, $filter, ModelSvc, TimeActivitySvc, BusyModalSvc) {
 
         $scope.model = ModelSvc.model;
         $scope.selectedEmployee = null;
@@ -114,6 +118,7 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
         };
 
         this.showSuccessfulAlert = function (result) {
+            BusyModalSvc.closeBusyModal($scope.busyModal);
             $scope.alertMessage = "Time Activity successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
             $scope.showAlert = true;
         };
@@ -132,6 +137,7 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
                 company: ModelSvc.model.company._links.self.href
             }, self.showSuccessfulAlert);
             $scope.clearTimeActivity();
+            $scope.busyModal = BusyModalSvc.openBusyModal()
         };
 
         $scope.clearTimeActivity = function () {
@@ -158,8 +164,8 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
         };
     }]);
 
-controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc',
-    function ($scope, ModelSvc, InvoiceSvc) {
+controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc', 'BusyModalSvc',
+    function ($scope, ModelSvc, InvoiceSvc, BusyModalSvc) {
         InvoiceSvc.refreshPendingInvoices();
 
 
@@ -180,11 +186,12 @@ controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc',
 
         $scope.generateInvoice = function (invoice) {
             InvoiceSvc.submitInvoiceForBilling(invoice, self.showSuccessfulAlert);
+            $scope.busyModal = BusyModalSvc.openBusyModal();
         };
 
         this.showSuccessfulAlert = function (result) {
             $scope.alertMessage = "Invoice successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
             $scope.showAlert = true;
+            BusyModalSvc.closeBusyModal($scope.busyModal);
         };
     }]);
-

@@ -6,10 +6,9 @@ angular.module('myApp', [
     'ngRoute',
     'ui.bootstrap',
     'ui.validate',
-    'myApp.filters',
     'myApp.services',
-    'myApp.directives',
-    'myApp.controllers'
+    'myApp.controllers',
+    'angularSpinner',
 ]).
     config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/settings', {templateUrl: 'partials/settings.html', controller: 'SettingsCtrl'});
@@ -20,4 +19,6 @@ angular.module('myApp', [
     .run(['InitializerSvc', function (InitializerSvc) {
         InitializerSvc.initialize();
     }]);
+
+
 

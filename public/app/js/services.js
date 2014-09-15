@@ -3,9 +3,7 @@
 /* Services */
 
 
-var timetrackingServices = angular.module('myApp.services', ['ngResource']);
-
-timetrackingServices.value('version', '0.1');
+var timetrackingServices = angular.module('myApp.services', ['ngResource', 'ui.bootstrap']);
 
 timetrackingServices.factory('InitializerSvc',
     ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc',
@@ -282,5 +280,28 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
             submitInvoiceForBilling: submitInvoiceForBilling
         }
     }
-])
-;
+]);
+
+timetrackingServices.factory('BusyModalSvc', ['$modal',
+    function ($modal) {
+
+        var openBusyModal = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/busyModal.html',
+                backdrop: 'static',
+                size: 'lg'
+            });
+
+            return modalInstance;
+        };
+
+        var closeBusyModal = function (modalInstance) {
+            modalInstance.dismiss();
+        };
+
+        return {
+            openBusyModal: openBusyModal,
+            closeBusyModal: closeBusyModal
+        }
+    }
+]);

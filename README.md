@@ -12,18 +12,23 @@ Please note that while these examples work, features not called out above are no
 
 For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.
 
-Therefore there are certain instances where we might forego a more complicated implementation (e.g. cacheing a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from. 
+Therefore there are certain instances where we might forgo a more complicated implementation (e.g. caching a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from.
 
-## First use instructions
+## Requirements
 
-The most conveinent way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details). 
+In order to successfully run this sample app you need a few things:
 
-There you can quickly:
+1. A developer.intuit.com account
+2. An app on developer.intuit.com (with app token, consumer key, and consumer secret).
+3. A sandbox QuickBooks Online company
+ 
+## First Use Instructions
 
-1. Create a developer account
-2. Create your first app and get development OAuth keys created
-3. Get a sandbox QuickBooks Online company provisioned
-4. Download this sample app's source code with an additional file containing your OAuth keys pre-installed in the project
+To most convenient way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
+
+1. <Patti to fill in>
+2. Clone the GitHub repo to your computer
+3. Fill in your oauth.json file values (app token, consumer key, consumer secret).
 
 ## Running the code
 
@@ -48,7 +53,7 @@ The project is maintained with IntelliJ IDEA and as such an .ipr file is checked
 To create Eclipse .project and .classpath files for the project execute the following: _./gradlew eclipse_
 
 ## Testing the code
-The three types of tests in the project (and how to run them) are listed below.
+The two types of tests in the project (and how to run them) are listed below.
 
 ### Java JUnit tests
 1. _./gradlew test_
@@ -59,17 +64,6 @@ To run the Javascript Karma tests you must have NodeJs v0.10.28 or later (http:/
 1. _cd public_
 2. _npm test_
 
-### Javascript Protractor tests
-To run the Javascript Protractor tests you must have NodeJs v0.10.28 or later (http://nodejs.org/) installed and have npm on the path.
-
-On one command prompt window:
-
-1. _./gradlew bootRun_
-
-On **_another_** command prompt window:
-
-1. _cd public_
-2. _npm run protractor_
 
 
 

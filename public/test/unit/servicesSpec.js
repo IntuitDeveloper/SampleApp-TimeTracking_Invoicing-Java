@@ -611,4 +611,45 @@ describe('Unit: Services', function () {
 
 
     });
+
+    describe('Unit: BusyModalSvc', function () {
+        var $modal, BusyModalSvc;
+
+        beforeEach(inject(function ($injector, _BusyModalSvc_) {
+            $modal = $injector.get('$modal');
+            BusyModalSvc = _BusyModalSvc_;
+        }));
+
+        it('should have a openBusyModal function', function () {
+            expect(BusyModalSvc.openBusyModal).toBeDefined();
+
+            var expectedModal = {foo: "bar"};
+
+            spyOn($modal, 'open').andReturn(expectedModal);
+
+            var result = BusyModalSvc.openBusyModal();
+
+            expect($modal.open).toHaveBeenCalledWith({
+                templateUrl: "partials/busyModal.html",
+                backdrop: 'static',
+                size: 'lg'
+            });
+
+            expect(result).toBe(expectedModal)
+        });
+
+        it('should have a closeBusyModal function', function () {
+
+            expect(BusyModalSvc.closeBusyModal).toBeDefined();
+
+            var dismiss = jasmine.createSpy('dismiss');
+
+            var modal = {dismiss: dismiss};
+
+            BusyModalSvc.closeBusyModal(modal);
+
+            expect(dismiss).toHaveBeenCalled();
+        });
+
+    });
 });

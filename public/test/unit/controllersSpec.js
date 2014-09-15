@@ -53,11 +53,11 @@ describe("Unit: Controllers", function () {
     describe('Unit: SettingsCtrl', function () {
 
 
-        var ctrl, scope, ModelSvc, SyncRequestSvc, CompanySvc;
+        var ctrl, scope, ModelSvc, SyncRequestSvc, CompanySvc, BusyModalSvc;
 
         beforeEach(module('myApp.controllers'));
 
-        beforeEach(inject(function ($rootScope, $controller, _ModelSvc_, _SyncRequestSvc_, _CompanySvc_) {
+        beforeEach(inject(function ($rootScope, $controller, _ModelSvc_, _SyncRequestSvc_, _CompanySvc_, _BusyModalSvc_) {
 
             //create an empty scope
             scope = $rootScope.$new();
@@ -69,6 +69,7 @@ describe("Unit: Controllers", function () {
             ModelSvc = _ModelSvc_;
             SyncRequestSvc = _SyncRequestSvc_;
             CompanySvc = _CompanySvc_;
+            BusyModalSvc = _BusyModalSvc_;
 
         }));
 
@@ -165,9 +166,13 @@ describe("Unit: Controllers", function () {
         });
 
         it('should have a private function called syncCompleted that updates the customer sync message', function () {
+
+            scope.busyModal = {foo: "bar"};
+
             expect(ctrl.syncCompleted).toBeDefined();
 
             spyOn(CompanySvc, 'initializeModel');
+            spyOn(BusyModalSvc, 'closeBusyModal');
 
             ctrl.syncCompleted({
                 successful: true,
@@ -177,12 +182,16 @@ describe("Unit: Controllers", function () {
 
             expect(scope.syncCustomersMessage).toEqual("123");
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
+            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
 
         it('should have a private function called syncCompleted that updates the employee sync message', function () {
             expect(ctrl.syncCompleted).toBeDefined();
 
+            scope.busyModal = {foo: "bar"};
+
             spyOn(CompanySvc, 'initializeModel');
+            spyOn(BusyModalSvc, 'closeBusyModal');
 
             ctrl.syncCompleted({
                 successful: true,
@@ -192,12 +201,16 @@ describe("Unit: Controllers", function () {
 
             expect(scope.syncEmployeesMessage).toEqual("abc");
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
+            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
 
         it('should have a private function called syncCompleted that updates the service item sync message', function () {
             expect(ctrl.syncCompleted).toBeDefined();
 
+            scope.busyModal = {foo: "bar"};
+
             spyOn(CompanySvc, 'initializeModel');
+            spyOn(BusyModalSvc, 'closeBusyModal');
 
             ctrl.syncCompleted({
                 successful: true,
@@ -207,6 +220,7 @@ describe("Unit: Controllers", function () {
 
             expect(scope.syncServiceItemsMessage).toEqual("987");
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
+            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
 
     });
@@ -408,16 +422,17 @@ describe("Unit: Controllers", function () {
     });
 
     describe('Unit: InvoiceCtrl', function () {
-        var ctrl, scope, InvoiceSvc, ModelSvc;
+        var ctrl, scope, InvoiceSvc, ModelSvc, BusyModalSvc;
 
         beforeEach(module('myApp.controllers'));
 
-        beforeEach(inject(function ($rootScope, $controller, _InvoiceSvc_, _ModelSvc_) {
+        beforeEach(inject(function ($rootScope, $controller, _InvoiceSvc_, _ModelSvc_, _BusyModalSvc_) {
             //create an empty scope
             scope = $rootScope.$new();
 
             ModelSvc = _ModelSvc_;
             InvoiceSvc = _InvoiceSvc_;
+            BusyModalSvc = _BusyModalSvc_;
 
             spyOn(InvoiceSvc, 'refreshPendingInvoices');
 
@@ -473,13 +488,16 @@ describe("Unit: Controllers", function () {
 
             expect(scope.showAlert).toBeFalsy();
 
+            scope.busyModal = {foo: "bar"};
+            spyOn(BusyModalSvc, 'closeBusyModal');
+
             var qboId = 1234;
             ctrl.showSuccessfulAlert({qboId: qboId});
 
             expect(scope.alertMessage).toEqual("Invoice successfully created and pushed to QBO (QBO ID = " + qboId + ")");
             expect(scope.showAlert).toBeTruthy();
+            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
-
 
 
     });
