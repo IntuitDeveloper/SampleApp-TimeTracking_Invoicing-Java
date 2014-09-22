@@ -13,7 +13,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
-apply plugin: 'jacoco'
 
 mainClassName = "com.intuit.developer.sampleapp.timetracking.Application"
 
@@ -35,8 +34,8 @@ repositories {
 }
 
 dependencies {
-    testCompile("org.jmockit:jmockit:1.9")
-    testCompile("org.jmockit:jmockit-coverage:1.9")
+    testCompile("org.jmockit:jmockit:1.12")
+    testCompile("org.jmockit:jmockit-coverage:1.12")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.hsqldb:hsqldb") //set the database to hyper sql
@@ -61,10 +60,6 @@ jar {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12' //tie this buildscript to a specific version of gradle so that we get consistent behavior
 }
-
-//jacoco {
-//    toolVersion = "0.7.2.201409121644"
-//}
 
 test {
     ignoreFailures = true

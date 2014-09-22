@@ -13,15 +13,10 @@ import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateSerializ
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneyDeserializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneySerializer;
 import oauth.OAuthInfoProvider;
-import org.apache.catalina.connector.Connector;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
 
@@ -61,41 +55,6 @@ public class Application extends RepositoryRestMvcConfiguration {
         config.setReturnBodyOnUpdate(true);
         config.exposeIdsFor(Company.class);
     }
-
-    @Override
-    protected void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
-        //add validators here
-//        validatingListener.addValidator("beforeCreate", new SyncRequestValidator());
-    }
-
-    /**
-     * A bean to configure the embedded tomcat.
-     * <p/>
-     * Right now we are only setting the port to 9001
-     */
-    @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return new EmbeddedServletContainerCustomizer() {
-            @Override
-            public void customize(ConfigurableEmbeddedServletContainer factory) {
-                if (factory instanceof TomcatEmbeddedServletContainerFactory) {
-                    customizeTomcat((TomcatEmbeddedServletContainerFactory) factory);
-                }
-            }
-
-            private void customizeTomcat(TomcatEmbeddedServletContainerFactory factory) {
-                factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
-
-                    @Override
-                    public void customize(Connector connector) {
-                        connector.setPort(9001);
-                    }
-                });
-            }
-        };
-    }
-
-
 
     //add REST event handler beans here
     @Bean
