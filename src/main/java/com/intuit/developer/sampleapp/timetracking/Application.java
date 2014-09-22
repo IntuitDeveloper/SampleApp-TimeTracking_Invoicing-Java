@@ -13,10 +13,15 @@ import com.intuit.developer.sampleapp.timetracking.serializers.LocalDateSerializ
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneyDeserializer;
 import com.intuit.developer.sampleapp.timetracking.serializers.MoneySerializer;
 import oauth.OAuthInfoProvider;
+import org.apache.catalina.connector.Connector;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -62,6 +67,34 @@ public class Application extends RepositoryRestMvcConfiguration {
         //add validators here
 //        validatingListener.addValidator("beforeCreate", new SyncRequestValidator());
     }
+
+    /**
+     * A bean to configure the embedded tomcat.
+     * <p/>
+     * Right now we are only setting the port to 9001
+     */
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return new EmbeddedServletContainerCustomizer() {
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer factory) {
+                if (factory instanceof TomcatEmbeddedServletContainerFactory) {
+                    customizeTomcat((TomcatEmbeddedServletContainerFactory) factory);
+                }
+            }
+
+            private void customizeTomcat(TomcatEmbeddedServletContainerFactory factory) {
+                factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+
+                    @Override
+                    public void customize(Connector connector) {
+                        connector.setPort(9001);
+                    }
+                });
+            }
+        };
+    }
+
 
 
     //add REST event handler beans here

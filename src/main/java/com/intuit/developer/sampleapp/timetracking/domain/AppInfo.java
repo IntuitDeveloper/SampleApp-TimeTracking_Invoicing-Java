@@ -3,7 +3,11 @@ package com.intuit.developer.sampleapp.timetracking.domain;
 import javax.persistence.*;
 
 /**
- * Created with IntelliJ IDEA.
+ * A sample app domain entity that holds the app token, consumer key, and consumer secret that identifies the
+ * sample app to the Intuit APIs.
+ * <p/>
+ * In the sample app, there should only ever be one of these entities in the database.
+ * <p/>
  * User: russellb337
  * Date: 6/24/14
  * Time: 12:58 PM

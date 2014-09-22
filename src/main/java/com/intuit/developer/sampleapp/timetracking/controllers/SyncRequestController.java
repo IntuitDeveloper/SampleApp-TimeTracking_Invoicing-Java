@@ -6,13 +6,11 @@ import com.intuit.developer.sampleapp.timetracking.domain.Employee;
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.repository.CompanyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created with IntelliJ IDEA.
+ * A REST controller that is triggered by the sample app UI and initiates syncing between the sample app and QBO
  * User: russellb337
  * Date: 8/22/14
  * Time: 4:47 PM
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/syncrequest")
 public class SyncRequestController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SyncRequestController.class);
 
     @Autowired
     private CompanyRepository companyRepository;

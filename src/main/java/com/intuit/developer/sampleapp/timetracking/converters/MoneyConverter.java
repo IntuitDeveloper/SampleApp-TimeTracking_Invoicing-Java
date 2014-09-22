@@ -6,7 +6,9 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * Created with IntelliJ IDEA.
+ * A class that knows how to convert Joda Money objects to and from a string.
+ * Used in ORM deserialization/serialization
+ * <p/>
  * User: russellb337
  * Date: 6/25/14
  * Time: 8:41 AM

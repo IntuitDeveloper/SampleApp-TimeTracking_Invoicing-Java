@@ -9,7 +9,7 @@ import oauth.OAuthInfoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Created with IntelliJ IDEA.
+ * An application specific implementation of the OAuthInfoProvider class.
  * User: russellb337
  * Date: 7/17/14
  * Time: 4:17 PM

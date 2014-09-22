@@ -48,22 +48,21 @@ public class OAuthController {
         //Instantiate the QuickBook SDK's IAPlatformClient object
         IAPlatformClient client = new IAPlatformClient();
         try {
-            //Use the IAPlatformClient to get a Request Token and Request Token Secret from Intuit
+            //Use the IAPlatformClient (from the SDK) to get a Request Token and Request Token Secret from Intuit
             final Map<String, String> requestTokenAndSecret = client.getRequestTokenAndSecret(oAuthInfoProvider.getConsumerKey(), oAuthInfoProvider.getConsumerSecret());
 
             //Pull the values out of the map
             final String requestToken = requestTokenAndSecret.get("requestToken");
             final String requestTokenSecret = requestTokenAndSecret.get("requestTokenSecret");
 
-            //Persist the request token and request token secret in the app database on the given company, we will need the
-            //Request Token Secret to make the final request to Intuit for the Access Tokens
+            //Persist the request token and request token secret in the app database on the given company, we will need it later
             oAuthInfoProvider.setRequestTokenValuesForCompany(companyId,
                     requestToken, requestTokenSecret);
 
             // Retrieve the Authorize URL
             final String authURL = client.getOauthAuthorizeUrl(requestToken);
 
-            // Redirect to the authorized URL page and retrieve the verifier code.
+            // Redirect to the authorize URL
             response.sendRedirect(authURL);
 
         } catch (OAuthException e) {

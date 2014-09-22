@@ -1,7 +1,10 @@
 package com.intuit.developer.sampleapp.timetracking.controllers;
 
 /**
- * Created with IntelliJ IDEA.
+ * A DTO class that is used in the SyncRequestController.
+ * <p/>
+ * A SyncRequest contains all the information necessary to sync one set of entities between the sample app and QBO
+ * <p/>
  * User: russellb337
  * Date: 8/22/14
  * Time: 4:51 PM

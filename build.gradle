@@ -13,7 +13,9 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
-apply plugin: 'jacoco'
+//apply plugin: 'jacoco'
+
+mainClassName = "com.intuit.developer.sampleapp.timetracking.Application"
 
 
 sourceCompatibility = 1.7
@@ -33,6 +35,8 @@ repositories {
 }
 
 dependencies {
+    testCompile("org.jmockit:jmockit:1.10")
+    testCompile("org.jmockit:jmockit-coverage:1.10")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.hsqldb:hsqldb") //set the database to hyper sql
@@ -42,7 +46,7 @@ dependencies {
     compile("ma.glasnost.orika:orika-core:1.4.5")
     compile fileTree(dir: "libs/qbo-sdk-2.3.1", include: "*.jar")
 
-    testCompile("org.jmockit:jmockit:1.10")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     //oauth dependencies
@@ -58,9 +62,9 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12' //tie this buildscript to a specific version of gradle so that we get consistent behavior
 }
 
-jacoco {
-    toolVersion = "0.7.1.201405082137" //specify a version of jacoco that works with java 8
-}
+//jacoco {
+//    toolVersion = "0.7.2.201409121644"
+//}
 
 test {
     ignoreFailures = true
