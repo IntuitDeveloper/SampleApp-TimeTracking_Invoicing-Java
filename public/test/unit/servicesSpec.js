@@ -6,12 +6,12 @@ describe('Unit: Services', function () {
 
     beforeEach(module('myApp.services'));
 
-    var rootResource = 'http://localhost:8080';
-    var rootCompaniesResource = 'http://localhost:8080/companies';
-    var rootEmployeesResource = 'http://localhost:8080/employees';
-    var rootCustomersResource = 'http://localhost:8080/customers';
-    var rootServiceItemsResource = 'http://localhost:8080/serviceItem';
-    var syncRequestResource = 'http://localhost:8080/syncrequest';
+    var rootResource = 'http://localhost:9001';
+    var rootCompaniesResource = 'http://localhost:9001/companies';
+    var rootEmployeesResource = 'http://localhost:9001/employees';
+    var rootCustomersResource = 'http://localhost:9001/customers';
+    var rootServiceItemsResource = 'http://localhost:9001/serviceItem';
+    var syncRequestResource = 'http://localhost:9001/syncrequest';
 
     var templateThing = "{?page,size,sort}";
 
@@ -239,7 +239,7 @@ describe('Unit: Services', function () {
     describe('Unit: ServiceItemSvc', function () {
         var $httpBackend, $rootScope, ServiceItemSvc, ModelSvc, RootUrlSvc;
 
-        var serviceItemsForCompany1URL = "http://localhost:8080/companies/1/serviceItems";
+        var serviceItemsForCompany1URL = "http://localhost:9001/companies/1/serviceItems";
 
         var serviceItemsForCompany1Response = {
             _embedded: {
@@ -296,7 +296,7 @@ describe('Unit: Services', function () {
     describe('Unit: CustomerSvc', function () {
         var $httpBackend, $rootScope, CustomerSvc, ModelSvc, RootUrlSvc;
 
-        var customersForCompany1URL = "http://localhost:8080/companies/1/customers";
+        var customersForCompany1URL = "http://localhost:9001/companies/1/customers";
 
         var customersForCompany1Response = {
             _embedded: {
@@ -353,7 +353,7 @@ describe('Unit: Services', function () {
     describe('Unit: EmployeeSvc', function () {
         var $httpBackend, $rootScope, EmployeeSvc, ModelSvc, RootUrlSvc;
 
-        var employeesForCompany1URL = "http://localhost:8080/companies/1/employees";
+        var employeesForCompany1URL = "http://localhost:9001/companies/1/employees";
 
         var employeesForCompany1Response = {
             _embedded: {
@@ -485,7 +485,7 @@ describe('Unit: Services', function () {
     describe('Unit: TimeActivitySvc', function () {
         var $httpBackend, $rootScope, TimeActivitySvc, ModelSvc, RootUrlSvc;
 
-        var timeActivityRootResource = "http://localhost:8080/timeActivities";
+        var timeActivityRootResource = "http://localhost:9001/timeActivities";
 
         beforeEach(inject(function (_TimeActivitySvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
             TimeActivitySvc = _TimeActivitySvc_;
@@ -531,7 +531,7 @@ describe('Unit: Services', function () {
     describe('Unit: InvoiceSvc', function () {
         var $httpBackend, $rootScope, InvoiceSvc, ModelSvc, RootUrlSvc;
 
-        var invoiceRootResource = "http://localhost:8080/invoices";
+        var invoiceRootResource = "http://localhost:9001/invoices";
 
         beforeEach(inject(function (_InvoiceSvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
             InvoiceSvc = _InvoiceSvc_;

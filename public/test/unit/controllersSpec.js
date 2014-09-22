@@ -293,10 +293,10 @@ describe("Unit: Controllers", function () {
             spyOn(TimeActivitySvc, 'createTimeActivity');
             spyOn(scope, 'clearTimeActivity')
 
-            var selectedServiceItemHref = "http://localhost:8080/serviceItems/1";
-            var selectedEmployeeHref = "http://localhost:8080/employees/1";
-            var selectedCustomerHref = "http://localhost:8080/employees/1";
-            var selectedCompanyHref = "http://localhost:8080/companies/1";
+            var selectedServiceItemHref = "http://localhost:9001/serviceItems/1";
+            var selectedEmployeeHref = "http://localhost:9001/employees/1";
+            var selectedCustomerHref = "http://localhost:9001/employees/1";
+            var selectedCompanyHref = "http://localhost:9001/companies/1";
 
             scope.selectedServiceItem = {
                 _links: {

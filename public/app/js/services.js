@@ -68,7 +68,7 @@ timetrackingServices.factory('RootUrlSvc', ['$resource', '$rootScope', '$locatio
 
         var rootUrls = {};
         var apiRoot = function () {
-            return $location.protocol() + "://" + $location.host() + ":8080";
+            return $location.protocol() + "://" + $location.host() + ":9001";
         };
 
         var initialize = function () {
