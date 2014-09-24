@@ -533,13 +533,22 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/jcl-over-slf4j/1.7.7/b5a646b81b899e930f8600c5f45766dd82743d93/jcl-over-slf4j-1.7.7-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: jmockit-1.10">
+    <library name="Gradle: jmockit-1.12">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit/1.10/1b20767f7f9d401ab6613015d484b53d05057934/jmockit-1.10.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit/1.12/4e9d40e385bec309c2b528715ed046b14aacaef4/jmockit-1.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit/1.10/f5e5e5faf3dcdf5362a9b2ad6454374e7287bf99/jmockit-1.10-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit/1.12/beb12f00f7bf7313d06cead55e2d3f1767c4bc6e/jmockit-1.12-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: jmockit-coverage-1.12">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit-coverage/1.12/e8ccb28e3999fca4650b2f85c9a09ee3b646fd5a/jmockit-coverage-1.12.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmockit/jmockit-coverage/1.12/6e478aecc5fcaa6863a3a2094c2d26b3fe719dc9/jmockit-coverage-1.12-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: joda-money-0.9.1">
