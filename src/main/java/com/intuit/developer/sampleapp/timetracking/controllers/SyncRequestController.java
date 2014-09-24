@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Time: 4:47 PM
  */
 @RestController
-@RequestMapping("/syncrequest")
+@RequestMapping(value = "/syncrequest", consumes = "application/json", produces = "application/json")
 public class SyncRequestController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class SyncRequestController {
     @Autowired
     private QBOGateway qboGateway;
 
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public SyncRequest createSyncRequest(@RequestBody final SyncRequest syncRequest) {
 
