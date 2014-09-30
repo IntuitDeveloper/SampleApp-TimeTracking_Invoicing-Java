@@ -3,10 +3,7 @@ package com.intuit.developer.sampleapp.timetracking.mappers;
 import com.intuit.developer.sampleapp.timetracking.domain.Invoice;
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
 import com.intuit.developer.sampleapp.timetracking.domain.TimeActivity;
-import com.intuit.ipp.data.Line;
-import com.intuit.ipp.data.LineDetailTypeEnum;
-import com.intuit.ipp.data.ReferenceType;
-import com.intuit.ipp.data.SalesItemLineDetail;
+import com.intuit.ipp.data.*;
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
@@ -71,6 +68,12 @@ public class InvoiceMapper {
                             final ReferenceType itemRef = new ReferenceType();
                             detail.setItemRef(itemRef);
                             itemRef.setValue(serviceItem.getQboId());
+
+
+                            LinkedTxn linkedTxn = new LinkedTxn();
+                            linkedTxn.setTxnType("TimeActivity");
+                            linkedTxn.setTxnId(timeActivity.getQboId());
+                            b.getLinkedTxn().add(linkedTxn);
                         }
                     }
                 })

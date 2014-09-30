@@ -48,6 +48,16 @@ public class TimeActivityMapper {
                         Period period = new Period(0, a.getMinutes(), 0, 0).normalizedStandard();
                         b.setHours(period.getHours());
                         b.setMinutes(period.getMinutes());
+
+                        /*
+                        In this example we decided to go with the service item's rate. You could also use:
+                         -- Employee's hourly rate (not present in this sample app's domain, but still a reasonable choice)
+                         -- If employee's had roles (e.g. Chief Counsel, Paralegal) you could use the role's global rate,
+                            or even a rate for a given combination of role and service item
+
+                         It all depends on what kind of billing model the user would want.
+                         */
+                        b.setHourlyRate(a.getServiceItem().getRate().getAmount());
                     }
                 })
                 .byDefault()
