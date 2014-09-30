@@ -66,10 +66,6 @@ test {
     reports.html.enabled = false
 }
 
-clean {
-    delete 'database'
-}
-
 sourceSets {
     main {
         //fixes bootRun not picking up resource files

@@ -5,8 +5,8 @@ import com.intuit.developer.sampleapp.timetracking.domain.Employee;
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
 import com.intuit.developer.sampleapp.timetracking.domain.TimeActivity;
 import com.intuit.developer.sampleapp.timetracking.mappers.TimeActivityMapper;
+import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -44,6 +44,7 @@ public class TimeActivityMapperTests {
 
         ServiceItem domainServiceItem = new ServiceItem();
         domainServiceItem.setQboId(serviceItemQboId);
+        domainServiceItem.setRate(Money.parse("USD 10.00"));
         domainTimeActivity.setServiceItem(domainServiceItem);
 
         final com.intuit.ipp.data.TimeActivity timeActivity = TimeActivityMapper.buildQBOObject(domainTimeActivity);
@@ -57,12 +58,4 @@ public class TimeActivityMapperTests {
         assertEquals("service item qbo id", serviceItemQboId, timeActivity.getItemRef().getValue());
 
     }
-
-    public static void main(String[] args) {
-        Period period = new Period(0, 90, 0, 0).normalizedStandard();
-        System.out.println("Hours: " + period.getHours());
-        System.out.println("Minutes: " + period.getMinutes());
-    }
-
-
 }

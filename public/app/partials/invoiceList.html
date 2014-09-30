@@ -1,0 +1,62 @@
+<div ng-class="row">
+    <hr>
+    <h4><em>Total {{invoiceStatus}}: {{invoiceList.length}}</em></h4>
+    <hr>
+</div>
+<div ng-class="row">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th class="col-md-3">Customer</th>
+            <th class="col-md-3">Date Range</th>
+            <th class="col-md-4">Total</th>
+            <th class="col-md-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat-start="invoice in invoiceList">
+            <td>
+                <button type="button" class="btn btn-default btn-xs" ng-click="expandServiceItemSummary(invoice)">
+                    <span ng-class="expandButtonIcon(invoice)"></span>
+                </button>
+            </td>
+            <td>{{invoice.customer.firstName}} {{invoice.customer.lastName}}</td>
+            <td>{{invoice.summary.minDate | date :'shortDate' }} - {{invoice.summary.maxDate | date:'shortDate'}}</td>
+            <td>{{invoice.summary.totalAmount | currency : '$'}}</td>
+            <td>
+                <button type="button" class="btn btn-default btn-sm" ng-click="actionCallback(invoice)">
+                    <span ng-class="actionButtonIcon()"></span> {{actionButtonText()}}
+                </button>
+            </td>
+        </tr>
+        <tr ng-repeat-end="" ng-if="invoice.showServiceItemSummaries">
+            <td></td>
+            <td colspan="4">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Service Item</th>
+                        <th>Date</th>
+                        <th>Rate</th>
+                        <th>Hours</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="timeActivity in invoice.summary.timeActivities">
+                        <td>{{timeActivity.employeeName}}</td>
+                        <td>{{timeActivity.serviceItemName}}</td>
+                        <td>{{timeActivity.date | date : 'shortDate'}}</td>
+                        <td>{{timeActivity.serviceItemRate}}</td>
+                        <td>{{timeActivity.hours}}</td>
+                        <td>{{timeActivity.amount | currency : '$'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -17,6 +17,8 @@ public class TimeActivitySummary {
     private final LocalDate date;
     private final BigDecimal hours;
     private final Money amount;
+    private final String serviceItemName;
+    private final Money serviceItemRate;
 
 
     public TimeActivitySummary(TimeActivity timeActivity) {
@@ -24,6 +26,8 @@ public class TimeActivitySummary {
         date = timeActivity.getDate();
         hours = timeActivity.getHours();
         amount = timeActivity.getAmount();
+        serviceItemName = timeActivity.getServiceItem().getName();
+        serviceItemRate = timeActivity.getServiceItem().getRate();
     }
 
     public String getEmployeeName() {
@@ -40,5 +44,13 @@ public class TimeActivitySummary {
 
     public Money getAmount() {
         return amount;
+    }
+
+    public String getServiceItemName() {
+        return serviceItemName;
+    }
+
+    public Money getServiceItemRate() {
+        return serviceItemRate;
     }
 }

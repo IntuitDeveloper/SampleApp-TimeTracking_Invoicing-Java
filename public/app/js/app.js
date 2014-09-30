@@ -8,6 +8,7 @@ angular.module('myApp', [
     'ui.validate',
     'myApp.services',
     'myApp.controllers',
+    'myApp.directives',
     'angularSpinner',
 ]).
     config(['$routeProvider', function ($routeProvider) {

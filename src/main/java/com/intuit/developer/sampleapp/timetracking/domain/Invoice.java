@@ -30,7 +30,7 @@ public class Invoice {
     @JoinColumn(name = "company_fk", referencedColumnName = "id")
     private Company company;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "invoice")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice")
     private List<TimeActivity> timeActivities;
 
     public void addTimeActivity(TimeActivity timeActivity) {

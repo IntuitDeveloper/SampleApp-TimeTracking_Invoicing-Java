@@ -127,12 +127,6 @@ describe("Unit: Controllers", function () {
             expect(scope.disableServiceItemsSyncButton()).toBeTruthy();
         });
 
-        it('should have a scope variables for storing sync messages', function () {
-            expect(scope.syncCustomersMessage).toBeDefined();
-            expect(scope.syncServiceItemsMessage).toBeDefined();
-            expect(scope.syncEmployeesMessage).toBeDefined();
-        });
-
         it('should have functions for initiating data sync', function () {
             expect(scope.syncCustomers).toBeDefined();
             expect(scope.syncServiceItems).toBeDefined();
@@ -165,7 +159,7 @@ describe("Unit: Controllers", function () {
             expect(SyncRequestSvc.sendEmployeeSyncRequest).toHaveBeenCalledWith(ctrl['syncCompleted']);
         });
 
-        it('should have a private function called syncCompleted that updates the customer sync message', function () {
+        it('should have a private function called syncCompleted that cleans up after a syncing operation', function () {
 
             scope.busyModal = {foo: "bar"};
 
@@ -176,53 +170,49 @@ describe("Unit: Controllers", function () {
 
             ctrl.syncCompleted({
                 successful: true,
-                message: "123",
-                type: "Customer"
+                message: "123"
             });
 
-            expect(scope.syncCustomersMessage).toEqual("123");
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
             expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
 
-        it('should have a private function called syncCompleted that updates the employee sync message', function () {
-            expect(ctrl.syncCompleted).toBeDefined();
-
-            scope.busyModal = {foo: "bar"};
-
-            spyOn(CompanySvc, 'initializeModel');
-            spyOn(BusyModalSvc, 'closeBusyModal');
-
-            ctrl.syncCompleted({
-                successful: true,
-                message: "abc",
-                type: "Employee"
-            });
-
-            expect(scope.syncEmployeesMessage).toEqual("abc");
-            expect(CompanySvc.initializeModel).toHaveBeenCalled();
-            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
+        it('should disable view in qbo buttons when not connected to QBO', function () {
+            ModelSvc.model.company.connectedToQbo = false;
+            ModelSvc.model.company.customersSynced = false;
+            ModelSvc.model.company.employeesSynced = false;
+            ModelSvc.model.company.serviceItemsSynced = false;
+            expect(scope.disableViewEmployeesInQBOButton()).toBeTruthy();
+            expect(scope.disableViewCustomersInQBOButton()).toBeTruthy();
+            expect(scope.disableViewItemsInQBOButton()).toBeTruthy();
         });
 
-        it('should have a private function called syncCompleted that updates the service item sync message', function () {
-            expect(ctrl.syncCompleted).toBeDefined();
-
-            scope.busyModal = {foo: "bar"};
-
-            spyOn(CompanySvc, 'initializeModel');
-            spyOn(BusyModalSvc, 'closeBusyModal');
-
-            ctrl.syncCompleted({
-                successful: true,
-                message: "987",
-                type: "ServiceItem"
-            });
-
-            expect(scope.syncServiceItemsMessage).toEqual("987");
-            expect(CompanySvc.initializeModel).toHaveBeenCalled();
-            expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
+        it('should disable view in qbo buttons when connected to QBO and not synced yet', function () {
+            ModelSvc.model.company.connectedToQbo = true;
+            ModelSvc.model.company.customersSynced = false;
+            ModelSvc.model.company.employeesSynced = false;
+            ModelSvc.model.company.serviceItemsSynced = false;
+            expect(scope.disableViewEmployeesInQBOButton()).toBeTruthy();
+            expect(scope.disableViewCustomersInQBOButton()).toBeTruthy();
+            expect(scope.disableViewItemsInQBOButton()).toBeTruthy();
         });
 
+        it('should not disable view in qbo buttons when connected to QBO and synced', function () {
+            ModelSvc.model.company.connectedToQbo = true;
+
+            ModelSvc.model.company.employeesSynced = true;
+            expect(scope.disableViewEmployeesInQBOButton()).toBeFalsy();
+
+            ModelSvc.model.company.customersSynced = true;
+            expect(scope.disableViewCustomersInQBOButton()).toBeFalsy();
+
+            ModelSvc.model.company.serviceItemsSynced = true;
+            expect(scope.disableViewItemsInQBOButton()).toBeFalsy();
+        });
+
+        it('should have a scope function called openEmployeesScreenInQBO()', function () {
+            expect(scope.openEmployeesScreenInQBO)
+        });
     });
 
     describe('Unit: TimeEntryCtrl', function () {
@@ -434,7 +424,6 @@ describe("Unit: Controllers", function () {
             InvoiceSvc = _InvoiceSvc_;
             BusyModalSvc = _BusyModalSvc_;
 
-            spyOn(InvoiceSvc, 'refreshPendingInvoices');
 
             //declare the controller and inject our empty scope
             ctrl = $controller('InvoiceCtrl', {$scope: scope});
@@ -443,10 +432,6 @@ describe("Unit: Controllers", function () {
 
         it('should have a invoice controller defined', function () {
             expect(ctrl).toBeDefined();
-        });
-
-        it('should call InvoiceSvc.refreshPendingInvoices when initialized', function () {
-            expect(InvoiceSvc.refreshPendingInvoices).toHaveBeenCalled();
         });
 
         it('should have the model on the scope object', function () {
@@ -471,17 +456,6 @@ describe("Unit: Controllers", function () {
             invoice = {showServiceItemSummaries: true};
             scope.expandServiceItemSummary(invoice);
             expect(invoice.showServiceItemSummaries).toBeFalsy();
-        });
-
-        it('should have a generateInvoice function', function () {
-            spyOn(InvoiceSvc, 'submitInvoiceForBilling');
-
-            var invoice = {};
-
-            scope.generateInvoice(invoice);
-
-            expect(InvoiceSvc.submitInvoiceForBilling).toHaveBeenCalledWith(invoice, ctrl.showSuccessfulAlert);
-
         });
 
         it('should have a showSuccessfulAlert function', function () {

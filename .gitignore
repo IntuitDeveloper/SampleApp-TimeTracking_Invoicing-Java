@@ -1,4 +1,6 @@
-oauth.json.russell
+oauth.json.prod
+oauth.json.golden
+oauth.json.qa
 build/
 database/
 time-tracking.iws

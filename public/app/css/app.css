@@ -5,5 +5,11 @@ body {
     padding-top: 70px;
 }
 
+.table-nonfluid {
+    width: auto;
+}
+
 /* required for angular-ui-bootstrap */
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}

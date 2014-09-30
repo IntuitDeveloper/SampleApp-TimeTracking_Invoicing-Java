@@ -35,7 +35,10 @@ public class DataLoader {
                 createCompany(context);
 
             } catch (IOException e) {
-                throw new RuntimeException("Failed to read oauth information from oauth.json. Please make sure oauth.json is in the root of the project directory");
+                throw new RuntimeException("Failed to read oauth information from oauth.json. Please make sure" +
+                        " oauth.json is in the root of the project directory. This file should contain your appToken," +
+                        " consumerKey, and consumerSecret which can be copied from the intuit developer portal. See the" +
+                        " readme for more information.");
             }
         }
     }
@@ -104,14 +107,34 @@ public class DataLoader {
 
         final JsonNode jsonAppInfo = jsonNode.get("appInfo");
 
-        AppInfo appInfo = new AppInfo(jsonAppInfo.get("appToken").asText(),
-                jsonAppInfo.get("consumerKey").asText(),
-                jsonAppInfo.get("consumerSecret").asText());
+        String appToken;
+        String consumerKey;
+        String consumerSecret;
 
+        try {
+            appToken = jsonAppInfo.get("appToken").asText();
+            consumerKey = jsonAppInfo.get("consumerKey").asText();
+            consumerSecret = jsonAppInfo.get("consumerSecret").asText();
+        } catch (NullPointerException e) {
+            RuntimeException rte = new RuntimeException("Exception occurred loading oauth.json verify that file contains valid json and that field names are correct.");
+            rte.setStackTrace(e.getStackTrace());
+            throw rte;
+        }
+
+        if (appToken.isEmpty()) {
+            throw new RuntimeException("In 'oauth.json': 'appToken' property is empty");
+        }
+        if (consumerKey.isEmpty()) {
+            throw new RuntimeException("In 'oauth.json': 'consumerKey' property is empty");
+        }
+        if (consumerSecret.isEmpty()) {
+            throw new RuntimeException("In 'oauth.json': 'consumerSecret' property is empty");
+        }
+
+        AppInfo appInfo = new AppInfo(appToken, consumerKey, consumerSecret);
         repository.save(appInfo);
 
         return appInfo;
-
     }
 
 }

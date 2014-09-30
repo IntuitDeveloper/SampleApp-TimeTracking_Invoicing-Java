@@ -6,22 +6,43 @@ var controllersModule = angular.module('myApp.controllers', ['ngRoute', 'ui.boot
 
 controllersModule.controller('NavCtrl', ['$scope', '$routeParams', '$location', 'ModelSvc',
     function ($scope, $routeParams, $location, ModelSvc) {
-        $scope.navClass = function (page) {
+        $scope.navClass = function (page, secondaryPage) {
             var currentRoute = $location.path().substring(1);
-            return page === currentRoute ? 'active' : '';
+
+            var result = page === currentRoute ? 'active' : '';
+            if (secondaryPage && $scope.disableSecondaryPages()) {
+                result = 'disabled';
+            }
+
+            return result;
+        };
+
+        $scope.disableSecondaryPages = function () {
+            if (ModelSvc.model.company.connectedToQbo &&
+                ModelSvc.model.company.employeesSynced &&
+                ModelSvc.model.company.customersSynced &&
+                ModelSvc.model.company.serviceItemsSynced) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        $scope.navChange = function (event) {
+            if ($scope.disableSecondaryPages()) {
+                event.preventDefault();
+            }
         };
 
         $scope.model = ModelSvc.model;
     }]);
 
 
-controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc', 'BusyModalSvc',
-    function ($scope, SyncRequestSvc, ModelSvc, CompanySvc, BusyModalSvc) {
+controllersModule.controller('SettingsCtrl',
+    ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc', 'BusyModalSvc', 'DeepLinkSvc', '$window',
+        function ($scope, SyncRequestSvc, ModelSvc, CompanySvc, BusyModalSvc, DeepLinkSvc, $window) {
 
         $scope.model = ModelSvc.model;
-        $scope.syncCustomersMessage = '';
-        $scope.syncServiceItemsMessage = '';
-        $scope.syncEmployeesMessage = '';
 
         $scope.showConnectButton = function () {
             return $scope.model.company.connectedToQbo === false;
@@ -47,51 +68,84 @@ controllersModule.controller('SettingsCtrl', ['$scope', 'SyncRequestSvc', 'Model
             }
         };
 
+            var disableViewInQBOButton = function (entitySynced) {
+                if (connectedToQBO()) {
+                    //we can synced
+                    if (entitySynced) {
+                        //don't disable the view button
+                        return false;
+                    } else {
+                        //do disable the view button
+                        return true;
+                    }
+                } else {
+                    //we can't view, disable the button
+                    return true;
+                }
+            };
+
         var self = this;
 
         $scope.disableCustomersSyncButton = function () {
             return disableSyncButton($scope.model.company.customersSynced);
-        }
+        };
 
         $scope.disableServiceItemsSyncButton = function () {
             return disableSyncButton($scope.model.company.serviceItemsSynced);
-        }
+        };
 
         $scope.disableEmployeeSyncButton = function () {
             return disableSyncButton($scope.model.company.employeesSynced);
-        }
+        };
+
+            $scope.disableViewEmployeesInQBOButton = function () {
+                return disableViewInQBOButton($scope.model.company.employeesSynced);
+            };
+
+            $scope.disableViewCustomersInQBOButton = function () {
+                return disableViewInQBOButton($scope.model.company.customersSynced);
+            };
+
+            $scope.disableViewItemsInQBOButton = function () {
+                return disableViewInQBOButton($scope.model.company.serviceItemsSynced);
+            };
 
         $scope.syncCustomers = function () {
             SyncRequestSvc.sendCustomerSyncRequest(self.syncCompleted);
             $scope.busyModal = BusyModalSvc.openBusyModal();
-        }
+        };
 
         $scope.syncServiceItems = function () {
             SyncRequestSvc.sendServiceItemsSyncRequest(self.syncCompleted);
             $scope.busyModal = BusyModalSvc.openBusyModal();
-        }
+        };
 
         $scope.syncEmployees = function () {
             SyncRequestSvc.sendEmployeeSyncRequest(self.syncCompleted);
             $scope.busyModal = BusyModalSvc.openBusyModal();
-        }
+        };
 
         this.syncCompleted = function (data, status, headers, config) {
-            var message = data.successful ? data.message : 'Error: ' + data.message;
-            if (data.type === 'Customer') {
-                $scope.syncCustomersMessage = message;
-            } else if (data.type === 'ServiceItem') {
-                $scope.syncServiceItemsMessage = message;
-            } else if (data.type === 'Employee') {
-                $scope.syncEmployeesMessage = message;
-            }
             CompanySvc.initializeModel();
             BusyModalSvc.closeBusyModal($scope.busyModal);
         };
+
+            $scope.openEmployeesScreenInQBO = function () {
+                $window.open(DeepLinkSvc.getEmployeesLink());
+            };
+
+            $scope.openCustomersScreenInQBO = function () {
+                $window.open(DeepLinkSvc.getCustomersLink());
+            };
+
+            $scope.openItemsScreenInQBO = function () {
+                $window.open(DeepLinkSvc.getItemsLink());
+            };
     }]);
 
-controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 'TimeActivitySvc', 'BusyModalSvc',
-    function ($scope, $filter, ModelSvc, TimeActivitySvc, BusyModalSvc) {
+controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', '$window',
+    'ModelSvc', 'TimeActivitySvc', 'BusyModalSvc', 'DeepLinkSvc',
+    function ($scope, $filter, $window, ModelSvc, TimeActivitySvc, BusyModalSvc, DeepLinkSvc) {
 
         $scope.model = ModelSvc.model;
         $scope.selectedEmployee = null;
@@ -162,11 +216,15 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', 'ModelSvc', 
                 self.resetSelectedDuration();
             }
         };
+
+        $scope.openSalesScreenInQuickBooks = function (timeActivity) {
+            $window.open(DeepLinkSvc.getSalesLink(timeActivity));
+        };
     }]);
 
-controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc', 'BusyModalSvc',
-    function ($scope, ModelSvc, InvoiceSvc, BusyModalSvc) {
-        InvoiceSvc.refreshPendingInvoices();
+controllersModule.controller('InvoiceCtrl', ['$scope', "$window", 'ModelSvc', 'InvoiceSvc', 'BusyModalSvc', 'DeepLinkSvc',
+    function ($scope, $window, ModelSvc, InvoiceSvc, BusyModalSvc, DeepLinkSvc) {
+        InvoiceSvc.getInvoices();
 
 
         $scope.model = ModelSvc.model;
@@ -187,6 +245,10 @@ controllersModule.controller('InvoiceCtrl', ['$scope', 'ModelSvc', 'InvoiceSvc',
         $scope.generateInvoice = function (invoice) {
             InvoiceSvc.submitInvoiceForBilling(invoice, self.showSuccessfulAlert);
             $scope.busyModal = BusyModalSvc.openBusyModal();
+        };
+
+        $scope.openInvoiceInQBO = function (invoice) {
+            $window.open(DeepLinkSvc.getInvoiceLink(invoice));
         };
 
         this.showSuccessfulAlert = function (result) {

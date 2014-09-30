@@ -5,9 +5,7 @@ import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,33 +19,22 @@ public class InvoiceSummary {
     private Money totalAmount = Money.zero(CurrencyUnit.USD);
     private LocalDate minDate;
     private LocalDate maxDate;
-    private List<ServiceItemAmountsSummary> serviceItemAmountsSummaries = new ArrayList<>();
+    private InvoiceStatus status;
+    private List<TimeActivitySummary> timeActivities = new ArrayList<>();
 
     public InvoiceSummary(Invoice invoice) {
         this.invoice = invoice;
-        createServiceItemSummaries();
+        this.status = invoice.getStatus();
+        createTimeActivitySummaries();
     }
 
-    private void createServiceItemSummaries() {
-        Map<Long, ServiceItemAmountsSummary> serviceItemsAmountSummariesMap = new HashMap<>();
+    private void createTimeActivitySummaries() {
 
         for (TimeActivity timeActivity : invoice.getTimeActivities()) {
-            final ServiceItem serviceItem = timeActivity.getServiceItem();
-
-            ServiceItemAmountsSummary serviceItemAmountsSummary = serviceItemsAmountSummariesMap.get(serviceItem.getId());
-            if (serviceItemAmountsSummary == null) {
-                serviceItemAmountsSummary = new ServiceItemAmountsSummary(serviceItem);
-                serviceItemsAmountSummariesMap.put(serviceItem.getId(), serviceItemAmountsSummary);
-            }
-
-            serviceItemAmountsSummary.addTimeActivity(timeActivity);
+            timeActivities.add(new TimeActivitySummary(timeActivity));
+            totalAmount = totalAmount.plus(timeActivity.getAmount());
             recomputeMinAndMaxDates(timeActivity);
 
-        }
-
-        for (ServiceItemAmountsSummary serviceItemAmountsSummary : serviceItemsAmountSummariesMap.values()) {
-            totalAmount = totalAmount.plus(serviceItemAmountsSummary.getTotalAmount());
-            this.serviceItemAmountsSummaries.add(serviceItemAmountsSummary);
         }
     }
 
@@ -78,7 +65,11 @@ public class InvoiceSummary {
         return totalAmount;
     }
 
-    public List<ServiceItemAmountsSummary> getServiceItemAmountsSummaries() {
-        return serviceItemAmountsSummaries;
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
+    public List<TimeActivitySummary> getTimeActivities() {
+        return timeActivities;
     }
 }

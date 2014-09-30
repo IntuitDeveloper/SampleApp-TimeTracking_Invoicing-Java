@@ -36,9 +36,9 @@ describe('Unit: Services', function () {
     };
 
     describe('Unit: InitializerSvc', function () {
-        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc;
+        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc;
 
-        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_) {
+        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_, _InvoiceSvc_) {
 
             InitializerSvc = _InitializerSvc_;
             CompanySvc = _CompanySvc_;
@@ -48,6 +48,7 @@ describe('Unit: Services', function () {
             CustomerSvc = _CustomerSvc_;
             ServiceItemSvc = _ServiceItemSvc_;
             TimeActivitySvc = _TimeActivitySvc_;
+            InvoiceSvc = _InvoiceSvc_;
 
         }));
 
@@ -65,13 +66,11 @@ describe('Unit: Services', function () {
             InitializerSvc.initialize();
 
             spyOn(CompanySvc, 'initialize');
-            spyOn(TimeActivitySvc, 'initialize');
             spyOn(CompanySvc, 'initializeModel');
 
             $rootScope.$broadcast('api.loaded');
 
             expect(CompanySvc.initialize).toHaveBeenCalled();
-            expect(TimeActivitySvc.initialize).toHaveBeenCalled();
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
         });
 
@@ -82,12 +81,16 @@ describe('Unit: Services', function () {
             spyOn(CustomerSvc, 'initializeModel');
             spyOn(ServiceItemSvc, 'initializeModel');
             spyOn(EmployeeSvc, 'initializeModel');
+            spyOn(InvoiceSvc, 'initializeModel');
+            spyOn(TimeActivitySvc, 'initializeModel');
 
             $rootScope.$broadcast('model.company.change');
 
             expect(CustomerSvc.initializeModel).toHaveBeenCalled();
             expect(ServiceItemSvc.initializeModel).toHaveBeenCalled();
             expect(EmployeeSvc.initializeModel).toHaveBeenCalled();
+            expect(InvoiceSvc.initializeModel).toHaveBeenCalled();
+            expect(TimeActivitySvc.initializeModel).toHaveBeenCalled();
         });
 
         it('should initialize the intuit javsacript library on $viewContentLoaded', function () {
@@ -487,6 +490,10 @@ describe('Unit: Services', function () {
 
         var timeActivityRootResource = "http://localhost:9001/timeActivities";
 
+        var companyId = '1234';
+        var companyTimeActivitiesURL = "http://localhost:9001/companies/" + companyId + "/timeActivities";
+
+
         beforeEach(inject(function (_TimeActivitySvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
             TimeActivitySvc = _TimeActivitySvc_;
             $httpBackend = $injector.get('$httpBackend');
@@ -500,31 +507,77 @@ describe('Unit: Services', function () {
 
             spyOn($location, "host").andReturn("localhost");
 
-            $httpBackend.whenPOST(timeActivityRootResource).respond({});
+            ModelSvc.model.company = {
+                id: companyId,
+                _links: {
+                    timeActivities: {
+                        href: companyTimeActivitiesURL
+                    }
+                }
+            };
+
+
         }));
 
-        it('should have an initialize function', function () {
-            expect(TimeActivitySvc.initialize).toBeDefined();
+        it('should have an initializeModel function', function () {
+            expect(TimeActivitySvc.initializeModel).toBeDefined();
         });
 
         it('should have a createTimeActivity function', function () {
             expect(TimeActivitySvc.createTimeActivity).toBeDefined();
         });
 
-        it('should call the employee resource on initializeModel', function () {
+        it('should call the time activity resource on initializeModel', function () {
 
-            var callback = jasmine.createSpy('callback');
-
-            var expectedRequestPayload = {
+            var timeActivity = {
                 foo: "bar"
-            }
+            };
 
-            TimeActivitySvc.initialize();
-            $httpBackend.expectPOST(timeActivityRootResource, expectedRequestPayload);
-            TimeActivitySvc.createTimeActivity(expectedRequestPayload, callback);
+            var expectedResponse = {
+                _embedded: {
+                    timeActivities: [timeActivity]
+                }
+            };
+
+            var expectedURL = companyTimeActivitiesURL + "?projection=summary";
+
+            $httpBackend.whenGET(expectedURL).respond(expectedResponse);
+
+            $httpBackend.expectGET(expectedURL);
+            TimeActivitySvc.initializeModel();
+
             $httpBackend.flush();
 
+            expect(ModelSvc.model.company.timeActivities).toEqual([timeActivity]);
+
+        });
+
+        it('should call the time activity resource on createTimeActivity', function () {
+            var timeActivity = {
+                foo: "bar"
+            };
+
+            var expectedResponse = {
+                hello: "world"
+            };
+
+            var callback = jasmine.createSpy();
+
+            var expectedURL = timeActivityRootResource + "?projection=summary";
+
+            $httpBackend.whenPOST(expectedURL).respond(expectedResponse);
+            $httpBackend.expectGET(companyTimeActivitiesURL + "?projection=summary").respond({});
+            $httpBackend.expectPOST(expectedURL, timeActivity);
+
+            TimeActivitySvc.initializeModel();
+            TimeActivitySvc.createTimeActivity(timeActivity, callback);
+
+            $httpBackend.flush();
+
+            expect(ModelSvc.model.company.timeActivities[0].hello).toEqual("world");
+
             expect(callback).toHaveBeenCalled();
+
         });
     });
 
@@ -532,6 +585,8 @@ describe('Unit: Services', function () {
         var $httpBackend, $rootScope, InvoiceSvc, ModelSvc, RootUrlSvc;
 
         var invoiceRootResource = "http://localhost:9001/invoices";
+        var companyId = '1234';
+        var companyInvoicesUrl = "http://localhost:9001/companies/" + companyId + "/invoices";
 
         beforeEach(inject(function (_InvoiceSvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
             InvoiceSvc = _InvoiceSvc_;
@@ -544,43 +599,61 @@ describe('Unit: Services', function () {
                 invoices: invoiceRootResource
             };
 
+            ModelSvc.model.company.id = companyId;
+            ModelSvc.model.company._links = {
+                invoices: {
+                    href: companyInvoicesUrl
+                }
+            };
+
+            ModelSvc.model.company.pendingInvoices = [];
+            ModelSvc.model.company.billedInvoices = [];
+
 
             spyOn($location, "host").andReturn("localhost");
 
         }));
 
-        it('should have an initialize function', function () {
-            expect(InvoiceSvc.initialize).toBeDefined();
+        it('should have an initializeModel function', function () {
+            expect(InvoiceSvc.initializeModel).toBeDefined();
         });
 
-        it('should have a refreshPendingInvoices function', function () {
+        it('should have a getInvoices function', function () {
 
-            var companyId = '1234';
-            ModelSvc.model.company.id = companyId;
-
-            var pendingInvoices = [
-                {
-                    foo: "bar"
+            var pendingInvoice =
+            {
+                foo: "bar",
+                summary: {
+                    status: "Pending"
                 }
-            ]
+            };
+
+            var billedInvoice = {
+                hello: "world",
+                summary: {
+                    status: "Billed"
+                }
+            }
 
             var response = {_embedded: {
-                invoices: pendingInvoices
+                invoices: [pendingInvoice, billedInvoice]
             }};
 
-            expect(InvoiceSvc.refreshPendingInvoices).toBeDefined();
+            expect(InvoiceSvc.getInvoices).toBeDefined();
 
-            var pendingInvoicesUrl = invoiceRootResource + "/search/findByCompanyAndStatus?companyId=" + companyId + "&projection=summary&status=Pending";
-            $httpBackend.whenGET(pendingInvoicesUrl).respond(response);
+            var expectedURL = companyInvoicesUrl + "?projection=summary";
 
-            $httpBackend.expectGET(pendingInvoicesUrl);
+            $httpBackend.whenGET(expectedURL).respond(response);
 
-            InvoiceSvc.initialize();
-            InvoiceSvc.refreshPendingInvoices();
+            $httpBackend.expectGET(expectedURL);
+
+            InvoiceSvc.initializeModel();
+            InvoiceSvc.getInvoices();
 
             $httpBackend.flush();
 
-            expect(ModelSvc.model.company.pendingInvoices).toEqual(pendingInvoices);
+            expect(ModelSvc.model.company.pendingInvoices).toEqual([pendingInvoice]);
+            expect(ModelSvc.model.company.billedInvoices).toEqual([billedInvoice]);
 
         });
 
@@ -599,7 +672,7 @@ describe('Unit: Services', function () {
             $httpBackend.whenPUT(invoiceUrl).respond(putResponse);
             $httpBackend.expectPUT(invoiceUrl, {status: 'ReadyToBeBilled'});
 
-            InvoiceSvc.initialize();
+            InvoiceSvc.initializeModel();
             InvoiceSvc.submitInvoiceForBilling(invoiceSummary, callback);
 
             $httpBackend.flush();
@@ -651,5 +724,63 @@ describe('Unit: Services', function () {
             expect(dismiss).toHaveBeenCalled();
         });
 
+    });
+
+    describe('Unit: DeepLinkSvc', function () {
+        var ModelSvc, DeepLinkSvc;
+
+        var companyQboId = "1234567";
+
+        beforeEach(inject(function (_ModelSvc_, _DeepLinkSvc_) {
+            ModelSvc = _ModelSvc_;
+            DeepLinkSvc = _DeepLinkSvc_;
+
+            ModelSvc.model = {};
+            ModelSvc.model.company = {qboId: companyQboId};
+        }));
+
+        it('should have a getCustomersLink', function () {
+            expect(DeepLinkSvc.getCustomersLink).toBeDefined();
+        });
+
+        it('should have a getEmployeesLink', function () {
+            expect(DeepLinkSvc.getEmployeesLink).toBeDefined();
+        });
+
+        it('should have a getItemsLink', function () {
+            expect(DeepLinkSvc.getItemsLink).toBeDefined();
+        });
+
+        it('should have a getInvoiceLink', function () {
+            expect(DeepLinkSvc.getInvoiceLink).toBeDefined();
+        });
+
+        it('should have a getSalesLink', function () {
+            expect(DeepLinkSvc.getSalesLink).toBeDefined();
+        });
+
+        it('should return the correct customers link when getCustomersLink() is called', function () {
+            expect(DeepLinkSvc.getCustomersLink()).toEqual("https://qa.qbo.intuit.com/login?deeplinkcompanyid=" + companyQboId + "&pagereq=customers");
+        });
+
+        it('should return the correct customers link when getEmployeesLink() is called', function () {
+            expect(DeepLinkSvc.getEmployeesLink()).toEqual("https://qa.qbo.intuit.com/login?deeplinkcompanyid=" + companyQboId + "&pagereq=employees");
+        });
+
+        it('should return the correct items link when getItemsLink() is called', function () {
+            expect(DeepLinkSvc.getItemsLink()).toEqual("https://qa.qbo.intuit.com/login?deeplinkcompanyid=" + companyQboId + "&pagereq=items");
+        });
+
+        it('should return  the correct invoice link when getInvoiceLink() is called', function () {
+            var invoiceQboId = "123";
+            var invoice = {qboId: invoiceQboId};
+
+            expect(DeepLinkSvc.getInvoiceLink(invoice)).toEqual("https://qa.qbo.intuit.com/login?pagereq=invoice?txnId=" + invoiceQboId + "&deeplinkcompanyid=" + companyQboId);
+        });
+
+        it('should return  the correct sales link when getSalesLink() is called', function () {
+
+            expect(DeepLinkSvc.getSalesLink()).toEqual("https://qa.qbo.intuit.com/login?deeplinkcompanyid=" + companyQboId + "&pagereq=sales");
+        });
     });
 });

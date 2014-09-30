@@ -1,117 +1,153 @@
 <div ng-class="row">
-    <div ng-class="row">
-        <div class="alert alert-success alert-dismissible" role="alert" ng-show="showAlert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
-                    class="sr-only">Close</span></button>
-            {{alertMessage}}
-        </div>
-
+    <div class="alert alert-success alert-dismissible" role="alert" ng-show="showAlert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
+                class="sr-only">Close</span></button>
+        {{alertMessage}}
     </div>
-    <div ng-class="row">
-        <h3>Step 2: Time Entry</h3>
-        <h4><em>Please enter all the information in the form to enable the save button</em></h4>
-    </div>
-    <div ng-class="row">
-        <form novalidate role="form" class="form-horizontal" name="form" id="form">
-            <div class="form-group" ng-class="{'has-error': form.employee.$invalid}">
 
-                <label class="col-xs-2 control-label">Employee</label>
+</div>
+<div ng-class="row">
+    <h3>Step 2: Time Entry</h3>
+    <h4><em>Please enter all the information in the form to enable the save button</em></h4>
+</div>
+<div ng-class="row">
+    <form novalidate role="form" class="form-horizontal" name="form" id="form">
+        <div class="form-group" ng-class="{'has-error': form.employee.$invalid}">
 
-                <div class="col-xs-3">
-                    <select name="employee" class="form-control"
-                            form="form"
-                            ng-model="selectedEmployee"
-                            ng-options='(employee.firstName + " " + employee.lastName) for employee in model.company.employees'
-                            required
-                            >
-                    </select>
-                </div>
+            <label class="col-xs-2 control-label">Employee</label>
+
+            <div class="col-xs-3">
+                <select name="employee" class="form-control"
+                        form="form"
+                        ng-model="selectedEmployee"
+                        ng-options='(employee.firstName + " " + employee.lastName) for employee in model.company.employees'
+                        required
+                        >
+                </select>
             </div>
-            <div class="form-group" ng-class="{'has-error': form.date.$invalid}">
-                <label class="col-xs-2 control-label">Date</label>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.date.$invalid}">
+            <label class="col-xs-2 control-label">Date</label>
 
-                <div class="col-xs-3">
-                    <p class="input-group">
-                        <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy"
-                               name="date"
-                               ng-model="selectedDate"
-                               is-open="datePickerOpened"
-                               min-date="minDate" max-date="'2015-06-22'"
-                               required close-text="Close"
-                                />
+            <div class="col-xs-3">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy"
+                           name="date"
+                           ng-model="selectedDate"
+                           is-open="datePickerOpened"
+                           min-date="minDate" max-date="'2015-06-22'"
+                           required close-text="Close"
+                            />
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="openDatePicker($event)">
                                 <i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
-                    </p>
-                </div>
+                </p>
             </div>
-            <div class="form-group" ng-class="{'has-error': form.customer.$invalid}">
-                <label class="col-xs-2 control-label">Customer</label>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.customer.$invalid}">
+            <label class="col-xs-2 control-label">Customer</label>
 
-                <div class="col-xs-3">
-                    <select name="customer" class="form-control"
-                            form="form"
-                            ng-model="selectedCustomer"
-                            ng-options='(customer.firstName + " " + customer.lastName) for customer in model.company.customers'
-                            required
-                            >
-                    </select>
-                </div>
+            <div class="col-xs-3">
+                <select name="customer" class="form-control"
+                        form="form"
+                        ng-model="selectedCustomer"
+                        ng-options='(customer.firstName + " " + customer.lastName) for customer in model.company.customers'
+                        required
+                        >
+                </select>
             </div>
-            <div class="form-group" ng-class="{'has-error': form.serviceItem.$invalid}">
-                <label class="col-xs-2 control-label">Service Item</label>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.serviceItem.$invalid}">
+            <label class="col-xs-2 control-label">Service Item</label>
 
-                <div class="col-xs-3">
-                    <select name="serviceItem" class="form-control"
-                            form="form"
-                            ng-model="selectedServiceItem"
-                            ng-options='serviceItem.name for serviceItem in model.company.serviceItems'
-                            required
-                            >
-                    </select>
-                </div>
+            <div class="col-xs-3">
+                <select name="serviceItem" class="form-control"
+                        form="form"
+                        ng-model="selectedServiceItem"
+                        ng-options='serviceItem.name for serviceItem in model.company.serviceItems'
+                        required
+                        >
+                </select>
             </div>
-            <div class="form-group">
-                <label class="col-xs-2 control-label">Rate</label>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">Rate</label>
 
-                <div class="col-xs-3">
-                    <p class="form-control-static" ng-show="selectedServiceItem">{{selectedServiceItem.rate |
-                        currency:"$"}} / Hour</p>
-                </div>
+            <div class="col-xs-3">
+                <p class="form-control-static" ng-show="selectedServiceItem">{{selectedServiceItem.rate |
+                    currency:"$"}} / Hour</p>
             </div>
-            <div class="form-group">
-                <label class="col-xs-2 control-label">Time</label>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">Time</label>
 
-                <div class="col-xs-3">
-                    <timepicker ng-model="selectedDuration"
-                                ng-change="timeChanged()"
-                                minute-step="15"
-                                hour-step="1"
-                                show-meridian="false"
-                                readonly-input="true">
-                    </timepicker>
-                </div>
+            <div class="col-xs-3">
+                <timepicker ng-model="selectedDuration"
+                            ng-change="timeChanged()"
+                            minute-step="15"
+                            hour-step="1"
+                            show-meridian="false"
+                            readonly-input="true">
+                </timepicker>
             </div>
-            <div class="form-group" ng-class="{'has-error': form.description.$invalid}">
-                <label class="col-xs-2 control-label">Description</label>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.description.$invalid}">
+            <label class="col-xs-2 control-label">Description</label>
 
-                <div class="col-xs-3">
-                    <textarea class="form-control" name="description"
-                              ng-model="description" rows="3" required></textarea>
-                </div>
+            <div class="col-xs-3">
+                <textarea class="form-control" name="description"
+                          ng-model="description" rows="3" required></textarea>
             </div>
-            <div class="form-group">
-                <div class="col-xs-2 col-xs-offset-1">
-                    <button class="btn btn-default" ng-click="clearTimeActivity()">Clear</button>
-                    </button>
-                </div>
-                <div class="col-xs-1 col-xs-offset-0">
-                    <button class="btn btn-success" ng-click="saveTimeActivity()"
-                            ng-disabled="form.$invalid || !form.$dirty">Save
-                    </button>
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-2 col-xs-offset-1">
+                <button class="btn btn-default" ng-click="clearTimeActivity()">Clear</button>
+                </button>
             </div>
-        </form>
+            <div class="col-xs-1 col-xs-offset-0">
+                <button class="btn btn-success" ng-click="saveTimeActivity()"
+                        ng-disabled="form.$invalid || !form.$dirty">Save
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div ng-class="row">
+
+    <div class="col-md-6">
+        <h3>Time Activities</h3>
     </div>
+    <div class="col-md-6 col-md-push-4">
+        <button type="button" class="btn btn-default btn-sm" style="margin-top: 20px"
+                ng-click="openSalesScreenInQuickBooks()">
+            <span class="glyphicon glyphicon-eye-open"></span> View in QuickBooks
+        </button>
+    </div>
+</div>
+<div ng-class="row">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Customer</th>
+            <th>Service Item</th>
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Amount</th>
+            <th>QBO ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="timeActivity in model.company.timeActivities | orderBy:qboId">
+            <td>{{timeActivity.employee.firstName}} {{timeActivity.employee.lastName}}</td>
+            <td>{{timeActivity.customer.firstName}} {{timeActivity.customer.lastName}}</td>
+            <td>{{timeActivity.serviceItem.name}}</td>
+            <td>{{timeActivity.date | date : 'shortDate'}}</td>
+            <td>{{timeActivity.hours}}</td>
+            <td>{{timeActivity.amount | currency : '$'}}</td>
+            <td>{{timeActivity.qboId}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>

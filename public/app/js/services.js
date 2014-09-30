@@ -15,15 +15,15 @@ timetrackingServices.factory('InitializerSvc',
 
                 $rootScope.$on('api.loaded', function () {
                     CompanySvc.initialize();
-                    TimeActivitySvc.initialize();
-                    InvoiceSvc.initialize();
                     CompanySvc.initializeModel();
                 });
 
                 $rootScope.$on('model.company.change', function () {
+                    InvoiceSvc.initializeModel();
                     ServiceItemSvc.initializeModel();
                     CustomerSvc.initializeModel();
                     EmployeeSvc.initializeModel();
+                    TimeActivitySvc.initializeModel();
                 });
 
                 RootUrlSvc.initialize();
@@ -202,23 +202,50 @@ timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlS
         }
     }]);
 
-timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'RootUrlSvc',
-    function ($resource, $rootScope, RootUrlSvc) {
+timetrackingServices.factory('TimeActivitySvc', ['$resource', '$rootScope', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, $rootScope, RootUrlSvc, ModelSvc) {
 
-        var rootTimeActivityResource;
+        var timeActivityResource;
 
-        var initialize = function () {
-            rootTimeActivityResource = $resource(RootUrlSvc.rootUrls.timeActivities);
+        var initializeModel = function () {
+
+            timeActivityResource = $resource(RootUrlSvc.rootUrls.timeActivities, {},
+                {
+                    query: {
+                        url: ModelSvc.model.company._links.timeActivities.href,
+                        method: 'GET',
+                        params: {
+                            projection: 'summary'
+                        },
+                        isArray: false
+                    },
+                    save: {
+                        method: 'POST',
+                        params: {
+                            projection: 'summary'
+                        }
+                    }
+
+                });
+
+            timeActivityResource.query(function (data) {
+                if (data._embedded) {
+                    ModelSvc.model.company.timeActivities = data._embedded.timeActivities;
+                } else {
+                    ModelSvc.model.company.timeActivities = [];
+                }
+            });
         };
 
         var createTimeActivity = function (timeActivity, callback) {
-            rootTimeActivityResource.save(timeActivity).$promise.then(function (responseFromServer) {
+            timeActivityResource.save(timeActivity, function (responseFromServer) {
+                ModelSvc.model.company.timeActivities.push(responseFromServer);
                 callback(responseFromServer);
             });
         };
 
         return {
-            initialize: initialize,
+            initializeModel: initializeModel,
             createTimeActivity: createTimeActivity
         }
     }]);
@@ -228,15 +255,13 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
 
         var Invoice;
 
-        var initialize = function () {
+        var initializeModel = function () {
             Invoice = $resource(RootUrlSvc.rootUrls.invoices + "/:invoiceId", {},
                 {
-                    pendingForCompany: {
-                        method: 'GET',
-                        url: RootUrlSvc.rootUrls.invoices + '/search/findByCompanyAndStatus',
+                    query: {
+                        url: ModelSvc.model.company._links.invoices.href,
                         params: {
-                            projection: 'summary',
-                            status: 'Pending'
+                            projection: 'summary'
                         },
                         isArray: false
                     },
@@ -246,37 +271,53 @@ timetrackingServices.factory('InvoiceSvc', ['$resource', '$rootScope', 'RootUrlS
                 });
         };
 
-        var _refreshPendingInvoices = function () {
-            Invoice.pendingForCompany({companyId: ModelSvc.model.company.id}, function (data) {
+        var _getInvoices = function () {
+            Invoice.query(function (data) {
                 if (data._embedded) {
-                    ModelSvc.model.company.pendingInvoices = data._embedded.invoices;
+                    ModelSvc.model.company.pendingInvoices = [];
+                    ModelSvc.model.company.billedInvoices = [];
+
+                    angular.forEach(data._embedded.invoices, function (invoice) {
+                        if (invoice.summary.status === 'Pending') {
+                            ModelSvc.model.company.pendingInvoices.push(invoice);
+                        } else {
+                            ModelSvc.model.company.billedInvoices.push(invoice);
+                        }
+                    });
+
                 } else {
                     ModelSvc.model.company.pendingInvoices = [];
+                    ModelSvc.model.company.billedInvoices = [];
                 }
             });
         };
 
-        var refreshPendingInvoices = function () {
+        var getInvoices = function () {
             if (ModelSvc.isCompanyInitialized()) {
-                _refreshPendingInvoices();
+                _getInvoices();
             } else {
-                $rootScope.$on('model.company.change', _refreshPendingInvoices);
+                $rootScope.$on('model.company.change', _getInvoices);
             }
         };
 
         var submitInvoiceForBilling = function (invoiceSummary, callback) {
             Invoice.get({invoiceId: invoiceSummary.id}, function (invoice) {
                 invoice.status = 'ReadyToBeBilled';
-                invoice.$update({invoiceId: invoiceSummary.id}, function (updatedInvoice) {
-                    refreshPendingInvoices();
-                    callback(updatedInvoice);
-                });
+                invoice.$update({invoiceId: invoiceSummary.id},
+                    function (updatedInvoice) {
+
+                        var index = ModelSvc.model.company.pendingInvoices.indexOf(invoiceSummary);
+                        ModelSvc.model.company.pendingInvoices.splice(index, 1);
+                        ModelSvc.model.company.billedInvoices.push(invoiceSummary);
+                        invoiceSummary.qboId = updatedInvoice.qboId;
+                        callback(updatedInvoice);
+                    });
             })
         };
 
         return {
-            initialize: initialize,
-            refreshPendingInvoices: refreshPendingInvoices,
+            initializeModel: initializeModel,
+            getInvoices: getInvoices,
             submitInvoiceForBilling: submitInvoiceForBilling
         }
     }
@@ -302,6 +343,53 @@ timetrackingServices.factory('BusyModalSvc', ['$modal',
         return {
             openBusyModal: openBusyModal,
             closeBusyModal: closeBusyModal
+        }
+    }
+]);
+
+timetrackingServices.factory('DeepLinkSvc', ['ModelSvc',
+    function (ModelSvc) {
+
+        var qboHostname = "qa.qbo.intuit.com"; //TODO change this to sandbox when available
+
+        var getQboDeepLinkURLRoot = function () {
+            return "https://" + qboHostname + "/login?";
+        };
+
+        var getMultipleEntitiesUrl = function (entityType) {
+            return getQboDeepLinkURLRoot() + "deeplinkcompanyid=" + ModelSvc.model.company.qboId + "&pagereq=" + entityType;
+        };
+
+        var getSingleEntityUrl = function (entityType, entityId) {
+            return getQboDeepLinkURLRoot() + "pagereq=" + entityType + "?txnId=" + entityId + "&deeplinkcompanyid=" + ModelSvc.model.company.qboId;
+        };
+
+        var getCustomersLink = function () {
+            return getMultipleEntitiesUrl("customers");
+        };
+
+        var getEmployeesLink = function () {
+            return getMultipleEntitiesUrl("employees");
+        };
+
+        var getSalesLink = function () {
+            return getMultipleEntitiesUrl("sales");
+        };
+
+        var getItemsLink = function () {
+            return getMultipleEntitiesUrl("items");
+        };
+
+        var getInvoiceLink = function (invoice) {
+            return getSingleEntityUrl("invoice", invoice.qboId);
+        };
+
+        return {
+            getCustomersLink: getCustomersLink,
+            getEmployeesLink: getEmployeesLink,
+            getItemsLink: getItemsLink,
+            getInvoiceLink: getInvoiceLink,
+            getSalesLink: getSalesLink
         }
     }
 ]);
