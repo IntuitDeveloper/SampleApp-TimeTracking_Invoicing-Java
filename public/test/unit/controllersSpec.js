@@ -472,8 +472,6 @@ describe("Unit: Controllers", function () {
             expect(scope.showAlert).toBeTruthy();
             expect(BusyModalSvc.closeBusyModal).toHaveBeenCalledWith(scope.busyModal);
         });
-
-
     });
 });
 

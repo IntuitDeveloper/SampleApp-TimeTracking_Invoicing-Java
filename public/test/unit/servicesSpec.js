@@ -36,9 +36,9 @@ describe('Unit: Services', function () {
     };
 
     describe('Unit: InitializerSvc', function () {
-        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc;
+        var $rootScope, InitializerSvc, CompanySvc, RootUrlSvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc, SystemPropertySvc;
 
-        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_, _InvoiceSvc_) {
+        beforeEach(inject(function (_InitializerSvc_, _CompanySvc_, _RootUrlSvc_, _$rootScope_, _EmployeeSvc_, _CustomerSvc_, _ServiceItemSvc_, _TimeActivitySvc_, _InvoiceSvc_, _SystemPropertySvc_) {
 
             InitializerSvc = _InitializerSvc_;
             CompanySvc = _CompanySvc_;
@@ -49,6 +49,7 @@ describe('Unit: Services', function () {
             ServiceItemSvc = _ServiceItemSvc_;
             TimeActivitySvc = _TimeActivitySvc_;
             InvoiceSvc = _InvoiceSvc_;
+            SystemPropertySvc = _SystemPropertySvc_;
 
         }));
 
@@ -67,11 +68,13 @@ describe('Unit: Services', function () {
 
             spyOn(CompanySvc, 'initialize');
             spyOn(CompanySvc, 'initializeModel');
+            spyOn(SystemPropertySvc, 'initializeModel');
 
             $rootScope.$broadcast('api.loaded');
 
             expect(CompanySvc.initialize).toHaveBeenCalled();
             expect(CompanySvc.initializeModel).toHaveBeenCalled();
+            expect(SystemPropertySvc.initializeModel).toHaveBeenCalled();
         });
 
         it('initialize() should call initializeModel on other services when the company is changed', function () {
@@ -97,10 +100,6 @@ describe('Unit: Services', function () {
             InitializerSvc.initialize();
 
             spyOn(intuit.ipp.anywhere, 'init');
-
-            $rootScope.$broadcast('$viewContentLoaded');
-
-            expect(intuit.ipp.anywhere.init).not.toHaveBeenCalled();
 
             $rootScope.$broadcast('$viewContentLoaded');
 
@@ -737,6 +736,7 @@ describe('Unit: Services', function () {
 
             ModelSvc.model = {};
             ModelSvc.model.company = {qboId: companyQboId};
+            ModelSvc.model.systemProperties = {qboUiHostname: "qa.qbo.intuit.com"};
         }));
 
         it('should have a getCustomersLink', function () {
@@ -781,6 +781,57 @@ describe('Unit: Services', function () {
         it('should return  the correct sales link when getSalesLink() is called', function () {
 
             expect(DeepLinkSvc.getSalesLink()).toEqual("https://qa.qbo.intuit.com/login?deeplinkcompanyid=" + companyQboId + "&pagereq=sales");
+        });
+    });
+
+    describe('Unit: SystemPropertySvc', function () {
+        var $httpBackend, $rootScope, SystemPropertySvc, ModelSvc, RootUrlSvc;
+
+        var systemPropertyRootResource = "http://localhost:9001/systemProperties"
+
+        beforeEach(inject(function (_SystemPropertySvc_, _RootUrlSvc_, _ModelSvc_, $injector, _$rootScope_, $location) {
+            SystemPropertySvc = _SystemPropertySvc_;
+            $httpBackend = $injector.get('$httpBackend');
+            $rootScope = _$rootScope_;
+            ModelSvc = _ModelSvc_;
+            RootUrlSvc = _RootUrlSvc_;
+
+            RootUrlSvc.rootUrls = {
+                systemProperties: systemPropertyRootResource
+            };
+
+            spyOn($location, "host").andReturn("localhost");
+
+        }));
+
+        it('should have an initializeModel method that calls the System property resource', function () {
+            expect(SystemPropertySvc.initializeModel).toBeDefined();
+
+            var response = {
+                _embedded: {
+                    systemProperties: [
+                        {
+                            key: "theKey",
+                            value: "theValue"
+                        },
+                        {
+                            key: "anotherKey",
+                            value: "anotherValue"
+                        }
+                    ]
+                }
+            };
+
+            $httpBackend.whenGET(systemPropertyRootResource).respond(response);
+            $httpBackend.expectGET(systemPropertyRootResource);
+
+            SystemPropertySvc.initializeModel();
+
+            $httpBackend.flush();
+
+            expect(ModelSvc.model.systemProperties.theKey).toEqual("theValue");
+            expect(ModelSvc.model.systemProperties.anotherKey).toEqual("anotherValue");
+
         });
     });
 });

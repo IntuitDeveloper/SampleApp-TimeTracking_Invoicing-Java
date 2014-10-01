@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.intuit.developer.sampleapp.timetracking.controllers.OAuthInfoProviderImpl;
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
+import com.intuit.developer.sampleapp.timetracking.domain.SystemProperty;
 import com.intuit.developer.sampleapp.timetracking.handlers.InvoiceEventHandler;
 import com.intuit.developer.sampleapp.timetracking.handlers.TimeActivityEventHandler;
 import com.intuit.developer.sampleapp.timetracking.qbo.DataServiceFactory;
@@ -47,6 +48,15 @@ public class Application extends RepositoryRestMvcConfiguration {
         final ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         //initialize some data
         DataLoader.initializeData(context);
+
+        System.out.println(
+                " ______    _______  _______  ______   __   __ \n" +
+                        "|    _ |  |       ||   _   ||      | |  | |  |\n" +
+                        "|   | ||  |    ___||  |_|  ||  _    ||  |_|  |\n" +
+                        "|   |_||_ |   |___ |       || | |   ||       |\n" +
+                        "|    __  ||    ___||       || |_|   ||_     _|\n" +
+                        "|   |  | ||   |___ |   _   ||       |  |   |  \n" +
+                        "|___|  |_||_______||__| |__||______|   |___|  ");
     }
 
     @Override
@@ -54,6 +64,7 @@ public class Application extends RepositoryRestMvcConfiguration {
         config.setReturnBodyOnCreate(true);
         config.setReturnBodyOnUpdate(true);
         config.exposeIdsFor(Company.class);
+        config.exposeIdsFor(SystemProperty.class);
     }
 
     //add REST event handler beans here

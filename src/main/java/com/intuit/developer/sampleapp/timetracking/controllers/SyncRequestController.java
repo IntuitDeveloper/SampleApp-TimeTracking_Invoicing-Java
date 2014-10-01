@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Time: 4:47 PM
  */
 @RestController
-@RequestMapping(value = "/syncrequest", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/syncrequest", consumes = "application/json", produces = "application/json", headers = "Content-Type=application/json")
 public class SyncRequestController {
 
     @Autowired

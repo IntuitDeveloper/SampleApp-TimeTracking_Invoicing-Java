@@ -6,14 +6,15 @@
 var timetrackingServices = angular.module('myApp.services', ['ngResource', 'ui.bootstrap']);
 
 timetrackingServices.factory('InitializerSvc',
-    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc',
-        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc) {
+    ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc', 'SystemPropertySvc',
+        function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc, SystemPropertySvc) {
 
             var initialized = false;
 
             var initialize = function () {
 
                 $rootScope.$on('api.loaded', function () {
+                    SystemPropertySvc.initializeModel();
                     CompanySvc.initialize();
                     CompanySvc.initializeModel();
                 });
@@ -33,10 +34,7 @@ timetrackingServices.factory('InitializerSvc',
                      Every time we load a new view, we need to reinitialize the intuit anywhere library
                      so that the connect to quickbooks button is rendered properly
                      */
-                    if (initialized) { //only reinitialize from the 2nd time onwards
-                        intuit.ipp.anywhere.init();
-                    }
-                    initialized = true;
+                    intuit.ipp.anywhere.init();
                 });
             };
 
@@ -51,6 +49,7 @@ timetrackingServices.factory('ModelSvc', [
 
         var model = {};
         model.company = {};
+        model.config = {};
 
         var isCompanyInitialized = function () {
             return !angular.equals({}, model.company)
@@ -350,10 +349,8 @@ timetrackingServices.factory('BusyModalSvc', ['$modal',
 timetrackingServices.factory('DeepLinkSvc', ['ModelSvc',
     function (ModelSvc) {
 
-        var qboHostname = "qa.qbo.intuit.com"; //TODO change this to sandbox when available
-
         var getQboDeepLinkURLRoot = function () {
-            return "https://" + qboHostname + "/login?";
+            return "https://" + ModelSvc.model.systemProperties.qboUiHostname + "/login?";
         };
 
         var getMultipleEntitiesUrl = function (entityType) {
@@ -393,3 +390,31 @@ timetrackingServices.factory('DeepLinkSvc', ['ModelSvc',
         }
     }
 ]);
+
+timetrackingServices.factory('SystemPropertySvc', [ '$resource', 'RootUrlSvc', 'ModelSvc',
+    function ($resource, RootUrlSvc, ModelSvc) {
+
+        var SystemProperty;
+
+        var initializeModel = function () {
+            SystemProperty = $resource(RootUrlSvc.rootUrls.systemProperties, {},
+                {
+                    query: {
+                        isArray: false
+                    }
+                });
+            SystemProperty.query(function (data) {
+                ModelSvc.model.systemProperties = {};
+
+                if (data._embedded) {
+                    angular.forEach(data._embedded.systemProperties, function (systemProperty) {
+                        ModelSvc.model.systemProperties[systemProperty.key] = systemProperty.value;
+                    });
+                }
+            });
+        }
+
+        return {
+            initializeModel: initializeModel
+        }
+    }]);
