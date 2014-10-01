@@ -58,7 +58,7 @@ public class DataLoader {
             case "https://quickbooks.api.intuit.com/v3/company":
                 qboUiHostname = "qbo.intuit.com";
                 break;
-            case "https://sandbox.quickbooks.api.intuit.com/v3/company":
+            case "https://sandbox-quickbooks.api.intuit.com/v3/company":
                 qboUiHostname = "sandbox.qbo.intuit.com";
                 break;
             default:
