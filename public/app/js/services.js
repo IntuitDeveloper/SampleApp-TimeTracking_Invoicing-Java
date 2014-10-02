@@ -9,8 +9,6 @@ timetrackingServices.factory('InitializerSvc',
     ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc', 'SystemPropertySvc',
         function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc, SystemPropertySvc) {
 
-            var initialized = false;
-
             var initialize = function () {
 
                 $rootScope.$on('api.loaded', function () {
@@ -184,7 +182,11 @@ timetrackingServices.factory('SyncRequestSvc', ['$http', '$rootScope', 'RootUrlS
     function ($http, $rootScope, RootUrlSvc, ModelSvc) {
 
         var sendSyncRequest = function (entityType, successCallback, errorCallback) {
-            $http.post(RootUrlSvc.rootUrls.syncRequest, {type: entityType, companyId: ModelSvc.model.company.id})
+            $http.post(RootUrlSvc.rootUrls.syncRequest, {type: entityType, companyId: ModelSvc.model.company.id},
+                {headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }})
                 .success(successCallback);
         };
 
