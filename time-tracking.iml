@@ -105,6 +105,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: jmockit-1.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: jmockit-coverage-1.12" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-core-asl-1.9.13" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-mapper-asl-1.9.13" level="project" />
   </component>
 </module>
 

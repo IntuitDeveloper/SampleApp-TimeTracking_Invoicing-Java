@@ -49,7 +49,7 @@
                         <td>{{timeActivity.employeeName}}</td>
                         <td>{{timeActivity.serviceItemName}}</td>
                         <td>{{timeActivity.date | date : 'shortDate'}}</td>
-                        <td>{{timeActivity.serviceItemRate}}</td>
+                        <td>{{timeActivity.serviceItemRate | currency: "$"}}</td>
                         <td>{{timeActivity.hours}}</td>
                         <td>{{timeActivity.amount | currency : '$'}}</td>
                     </tr>

@@ -14,7 +14,7 @@ directivesModule.directive('invoiceList', function () {
         controller: ["$scope", function ($scope) {
 
             $scope.actionButtonIcon = function () {
-                if ($scope.invoiceStatus === 'Billed') {
+                if ($scope.invoiceStatus === 'Invoiced') {
                     return "glyphicon glyphicon-eye-open"
                 } else {
                     return "glyphicon glyphicon-send"
@@ -22,7 +22,7 @@ directivesModule.directive('invoiceList', function () {
             };
 
             $scope.actionButtonText = function () {
-                if ($scope.invoiceStatus === 'Billed') {
+                if ($scope.invoiceStatus === 'Invoiced') {
                     return "View in QuickBooks"
                 } else {
                     return "Generate"

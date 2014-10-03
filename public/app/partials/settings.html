@@ -2,11 +2,11 @@
     <h3>Step 1a: Connect To QuickBooks Online</h3>
 
     <div ng-show="showConnectButton()" id="connect-to-qbo-div">
-        <p>{{model.company.name}} is not connected to QuickBooks Online.</p>
+        <p>Your app is not connected to QuickBooks Online.</p>
         <ipp:connectToIntuit></ipp:connectToIntuit>
     </div>
     <div ng-show="!showConnectButton()" id="disconnect-from-qbo-div">
-        <p>{{model.company.name}} is connected to QuickBooks Online.</p>
+        <p>Your app is connected to QuickBooks Online.</p>
     </div>
 </div>
 <div ng-class="row">
