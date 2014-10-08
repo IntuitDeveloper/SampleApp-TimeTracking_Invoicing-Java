@@ -132,7 +132,7 @@ public class QBOGateway {
         /* I'm setting to Not Billable because I don't want this time time activity to show up on the QBO Create Invoice
            screen because this time activity will be billed through invoices created through THIS app
          */
-        qboObject.setBillableStatus(BillableStatusEnum.BILLABLE);
+        qboObject.setBillableStatus(BillableStatusEnum.NOT_BILLABLE);
         qboObject.setNameOf(TimeActivityTypeEnum.EMPLOYEE);
 
         final com.intuit.ipp.data.TimeActivity returnedQboObject = createObjectInQBO(dataService, qboObject);
