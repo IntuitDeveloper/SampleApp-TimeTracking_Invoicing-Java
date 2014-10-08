@@ -9,6 +9,8 @@ timetrackingServices.factory('InitializerSvc',
     ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc', 'SystemPropertySvc',
         function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc, SystemPropertySvc) {
 
+            var initialized = false;
+
             var initialize = function () {
 
                 $rootScope.$on('api.loaded', function () {
@@ -32,7 +34,10 @@ timetrackingServices.factory('InitializerSvc',
                      Every time we load a new view, we need to reinitialize the intuit anywhere library
                      so that the connect to quickbooks button is rendered properly
                      */
-                    intuit.ipp.anywhere.init();
+                    if (initialized) {
+                        intuit.ipp.anywhere.init();
+                        initialized = true;
+                    }
                 });
             };
 

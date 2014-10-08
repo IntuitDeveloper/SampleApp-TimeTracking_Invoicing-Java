@@ -4,7 +4,7 @@ module.exports = function(config){
     basePath : '../',
 
     files : [
-        'https://js.appcenter.intuit.com/Content/IA/intuit.ipp.anywhere-1.2.4.js',
+        'https://js.appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js',
         'app/bower_components/angular/angular.js',
         'app/bower_components/angular-route/angular-route.js',
         'app/bower_components/angular-mocks/angular-mocks.js',
