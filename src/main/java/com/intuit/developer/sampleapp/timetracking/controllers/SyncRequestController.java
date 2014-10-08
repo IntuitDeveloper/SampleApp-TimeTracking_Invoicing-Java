@@ -25,7 +25,7 @@ public class SyncRequestController {
     @Autowired
     private QBOGateway qboGateway;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json", headers = "Content-Type=application/json")
     @ResponseBody
     public SyncRequest createSyncRequest(@RequestBody final SyncRequest syncRequest) {
 
