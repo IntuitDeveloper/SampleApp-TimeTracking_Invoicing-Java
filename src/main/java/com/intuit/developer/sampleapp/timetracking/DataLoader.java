@@ -101,10 +101,10 @@ public class DataLoader {
     private static void createCustomers(Company company, ConfigurableApplicationContext springContext) {
         final CustomerRepository repository = springContext.getBean(CustomerRepository.class);
 
-        final Customer customer1 = new Customer("John", "Defendant", "john.defendant@innocent.com", "916-555-7777");
+        final Customer customer1 = new Customer("Alvin", "Lee", "alvin.lee@example.com", "650-555-7777");
         company.addCustomer(customer1);
 
-        final Customer customer2 = new Customer("Jane", "Litigious", "jane.litigious@lawsuit.com", "916-777-9999");
+        final Customer customer2 = new Customer("Brad", "Hall", "brad.hall@example.com", "650-555-9999");
         company.addCustomer(customer2);
 
         repository.save(customer1);
@@ -114,9 +114,9 @@ public class DataLoader {
     private static void createEmployees(Company company, ConfigurableApplicationContext springContext) {
         final EmployeeRepository repository = springContext.getBean(EmployeeRepository.class);
 
-        final Employee employee1 = new Employee("Jackie", "Chiles", "jackie.chiles@law.com", "916-333-4444");
+        final Employee employee1 = new Employee("Bryan", "Ruff", "bryan.ruff@example.com", "650-555-4444");
         company.addEmployee(employee1);
-        final Employee employee2 = new Employee("Johnnie", "Cochran", "johnnie.cochran@law.com", "916-222-5555");
+        final Employee employee2 = new Employee("Paul", "Simmons", "paul.simmons@example.com", "650-555-5555");
         company.addEmployee(employee2);
 
         repository.save(employee1);
