@@ -16,6 +16,18 @@ apply plugin: 'spring-boot'
 
 mainClassName = "com.intuit.developer.sampleapp.timetracking.Application"
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir 'src-general/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
 
 sourceCompatibility = 1.7
 version = '1.0'
