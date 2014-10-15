@@ -1,11 +1,11 @@
-package com.intuit.developer.sampleapp.timetracking.controllers;
+package com.intuit.developer.sampleapp.timetracking.oauth.controllers;
 
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
+import com.intuit.developer.sampleapp.timetracking.oauth.CompanyRequestTokenSecret;
+import com.intuit.developer.sampleapp.timetracking.oauth.OAuthException;
+import com.intuit.developer.sampleapp.timetracking.oauth.OAuthInfoProvider;
 import com.intuit.developer.sampleapp.timetracking.repository.AppInfoRepository;
 import com.intuit.developer.sampleapp.timetracking.repository.CompanyRepository;
-import oauth.CompanyRequestTokenSecret;
-import oauth.OAuthException;
-import oauth.OAuthInfoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

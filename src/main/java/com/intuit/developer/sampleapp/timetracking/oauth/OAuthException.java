@@ -1,4 +1,4 @@
-package oauth;
+package com.intuit.developer.sampleapp.timetracking.oauth;
 
 import java.io.IOException;
 

@@ -1,9 +1,9 @@
-package com.intuit.developer.sampleapp.timetracking.controllers;
+package com.intuit.developer.sampleapp.timetracking.oauth.controllers;
 
+import com.intuit.developer.sampleapp.timetracking.oauth.CompanyRequestTokenSecret;
+import com.intuit.developer.sampleapp.timetracking.oauth.OAuthInfoProvider;
 import com.intuit.ia.connection.IAPlatformClient;
 import com.intuit.ia.exception.OAuthException;
-import oauth.CompanyRequestTokenSecret;
-import oauth.OAuthInfoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.timetracking.controllers;
+package com.intuit.developer.sampleapp.timetracking.oauth.controllers;
 
 /**
  * A DTO class that is used in the SyncRequestController.

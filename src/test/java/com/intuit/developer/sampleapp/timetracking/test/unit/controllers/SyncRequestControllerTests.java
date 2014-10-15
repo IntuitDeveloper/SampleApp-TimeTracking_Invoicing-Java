@@ -1,12 +1,12 @@
 package com.intuit.developer.sampleapp.timetracking.test.unit.controllers;
 
 
-import com.intuit.developer.sampleapp.timetracking.controllers.SyncRequest;
-import com.intuit.developer.sampleapp.timetracking.controllers.SyncRequestController;
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
 import com.intuit.developer.sampleapp.timetracking.domain.Employee;
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
+import com.intuit.developer.sampleapp.timetracking.oauth.controllers.SyncRequest;
+import com.intuit.developer.sampleapp.timetracking.oauth.controllers.SyncRequestController;
 import com.intuit.developer.sampleapp.timetracking.qbo.QBOGateway;
 import com.intuit.developer.sampleapp.timetracking.repository.CompanyRepository;
 import mockit.Injectable;

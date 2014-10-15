@@ -1,4 +1,4 @@
-package com.intuit.developer.sampleapp.timetracking.controllers;
+package com.intuit.developer.sampleapp.timetracking.oauth.controllers;
 
 import com.intuit.developer.sampleapp.timetracking.domain.Company;
 import com.intuit.developer.sampleapp.timetracking.domain.Customer;
