@@ -1,10 +1,8 @@
 package com.intuit.developer.sampleapp.timetracking.oauth;
 
 /**
- * Created with IntelliJ IDEA.
- * User: russellb337
- * Date: 7/17/14
- * Time: 2:26 PM
+ * An interface that defines operations a given application would need to support in order to 
+ * to access and persist information required during the OAuth 1.0 flow.
  */
 public interface OAuthInfoProvider {
 
@@ -16,7 +14,6 @@ public interface OAuthInfoProvider {
 
     /**
      * Persist the request token values for a given company in your app
-     *
      * @param appCompanyId
      * @param requestToken
      * @param requestTokenSecret
