@@ -38,7 +38,7 @@ public class OAuthController {
 	 *
 	 * For example in your Javascript you would do the following:
 	 *
-	 * intuit.ipp.anywhere.setup({grantUrl: https://myawesomeapp.com/request_token?companyId=<companyIdInYourApp>});
+	 * intuit.ipp.anywhere.setup({grantUrl: https://myawesomeapp.com/request_token?appCompanyId=<companyIdInYourApp>});
 	 */
 
     @RequestMapping(value = "/request_token", method = RequestMethod.GET)

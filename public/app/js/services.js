@@ -9,8 +9,6 @@ timetrackingServices.factory('InitializerSvc',
     ['$rootScope', 'RootUrlSvc', 'CompanySvc', 'CustomerSvc', 'ServiceItemSvc', 'EmployeeSvc', 'TimeActivitySvc', 'InvoiceSvc', 'SystemPropertySvc',
         function ($rootScope, RootUrlSvc, CompanySvc, CustomerSvc, ServiceItemSvc, EmployeeSvc, TimeActivitySvc, InvoiceSvc, SystemPropertySvc) {
 
-            var initialized = false;
-
             var initialize = function () {
 
                 $rootScope.$on('api.loaded', function () {
@@ -34,10 +32,7 @@ timetrackingServices.factory('InitializerSvc',
                      Every time we load a new view, we need to reinitialize the intuit anywhere library
                      so that the connect to quickbooks button is rendered properly
                      */
-                    if (initialized) {
-                        intuit.ipp.anywhere.init();
-                        initialized = true;
-                    }
+                    intuit.ipp.anywhere.init();
                 });
             };
 
@@ -115,9 +110,20 @@ timetrackingServices.factory('CompanySvc', ['$resource', '$rootScope', 'RootUrlS
                 ModelSvc.model.company = companies[0]; //select the first company for now
                 $rootScope.$broadcast('model.company.change');
 
+                /*
+                 Initializing the intuit anywhere javascript here because at this point we know the local id of the company
+                 in the sample app. We need this information in the first OAUTH rest endpoint so that we can save the request token
+                 and request token secret on the appropriate company in the local database.
+                 */
                 var grantUrl = RootUrlSvc.oauthGrantUrl() + '?appCompanyId=' + ModelSvc.model.company.id;
                 intuit.ipp.anywhere.setup({
-                    grantUrl: grantUrl});
+                    grantUrl: grantUrl,
+                    datasources: {
+                        quickbooks: true,
+                        payments: false
+
+                    }
+                });
             });
         };
 
