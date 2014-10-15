@@ -39,8 +39,10 @@ controllersModule.controller('NavCtrl', ['$scope', '$routeParams', '$location', 
 
 
 controllersModule.controller('SettingsCtrl',
-    ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc', 'BusyModalSvc', 'DeepLinkSvc', '$window',
-        function ($scope, SyncRequestSvc, ModelSvc, CompanySvc, BusyModalSvc, DeepLinkSvc, $window) {
+    ['$scope', 'SyncRequestSvc', 'ModelSvc', 'CompanySvc', 'BusyModalSvc', 'DeepLinkSvc', '$window', 'TrackingSvc',
+        function ($scope, SyncRequestSvc, ModelSvc, CompanySvc, BusyModalSvc, DeepLinkSvc, $window, TrackingSvc) {
+
+        TrackingSvc.trackPage('setup');
 
         $scope.model = ModelSvc.model;
 
@@ -144,8 +146,10 @@ controllersModule.controller('SettingsCtrl',
     }]);
 
 controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', '$window',
-    'ModelSvc', 'TimeActivitySvc', 'BusyModalSvc', 'DeepLinkSvc',
-    function ($scope, $filter, $window, ModelSvc, TimeActivitySvc, BusyModalSvc, DeepLinkSvc) {
+    'ModelSvc', 'TimeActivitySvc', 'BusyModalSvc', 'DeepLinkSvc', 'TrackingSvc',
+    function ($scope, $filter, $window, ModelSvc, TimeActivitySvc, BusyModalSvc, DeepLinkSvc, TrackingSvc) {
+
+        TrackingSvc.trackPage('timeentry')
 
         $scope.model = ModelSvc.model;
         $scope.selectedEmployee = null;
@@ -222,8 +226,10 @@ controllersModule.controller('TimeEntryCtrl', ['$scope', '$filter', '$window',
         };
     }]);
 
-controllersModule.controller('InvoiceCtrl', ['$scope', "$window", 'ModelSvc', 'InvoiceSvc', 'BusyModalSvc', 'DeepLinkSvc',
-    function ($scope, $window, ModelSvc, InvoiceSvc, BusyModalSvc, DeepLinkSvc) {
+controllersModule.controller('InvoiceCtrl', ['$scope', "$window", 'ModelSvc', 'InvoiceSvc', 'BusyModalSvc', 'DeepLinkSvc', 'TrackingSvc',
+    function ($scope, $window, ModelSvc, InvoiceSvc, BusyModalSvc, DeepLinkSvc, TrackingSvc) {
+        TrackingSvc.trackPage('invoices');
+
         InvoiceSvc.getInvoices();
 
 
@@ -253,6 +259,7 @@ controllersModule.controller('InvoiceCtrl', ['$scope', "$window", 'ModelSvc', 'I
 
         this.showSuccessfulAlert = function (result) {
             $scope.alertMessage = "Invoice successfully created and pushed to QBO (QBO ID = " + result.qboId + ")";
+            TrackingSvc.trackPage('invoices_success');
             $scope.showAlert = true;
             BusyModalSvc.closeBusyModal($scope.busyModal);
         };

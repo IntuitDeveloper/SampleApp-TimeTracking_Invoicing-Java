@@ -431,3 +431,24 @@ timetrackingServices.factory('SystemPropertySvc', [ '$resource', 'RootUrlSvc', '
             initializeModel: initializeModel
         }
     }]);
+
+timetrackingServices.factory('TrackingSvc', [function () {
+    return {
+
+        trackPage: function (pageName, event, properties) {
+            var props = properties || {};
+            props['site_section'] = 'sampleapps';
+            pageName = 'sampleapps/ecommerce/' + pageName;
+
+            wa.trackPage(pageName, event, properties);
+        },
+
+        trackEvent: function (event, properties) {
+            var props = properties || {};
+            props['site_section'] = 'sampleapps';
+
+            wa.trackEvent(event, properties);
+        }
+
+    };
+}]);
