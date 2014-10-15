@@ -26,6 +26,11 @@ sourceSets {
             srcDir 'src/main/resources'
         }
     }
+    test {
+        java {
+            srcDir 'src-general/text/java'
+        }
+    }
 }
 
 
