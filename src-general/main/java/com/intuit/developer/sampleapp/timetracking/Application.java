@@ -26,6 +26,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
+import java.util.List;
 
 
 /**
@@ -66,6 +70,20 @@ public class Application extends RepositoryRestMvcConfiguration {
         config.exposeIdsFor(Company.class);
         config.exposeIdsFor(SystemProperty.class);
     }
+
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(converter());
+    }
+
+    @Bean
+    MappingJackson2HttpMessageConverter converter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        //do your customizations here...
+        return converter;
+    }
+
 
     //add REST event handler beans here
     @Bean
