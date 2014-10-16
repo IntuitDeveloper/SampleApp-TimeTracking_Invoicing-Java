@@ -438,7 +438,7 @@ timetrackingServices.factory('TrackingSvc', [function () {
         trackPage: function (pageName, event, properties) {
             var props = properties || {};
             props['site_section'] = 'sampleapps';
-            pageName = 'sampleapps/ecommerce/' + pageName;
+            pageName = 'sampleapps/timetracking/' + pageName;
 
             wa.trackPage(pageName, event, properties);
         },
