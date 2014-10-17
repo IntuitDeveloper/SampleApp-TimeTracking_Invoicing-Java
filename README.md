@@ -21,7 +21,7 @@ Therefore there are certain instances where we might forgo a more complicated im
 * [Running the code](#running-the-code)
 * [Project Structure](#project-structure)
 * [Importing into IntelliJ IDEA & Eclipse](#importing-into-intellij-idea--eclipse)
-  * [IntelliJ IDEA](#intelliJ-iDEA)
+  * [IntelliJ IDEA](#intellij-idea)
   * [Eclipse](#eclipse)
 * [How To Guides](#how-to-guides)
 * [Cleaning up the database](#cleaning-up-the-database)
@@ -71,6 +71,7 @@ To edit the code you will need to open it in an IDE. Currently we support both I
 
 ### IntelliJ IDEA
   * The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo.
+
 ### Eclipse
   * [Importing Project into Eclipse IDE](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/Importing-Project-into-Eclipse-IDE)
 
