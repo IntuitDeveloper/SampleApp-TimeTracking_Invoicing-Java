@@ -45,10 +45,11 @@ Once the sample app code is on your computer, you can do the following steps to 
 http://localhost:9001/app/index.html
 ```
 </li>
+</ol>
 
 If you happen to be behind an http proxy you will need to create a file called gradle.properties in the root of the project and follow instructions on this [page](http://www.gradle.org/docs/current/userguide/build_environment.html) for configuring gradle to use a proxy.
 
-### Project Structure
+## Project Structure
 * **The Java code for integrating with the QuickBooks Online Accounting is located in the [`src`](src) directory.**
     *  For OAuth implementation see:
         - [`OAuthController.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/controllers/OAuthController.java)
@@ -60,12 +61,13 @@ If you happen to be behind an http proxy you will need to create a file called g
 * The Java code for the rest of the application is located in the [`src-general`](src-general) directory
 * The HTML, CSS and JavaScript code for the web-based client are is located in the [`public`](public) directory
 
+## Importing into IntelliJ IDEA & Eclipse
 
-## Cleaning up the database
+To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
 
-This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
-this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
-with no data.
+The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo. 
+
+To create Eclipse .project and .classpath files for the project execute the following: _./gradlew eclipse_
 
 ## How To Guides
 
@@ -73,12 +75,11 @@ How-To guides related to implementation tasks necessary to produce a production-
 
 [Time Tracking Sample App Wiki](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki)
 
-## Editing the code
-To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
+## Cleaning up the database
 
-The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo. 
-
-To create Eclipse .project and .classpath files for the project execute the following: _./gradlew eclipse_
+This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
+this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
+with no data.
 
 ## Testing the code
 The two types of tests in the project (and how to run them) are listed below.
