@@ -25,6 +25,9 @@ Therefore there are certain instances where we might forgo a more complicated im
   * [Eclipse](#eclipse)
 * [How To Guides](#how-to-guides)
 * [Cleaning up the database](#cleaning-up-the-database)
+* [Testing the code](#testing-the-code)
+  * [Java Junit Tests](#java-junit-tests)
+  * [Javascript Karma tests](#javascript-karma-tests)
 
 
 ## Requirements
