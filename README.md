@@ -20,11 +20,11 @@ Therefore there are certain instances where we might forgo a more complicated im
 * [First Use Instructions](#first-user-instructions)
 * [Running the code](#running-the-code)
 * [Project Structure](#project-structure)
-* [Importing into IntelliJ IDEA & Eclipse](#Importing-into-IntelliJ-IDEA-&-Eclipse)
-  * [IntelliJ IDEA](#IntelliJ-IDEA)
+* [Importing into IntelliJ IDEA & Eclipse](#importing-into-intelliJ-iDEA-&-eclipse)
+  * [IntelliJ IDEA](#intelliJ-iDEA)
   * [Eclipse](#eclipse)
-* [How To Guides](#How-To-Guides)
-* [Cleaning up the database](#Cleaning-up-the-database)
+* [How To Guides](#how-to-guides)
+* [Cleaning up the database](#cleaning-up-the-database)
 
 
 ## Requirements
