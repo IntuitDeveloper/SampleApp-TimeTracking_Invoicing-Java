@@ -36,12 +36,10 @@ Once the sample app code is on your computer, you can do the following steps to 
 <li>cd to the project directory</li>
 
 <li>Run the command:
-./gradlew bootRun
+`./gradlew bootRun`
 </li>
 <li>Open your browser and go to 
-```
-http://localhost:9001/app/index.html
-```
+`http://localhost:9001/app/index.html`
 </li>
 </ol>
 
