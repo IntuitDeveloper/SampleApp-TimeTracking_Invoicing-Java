@@ -17,7 +17,7 @@ Therefore there are certain instances where we might forgo a more complicated im
 ## Table of Contents
 
 * [Requirements](#requirements)
-* [First Use Instructions](#first-user-instructions)
+* [First Use Instructions](#first-use-instructions)
 * [Running the code](#running-the-code)
 * [Project Structure](#project-structure)
 * [Importing into IntelliJ IDEA & Eclipse](#importing-into-intellij-idea--eclipse)
@@ -69,9 +69,9 @@ If you happen to be behind an http proxy you will need to create a file called g
 
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
 
-* ###IntelliJ IDEA
+### IntelliJ IDEA
   * The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo.
-* **Eclipse**
+### Eclipse
   * [Importing Project into Eclipse IDE](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/Importing-Project-into-Eclipse-IDE)
 
 ## How To Guides
