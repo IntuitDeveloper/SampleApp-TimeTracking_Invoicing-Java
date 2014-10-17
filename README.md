@@ -46,7 +46,7 @@ If you happen to be behind an http proxy you will need to create a file called g
         - [`OAuthInfoProviderImpl.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/controllers/OAuthInfoProviderImpl.java)
     *  For QBO V3 Java SDK usage see:
         - [`QBOGateway.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOGateway.java)
-        - [`QBOServiceFactory.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOServiceFactory.java)
+        - [`DataServiceFactory.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/DataServiceFactory.java)
 * The Java code for the rest of the application is located in the [`src-general`](src-general) directory
 * The HTML, CSS and JavaScript code for the web-based client are is located in the [`public`](public) directory
 
