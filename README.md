@@ -32,12 +32,19 @@ To most convenient way to start playing around with this sample app is to start 
 
 Once the sample app code is on your computer, you can do the following steps to run the app:
 
-1. cd to the project directory
-2. Run the command:
+<ol>
+<li>cd to the project directory</li>
+
+<li>Run the command:
 ```
 ./gradlew bootRun
 ```
-3. Open your browser to http://localhost:9001/app/index.html
+</li>
+<li>Open your browser and go to 
+```
+http://localhost:9001/app/index.html
+```
+</li>
 
 If you happen to be behind an http proxy you will need to create a file called gradle.properties in the root of the project and follow instructions on this [page](http://www.gradle.org/docs/current/userguide/build_environment.html) for configuring gradle to use a proxy.
 
