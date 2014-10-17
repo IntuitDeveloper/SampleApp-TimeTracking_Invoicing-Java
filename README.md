@@ -36,9 +36,7 @@ Once the sample app code is on your computer, you can do the following steps to 
 <li>cd to the project directory</li>
 
 <li>Run the command:
-```
 ./gradlew bootRun
-```
 </li>
 <li>Open your browser and go to 
 ```
