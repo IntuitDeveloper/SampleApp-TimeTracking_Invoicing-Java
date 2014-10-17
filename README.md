@@ -20,7 +20,7 @@ Therefore there are certain instances where we might forgo a more complicated im
 * [First Use Instructions](#first-user-instructions)
 * [Running the code](#running-the-code)
 * [Project Structure](#project-structure)
-* [Importing into IntelliJ IDEA & Eclipse](#importing-into-intelliJ-iDEA-&-eclipse)
+* [Importing into IntelliJ IDEA & Eclipse](#importing-into-intellij-idea--eclipse)
   * [IntelliJ IDEA](#intelliJ-iDEA)
   * [Eclipse](#eclipse)
 * [How To Guides](#how-to-guides)
@@ -69,7 +69,7 @@ If you happen to be behind an http proxy you will need to create a file called g
 
 To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
 
-* **IntelliJ IDEA**
+* ###IntelliJ IDEA
   * The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo.
 * **Eclipse**
   * [Importing Project into Eclipse IDE](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/Importing-Project-into-Eclipse-IDE)
