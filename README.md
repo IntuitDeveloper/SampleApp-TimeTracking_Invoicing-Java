@@ -43,7 +43,7 @@ If you happen to be behind an http proxy you will need to create a file called g
     *  For OAuth implementation see:
         - [`OAuthController.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/controllers/OAuthController.java)
         - [`OAuthInfoProvider.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/OAuthInfoProvider.java)
-        - [`OAuthInfoProviderImpl.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/controllers/OAuthInfoProviderImpl.java)
+        - [`OAuthInfoProviderImpl.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/OAuthInfoProviderImpl.java)
     *  For QBO V3 Java SDK usage see:
         - [`QBOGateway.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOGateway.java)
         - [`QBOServiceFactory.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOServiceFactory.java)
