@@ -14,6 +14,11 @@ For example, certain concerns are not addressed at all in our samples (e.g. secu
 
 Therefore there are certain instances where we might forgo a more complicated implementation (e.g. caching a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from.
 
+## Table of Contents
+
+* [Requirements](#requirements)
+
+
 ## Requirements
 
 In order to successfully run this sample app you need a few things:
