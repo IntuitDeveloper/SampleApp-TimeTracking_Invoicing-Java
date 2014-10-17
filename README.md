@@ -38,6 +38,19 @@ Once the sample app code is on your computer, you can do the following steps to 
 
 If you happen to be behind an http proxy you will need to create a file called gradle.properties in the root of the project and follow instructions on this [page](http://www.gradle.org/docs/current/userguide/build_environment.html) for configuring gradle to use a proxy.
 
+### Project Structure
+* **The Java code for integrating with the QuickBooks Online Accounting is located in the [`src`](src) directory.**
+    *  For OAuth implementation see:
+        - [`OAuthController.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/controllers/OAuthController.java)
+        - [`OAuthInfoProvider.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/oauth/OAuthInfoProvider.java)
+        - [`OAuthInfoProviderImpl.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/controllers/OAuthInfoProviderImpl.java)
+    *  For QBO V3 Java SDK usage see:
+        - [`QBOGateway.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOGateway.java)
+        - [`QBOServiceFactory.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/QBOServiceFactory.java)
+* The Java code for the rest of the application is located in the [`src-general`](src-general) directory
+* The HTML, CSS and JavaScript code for the web-based client are is located in the [`public`](public) directory
+
+
 ## Cleaning up the database
 
 This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
