@@ -17,6 +17,14 @@ Therefore there are certain instances where we might forgo a more complicated im
 ## Table of Contents
 
 * [Requirements](#requirements)
+* [First Use Instructions](#first-user-instructions)
+* [Running the code](#running-the-code)
+* [Project Structure](#project-structure)
+* [Importing into IntelliJ IDEA & Eclipse](#Importing-into-IntelliJ-IDEA-&-Eclipse)
+  * [IntelliJ IDEA](#IntelliJ-IDEA)
+  * [Eclipse](#eclipse)
+* [How To Guides](#How-To-Guides)
+* [Cleaning up the database](#Cleaning-up-the-database)
 
 
 ## Requirements
