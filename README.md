@@ -18,17 +18,15 @@ Therefore there are certain instances where we might forgo a more complicated im
 
 In order to successfully run this sample app you need a few things:
 
-1. A developer.intuit.com account
-2. An app on developer.intuit.com (with app token, consumer key, and consumer secret).
-3. A sandbox QuickBooks Online company
+1. A [developer.intuit.com](http://developer.intuit.com) account
+2. An app on [developer.intuit.com](http://developer.intuit.com) and the associated app token, consumer key, and consumer secret.
  
 ## First Use Instructions
 
 To most convenient way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
 
-1. Patti to fill in
-2. Clone the GitHub repo to your computer
-3. Fill in your oauth.json file values (app token, consumer key, consumer secret).
+1. Clone the GitHub repo to your computer
+2. Fill in your oauth.json file values (app token, consumer key, consumer secret) by copying over from the keys section for your app.
 
 ## Running the code
 
