@@ -111,9 +111,9 @@ To edit the code you will need to open it in an IDE. Currently we support both I
 
 ## How To Guides
 
-How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app (e.g. OAuth, OpenId, etc) can be found on the Time Tracking Sample Apps Wiki page:
+The following How-To guides related to implementation tasks necessary to produce a production-ready Intuit Partner Platform app (e.g. OAuth, OpenId, etc) are available:
 
-[Time Tracking Sample App Wiki](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki)
+* [OAuth How To Guide (Java)](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/OAuth-How-To-Guide-(Java))
 
 ## Testing the code
 The two types of tests in the project (and how to run them) are listed below.
