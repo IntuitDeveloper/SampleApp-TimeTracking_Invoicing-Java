@@ -1,18 +1,20 @@
 Time Tracking and Invoicing Java Sample App
 =====================================
 
-Welcome to the Intuit Developer's Time Tracking and Invoicing Java Sample App. 
+<p>Welcome to the Intuit Developer's Time Tracking and Invoicing Java Sample App.</p>
+<p>This sample app is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem.  Specifically, this sample application demonstrates the following:</p>
 
-This sample app is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem.  Specifically, this sample application demonstrates the following:
+<ul>
+	<li>Implementing OAuth to connect an application to a customer's QuickBooks Online company.</li>
+	<li>Syncing employee, customer, and service item data from the app's local database to the QuickBooks Online company.</li>
+	<li>Using the QuickBooks Online SDK to create TimeActivity and Invoice objects in the QuickBooks Online company.</li>
+</ul>
 
-1. Implementing OAuth to connect an application to a customer's QuickBooks Online (QBO) account.
-2. Using the QBO v3 SDK to create TimeActivity and Invoice objects in QBO.
+<p>Please note that while these examples work, features not called out above are not intended to be taken and used in production business applications. In other words, this is not a seed project to be taken cart blanche and deployed to your production environment.</p>  
 
-Please note that while these examples work, features not called out above are not intended to be taken and used in production business applications. In other words, this is not a seed project to be taken cart blanche and deployed to your production environment.  
+<p>For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.</p>
 
-For example, certain concerns are not addressed at all in our samples (e.g. security, privacy, scalability). In our sample apps, we strive to strike a balance between clarity, maintainability, and performance where we can. However, clarity is ultimately the most important quality in a sample app.
-
-Therefore there are certain instances where we might forgo a more complicated implementation (e.g. caching a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from.
+<p>Therefore there are certain instances where we might forgo a more complicated implementation (e.g. caching a frequently used value, robust error handling, more generic domain model structure) in favor of code that is easier to read. In that light, we welcome any feedback that makes our samples apps easier to learn from.</p>
 
 ## Table of Contents
 
