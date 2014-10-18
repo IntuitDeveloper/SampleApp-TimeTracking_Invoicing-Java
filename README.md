@@ -53,6 +53,7 @@ Once the sample app code is on your computer, you can do the following steps to 
 1. cd to the project directory
 2. Run the command:`./gradlew bootRun` (Mac OS) or `gradlew.bat bootRun` (Windows)
 3. Wait until the terminal output displays the **READY** message.
+![App Ready](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/App-Ready.png)
 4. Open your browser and go to `http://localhost:9001/app/index.html`
 
 
