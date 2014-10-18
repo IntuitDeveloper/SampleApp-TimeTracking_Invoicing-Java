@@ -19,6 +19,7 @@ Therefore there are certain instances where we might forgo a more complicated im
 * [Requirements](#requirements)
 * [First Use Instructions](#first-use-instructions)
 * [Running the code](#running-the-code)
+* [High Level Workflow](#high-level-workflow)
 * [Project Structure](#project-structure)
 * [Importing into IntelliJ IDEA & Eclipse](#importing-into-intellij-idea--eclipse)
   * [IntelliJ IDEA](#intellij-idea)
@@ -58,6 +59,15 @@ Once the sample app code is on your computer, you can do the following steps to 
 
 
 If you happen to be behind an http proxy you will need to create a file called gradle.properties in the root of the project and follow instructions on this [page](http://www.gradle.org/docs/current/userguide/build_environment.html) for configuring gradle to use a proxy.
+
+## High Level Workflow
+1. Connect to a QuickBooks Online company.
+2. Setup—sync the following from the local database to the QuickBooks Online company.
+  - employees—so time can be recorded against a specific service
+  - customers—so time can be recorded as billable to a specific customer, 
+  - items—the list of billable services.
+3. Create and push approved time activity objects to QuickBooks Online company for payroll and billing purposes.
+4. Create and push invoice objects to QuickBooks Online company for billing purposes.
 
 ## Project Structure
 * **The Java code for integrating with the QuickBooks Online Accounting is located in the [`src`](src) directory.**
