@@ -87,6 +87,16 @@ If you happen to be behind an http proxy you will need to create a file called g
 </li>
 </ol>
 
+## Importing into IntelliJ IDEA & Eclipse
+
+To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
+
+### IntelliJ IDEA
+  * The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo.
+
+### Eclipse
+  * [Importing Project into Eclipse IDE](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/Importing-Project-into-Eclipse-IDE)
+
 ## Project Structure
 * **The Java code for integrating with the QuickBooks Online Accounting is located in the [`src`](src) directory.**
     *  For OAuth implementation see:
@@ -98,16 +108,6 @@ If you happen to be behind an http proxy you will need to create a file called g
         - [`DataServiceFactory.java`](src/main/java/com/intuit/developer/sampleapp/timetracking/qbo/DataServiceFactory.java)
 * The Java code for the rest of the application is located in the [`src-general`](src-general) directory
 * The HTML, CSS and JavaScript code for the web-based client are is located in the [`public`](public) directory
-
-## Importing into IntelliJ IDEA & Eclipse
-
-To edit the code you will need to open it in an IDE. Currently we support both IntelliJ IDEA and Eclipse.
-
-### IntelliJ IDEA
-  * The project is maintained with IntelliJ IDEA and as such an .ipr file is checked into the GitHub repo.
-
-### Eclipse
-  * [Importing Project into Eclipse IDE](https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/Importing-Project-into-Eclipse-IDE)
 
 ## How To Guides
 
