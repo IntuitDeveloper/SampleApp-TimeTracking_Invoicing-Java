@@ -40,6 +40,7 @@ In order to successfully run this sample app you need a few things:
 1. Java 1.7
 2. A [developer.intuit.com](http://developer.intuit.com) account
 3. An app on [developer.intuit.com](http://developer.intuit.com) and the associated app token, consumer key, and consumer secret.
+4. QuickBooks Java SDK (already included in the [`libs`](libs) folder) 
  
 ## First Use Instructions
 
