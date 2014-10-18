@@ -22,15 +22,15 @@ Time Tracking and Invoicing Java Sample App
 * [First Use Instructions](#first-use-instructions)
 * [Running the code](#running-the-code)
 * [High Level Workflow](#high-level-workflow)
-* [Project Structure](#project-structure)
 * [Importing into IntelliJ IDEA & Eclipse](#importing-into-intellij-idea--eclipse)
   * [IntelliJ IDEA](#intellij-idea)
   * [Eclipse](#eclipse)
+* [Project Structure](#project-structure)
 * [How To Guides](#how-to-guides)
-* [Cleaning up the database](#cleaning-up-the-database)
 * [Testing the code](#testing-the-code)
   * [Java Junit Tests](#java-junit-tests)
   * [Javascript Karma tests](#javascript-karma-tests)
+* [Reset the App](#reset-the-app)
 
 
 ## Requirements
@@ -115,12 +115,6 @@ How-To guides related to implementation tasks necessary to produce a production-
 
 [Time Tracking Sample App Wiki](https://github.com/IntuitPartnerPlatform/SampleApp-TimeTracking_Invoicing-Java/wiki)
 
-## Cleaning up the database
-
-This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
-this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
-with no data.
-
 ## Testing the code
 The two types of tests in the project (and how to run them) are listed below.
 
@@ -132,6 +126,12 @@ To run the Javascript Karma tests you must have NodeJs v0.10.28 or later (http:/
 
 1. _cd public_
 2. _npm test_
+
+## Reset the App
+
+This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
+this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
+with no data.
 
 
 
