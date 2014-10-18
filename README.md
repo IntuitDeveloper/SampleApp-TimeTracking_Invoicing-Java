@@ -62,6 +62,8 @@ If you happen to be behind an http proxy you will need to create a file called g
 
 ## High Level Workflow
 1. Connect to a QuickBooks Online company.
+
+<img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep1a.png" alt="Connect to Quickbooks" height="150" width="150">
 2. Setup—sync the following from the local database to the QuickBooks Online company.
   - employees—so time can be recorded against a specific service
   - customers—so time can be recorded as billable to a specific customer, 
