@@ -64,20 +64,27 @@ If you happen to be behind an http proxy you will need to create a file called g
 
 ## High Level Workflow
 <ol>
-<li>Connect to a QuickBooks Online company.
 
-<p style="text-align: center;"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep1a.png" alt="Connect to Quickbooks" height="250" width="250"></p>
+<li>Connect to a QuickBooks Online company.
+<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep1a.png" alt="Connect to Quickbooks" height="250" width="250"/></p>
 </li>
+
 <li>Setup—sync the following from the local database to the QuickBooks Online company.
 <ul>
   <li>employees—so time can be recorded against a specific service,</li>
   <li>customers—so time can be recorded as billable to a specific customer, </li>
   <li>items—the list of billable services.</li>
 </ul>
-<p style="text-align: center;"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep1b.png" alt="Sync Entities" height="168" width="250"></p>
+<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep1b.png" alt="Sync Entities" height="168" width="250"></p>
 </li>
-<li>Create and push approved time activity objects to QuickBooks Online company for payroll and billing purposes.</li>
-<li>Create and push invoice objects to QuickBooks Online company for billing purposes.</li>
+
+<li>Create and push approved time activity objects to QuickBooks Online company for payroll and billing purposes.
+	<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep2.png" alt="Sync Entities" height="243" width="250"></p>
+</li>
+
+<li>Create and push invoice objects to QuickBooks Online company for billing purposes.
+<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/timetrackingstep3.png" alt="Sync Entities" height="84" width="500"></p>
+</li>
 </ol>
 
 ## Project Structure
