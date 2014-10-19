@@ -56,7 +56,7 @@ Once the sample app code is on your computer, you can do the following steps to 
 1. cd to the project directory</li>
 2. Run the command:`./gradlew bootRun` (Mac OS) or `gradlew.bat bootRun` (Windows)</li>
 3. Wait until the terminal output displays the **READY** message.
-<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/App-Ready.png" alt="Connect to Quickbooks" height="200" width="1000"/>
+<p align="center"><img src="https://github.com/IntuitDeveloper/SampleApp-TimeTracking_Invoicing-Java/wiki/images/App-Ready.png" alt="App Ready" height="200" width="1000"/>
 4. Open your browser and go to `http://localhost:9001/app/index.html`</li>
 
 If you happen to be behind an http proxy you will need to create a file called gradle.properties in the root of the project and follow instructions on this [page](http://www.gradle.org/docs/current/userguide/build_environment.html) for configuring gradle to use a proxy.
