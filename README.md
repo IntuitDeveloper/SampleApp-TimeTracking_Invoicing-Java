@@ -31,7 +31,8 @@ Time Tracking and Invoicing Java Sample App
   * [Java Junit Tests](#java-junit-tests)
   * [Javascript Karma tests](#javascript-karma-tests)
 * [Reset the App](#reset-the-app)
-* Watch & Learn(#watch--learn)
+* [Watch & Learn](#watch--learn)
+* [More Information](#more-information)
 
 
 ## Requirements
@@ -44,8 +45,6 @@ In order to successfully run this sample app you need a few things:
 4. QuickBooks Java SDK (already included in the [`libs`](libs) folder) 
  
 ## First Use Instructions
-
-To most convenient way to start playing around with this sample app is to start at [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
 
 1. Clone the GitHub repo to your computer
 2. Fill in your [`oauth.json`](oauth.json) file values (app token, consumer key, consumer secret) by copying over from the keys section for your app.
@@ -138,6 +137,10 @@ with no data.
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=I_KgAmtMtLk
 " target="_blank"><img src="http://img.youtube.com/vi/I_KgAmtMtLk/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
+## More Information
+
+More detailed information for this sample app can be found here [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
 
 
 
