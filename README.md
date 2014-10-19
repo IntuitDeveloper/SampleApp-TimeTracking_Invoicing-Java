@@ -31,6 +31,7 @@ Time Tracking and Invoicing Java Sample App
   * [Java Junit Tests](#java-junit-tests)
   * [Javascript Karma tests](#javascript-karma-tests)
 * [Reset the App](#reset-the-app)
+* Watch & Learn(#watch--learn)
 
 
 ## Requirements
@@ -131,6 +132,10 @@ To run the Javascript Karma tests you must have NodeJs v0.10.28 or later (http:/
 This app uses a file-based HSQL database that is stored in the _database_ folder in the root of the project. Deleting
 this folder will delete all data persisted in the database. The next time you start your app a clean database will be created
 with no data.
+
+## Watch & Learn
+<iframe style="margin-top:10px;width:100%;min-height:200px;" src="//www.youtube.com/embed/I_KgAmtMtLk" frameborder="0" allowfullscreen></iframe>
+
 
 
 
