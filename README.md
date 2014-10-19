@@ -134,7 +134,10 @@ this folder will delete all data persisted in the database. The next time you st
 with no data.
 
 ## Watch & Learn
-<iframe style="margin-top:10px;width:100%;min-height:200px;" src="//www.youtube.com/embed/I_KgAmtMtLk" frameborder="0" allowfullscreen></iframe>
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=I_KgAmtMtLk
+" target="_blank"><img src="http://img.youtube.com/vi/I_KgAmtMtLk/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 
 
