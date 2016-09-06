@@ -140,7 +140,7 @@ alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 ## More Information
 
-More detailed information for this sample app can be found here [http://developer.intuit.com/v2/sampleapps/details/timetracking_details](http://developer.intuit.com/v2/sampleapps/details/timetracking_details).
+More detailed information for this sample app can be found here [here](https://developer.intuit.com/sampleapps/timetracking).
 
 
 
