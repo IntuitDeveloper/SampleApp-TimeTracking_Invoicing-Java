@@ -1,6 +1,8 @@
 package com.intuit.developer.sampleapp.timetracking.mappers;
 
 import com.intuit.developer.sampleapp.timetracking.domain.ServiceItem;
+import com.intuit.ipp.data.ItemTypeEnum;
+
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -34,6 +36,7 @@ public class ServiceItemMapper {
         }
 
         final com.intuit.ipp.data.Item qboServiceItem = domainToQBOMapper.map(serviceItem);
+        qboServiceItem.setType(ItemTypeEnum.SERVICE);
 
         return qboServiceItem;
 

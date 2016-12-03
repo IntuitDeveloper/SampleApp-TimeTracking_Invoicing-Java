@@ -51,6 +51,9 @@ repositories {
 }
 
 dependencies {
+
+    compile fileTree(dir: "libs/qbo-sdk", include: "ipp-v3*.jar") 
+	compile fileTree(dir: "libs/qbo-sdk", include: "ipp-java*.jar") 
     testCompile("org.jmockit:jmockit:1.12")
     testCompile("org.jmockit:jmockit-coverage:1.12")
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -62,13 +65,13 @@ dependencies {
     compile("ma.glasnost.orika:orika-core:1.4.5")
     compile('org.codehaus.jackson:jackson-core-asl:1.9.13')
     compile('org.codehaus.jackson:jackson-mapper-asl:1.9.13')
-    compile fileTree(dir: "libs/qbo-sdk-2.3.1", include: "*.jar")
 
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     //oauth dependencies
     compile("oauth.signpost:signpost-core:1.2.1.2")
+
 }
 
 jar {
