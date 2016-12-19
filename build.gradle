@@ -52,8 +52,7 @@ repositories {
 
 dependencies {
 
-    compile fileTree(dir: "libs/qbo-sdk", include: "ipp-v3*.jar") 
-	compile fileTree(dir: "libs/qbo-sdk", include: "ipp-java*.jar") 
+    compile fileTree(dir: "libs/qbo-sdk", include: "*.jar")
     testCompile("org.jmockit:jmockit:1.12")
     testCompile("org.jmockit:jmockit-coverage:1.12")
     compile("org.springframework.boot:spring-boot-starter-web")
