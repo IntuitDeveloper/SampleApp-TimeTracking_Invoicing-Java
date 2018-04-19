@@ -1,3 +1,5 @@
+[![Sample Banner](views/Sample.png)][ss1]
+
 Time Tracking and Invoicing Java Sample App
 =====================================
 
@@ -142,27 +144,4 @@ alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 More detailed information for this sample app can be found here [here](https://developer.intuit.com/sampleapps/timetracking).
 
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+[ss1]: https://help.developer.intuit.com/s/samplefeedback?cid=9010&repoName=SampleApp-TimeTracking_Invoicing-Java
