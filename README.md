@@ -1,7 +1,9 @@
 [![Sample Banner](views/Callout.png)][ss1]
 
-Time Tracking and Invoicing Java Sample App ( This sample uses OAuth1.0 ) 
+Time Tracking and Invoicing Java Sample App 
 =====================================
+
+Note : This sample uses OAuth1.0
 
 <p>Welcome to the Intuit Developer's Time Tracking and Invoicing Java Sample App.</p>
 <p>This sample app is meant to provide working examples of how to integrate your app with the Intuit Small Business ecosystem.  Specifically, this sample application demonstrates the following:</p>
