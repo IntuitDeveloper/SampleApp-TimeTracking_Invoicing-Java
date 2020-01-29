@@ -1,6 +1,6 @@
-[![Sample Banner](views/Sample.png)][ss1]
+[![Sample Banner](views/Callout.png)][ss1]
 
-Time Tracking and Invoicing Java Sample App
+Time Tracking and Invoicing Java Sample App ( This sample uses OAuth1.0 ) 
 =====================================
 
 <p>Welcome to the Intuit Developer's Time Tracking and Invoicing Java Sample App.</p>
