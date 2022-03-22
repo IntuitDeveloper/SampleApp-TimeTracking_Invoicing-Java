@@ -1,0 +1,46 @@
+options:
+  cors: true
+actions:
+  action: ./actions/action.js
+  action1: ./actions/action1.js
+tasks:
+  task:
+    schedule: cron(5 8 ? * 0)
+    action: linkedin/companies.get
+    accounts: {}
+    monitor:
+      action: linkedin/companies.get
+      accounts: {}
+      trackBy: ''
+      array: ''
+      input: {}
+  task1:
+    schedule: cron(5 8 ? * 0)
+    action: hubspot/getCompanyByDomain
+    accounts: {}
+    monitor:
+      action: hubspot/getCompanyByDomain
+      accounts: {}
+      trackBy: ''
+      array: ''
+      input:
+        domain: '""'
+paths:
+  /paths0:
+    get:
+      action: linkedin/companies.get
+      accounts: {}
+  /paths1:
+    get:
+      action: hubspot/getCompanyByDomain
+      accounts: {}
+tests:
+  test:
+    action: linkedin/companies.get
+    accounts: {}
+    input: {}
+  test1:
+    action: hubspot/getCompanyByDomain
+    accounts: {}
+    input:
+      domain: '""'

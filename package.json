@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@datafire/linkedin": "4.0.0",
+    "@datafire/hubspot": "1.1.0"
+  },
+  "name": "cloverleavesaccountingcloud",
+  "version": "1.0.0"
+}
